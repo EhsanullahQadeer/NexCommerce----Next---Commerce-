@@ -1,22 +1,24 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Categories', href: '/categories' },
-  { name: 'Products', href: '/products' },
-];
+import NavLink from './elements/NavLink';
+import NotificationIcon from './elements/NotificationIcon';
+import { routes } from './routes';
+import SearchBar from '../SearchBar';
 
 const Navbar = () => {
+  const pathname = usePathname();
+  const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
+
+  const isActiveLink = (path: string) => path === pathname;
+
   return (
     <header className="bg-white w-full">
-      <nav
-        aria-label="Global"
-        className="flex items-center justify-between max-w-[1188px] mx-auto px-2.5"
-      >
+      <div className="relative flex w-container items-center justify-between mx-auto px-2.5">
         <div className="flex">
           <Link href="/">
             <span className="sr-only">Molla</span>
@@ -24,32 +26,41 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="h-[60px] text-sm uppercase text-[#222] flex items-center px-6"
-            >
-              {item.name}
-            </Link>
+        <nav className="flex items-center gap-2">
+          {routes.map((item) => (
+            <NavLink
+              key={item.url}
+              {...item}
+              isActive={isActiveLink(item.url)}
+            />
           ))}
-        </div>
-        <div className="flex items-center">
-          <div className="h-8 w-8">
-            <i className="bi bi-search text-lg text-[#666666]"></i>
+        </nav>
+        <div className="flex items-center gap-[1.5rem]">
+          <div onClick={() => setIsSearchBarOpen(true)}>
+            <NotificationIcon
+              icon={'las la-search'}
+              iconClass="text-black-75"
+            />
           </div>
-          <div className="h-8 w-8">
-            <i className="bi bi-heart text-lg text-[#666666]"></i>
-          </div>
+          <NotificationIcon
+            icon="lar la-heart"
+            iconClass="!text-[28px]"
+            count={3}
+          />
           <div className="flex items-center">
-            <div className="h-8 w-8">
-              <i className="bi bi-cart text-lg text-[#666666]"></i>
-            </div>
-            <span className="cart-txt text-[13px] text-[#222]">$ 164,00</span>
+            <NotificationIcon
+              icon="las la-shopping-cart"
+              iconClass="!text-[32px]"
+              count={2}
+            />
+            <span className="font-light text-[13px] text-[#222] ml-4 mb-1">
+              $ 164,00
+            </span>
           </div>
         </div>
-      </nav>
+
+        <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
+      </div>
     </header>
   );
 };
