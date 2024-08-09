@@ -9,6 +9,7 @@ import NavLink from './elements/NavLink';
 import NotificationIcon from './elements/NotificationIcon';
 import { routes } from './routes';
 import SearchBar from '../SearchBar';
+import CartDropdown from '../CartDropdown/CartDropdown';
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -47,16 +48,7 @@ const Navbar = () => {
             iconClass="!text-[28px]"
             count={3}
           />
-          <div className="flex items-center">
-            <NotificationIcon
-              icon="las la-shopping-cart"
-              iconClass="!text-[32px]"
-              count={2}
-            />
-            <span className="font-light text-[13px] text-[#222] ml-4 mb-1">
-              $ 164,00
-            </span>
-          </div>
+          <CartDropdown />
         </div>
 
         <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
