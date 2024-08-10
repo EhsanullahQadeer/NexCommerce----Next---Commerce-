@@ -2,88 +2,74 @@
 
 import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import { cn } from '@/lib/utils';
-import Button from '../Button';
+import { Navigation, Pagination } from 'swiper/modules';
 
 // Define the types for the ref and swiper instance
 import type { Swiper as SwiperType } from 'swiper';
+import SlideContent from './SlideContent';
+import SlideArrow from './SlideArrow';
 
-const navigationStyles =
-  'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[50] cursor-pointer';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import './swiper-pagination.css';
 
 const Slider: React.FC = () => {
   const swiperRef = useRef<SwiperType | null>(null);
 
   return (
-    <div className="relative h-[560px]">
+    <div className="relative h-[460px] lg:h-[480px] xl:h-[560px]">
       <Swiper
         rewind={true}
         observer
         observeParents
         loop
-        modules={[Navigation]}
+        pagination={{ clickable: true }}
+        modules={[Navigation, Pagination]}
         className="h-full w-full"
         onBeforeInit={(swiper) => {
           swiperRef.current = swiper;
         }}
       >
         <SwiperSlide className="bg-[url('/slide/slide-1.jpg')] bg-cover bg-center">
-          <div className="flex items-center h-full max-w-container mx-auto">
-            <div>
-              <h3 className="text-primary font-extralight text-sm lg:text-base uppercase mb-[15px]">
-                Seasonal Pick
-              </h3>
-              <h1 className="text-[3.125rem]  font-light text-black-75 leading-[60px] mb-[17px]">
+          <SlideContent
+            title="SEASONAL PICKS"
+            heading={
+              <>
                 Get All
                 <br />
                 The Good Stuff
-              </h1>
-              <Button className="uppercase leading-[1.5] !py-[11.5px]">
-                Discover More <i className="las la-arrow-right ml-2.5"></i>
-              </Button>
-            </div>
-          </div>
+              </>
+            }
+            btnText="Discover more"
+          />
         </SwiperSlide>
         <SwiperSlide className="bg-[url('/slide/slide-2.jpg')] bg-cover bg-center">
-          <div className="flex items-center h-full max-w-container mx-auto">
-            <div>
-              <h3 className="text-primary font-extralight text-sm lg:text-base uppercase mb-[15px]">
-                all at 50% off
-              </h3>
-              <h1 className="text-[3.125rem]  font-light text-white leading-[60px] mb-[17px]">
+          <SlideContent
+            title="all at 50% off"
+            heading={
+              <>
                 The Most Beautiful
                 <br />
                 Novelties In Our Shop
-              </h1>
-              <Button className="uppercase leading-[1.5] !py-[11.5px]">
-                Shop now <i className="las la-arrow-right ml-2.5"></i>
-              </Button>
-            </div>
-          </div>
+              </>
+            }
+            headingClass="!text-white"
+            btnText="Shop now"
+          />
         </SwiperSlide>
       </Swiper>
-      <div>
-        <div
-          className={cn(
-            'left-[5%] text-[22px] transition-all',
-            navigationStyles
-          )}
+      <div className="hidden lg:flex">
+        <SlideArrow
+          className='left-[5%]'
+          icon="la-angle-left"
           onClick={() => swiperRef.current?.slidePrev()}
-        >
-          <i className="las la-angle-left text-black-500 group-hover:text-primary"></i>
-        </div>
-        <div
-          className={cn(
-            'right-[5%] text-[22px] transition-all',
-            navigationStyles
-          )}
+        />
+        <SlideArrow
+          className='right-[5%]'
+          icon="la-angle-right"
           onClick={() => swiperRef.current?.slideNext()}
-        >
-          <i className="las la-angle-right text-black-500 group-hover:text-primary"></i>
-        </div>
+        />
       </div>
     </div>
   );

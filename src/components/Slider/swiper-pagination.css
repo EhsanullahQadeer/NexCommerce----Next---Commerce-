@@ -1,0 +1,33 @@
+.swiper-pagination-bullet {
+  height: 8px;
+  width: 8px;
+  background-color: transparent;
+  border: 1px solid #d7d7d7;
+  margin: 5px 6px;
+  opacity: 1;
+}
+
+.swiper-pagination-bullet:hover {
+  border-color: #cccccc;
+  background: #cccccc;
+}
+
+.swiper-pagination-bullet-active {
+  width: 18px;
+  border-color: #cccccc;
+  background: #cccccc;
+  border-radius: 30px;
+}
+
+.swiper-pagination-fraction,
+.swiper-pagination-custom,
+.swiper-horizontal > .swiper-pagination-bullets,
+.swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: 20px;
+}
+
+@media (min-width: 992px) {
+  .swiper-pagination-bullet {
+    display: none;
+  }
+}
