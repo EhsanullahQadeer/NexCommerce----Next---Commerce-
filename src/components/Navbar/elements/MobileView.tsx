@@ -29,7 +29,7 @@ const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
     <>
       <div
         className={cn(
-          'lg:hidden h-full w-full left-0 top-0 z-0 bg-[rgba(25,25,25,0.25)]',
+          'lg:hidden h-full w-full left-0 top-0 z-[998] bg-[rgba(25,25,25,0.25)]',
           isSidebarToggled && 'fixed flex'
         )}
         style={{ transition: 'all 0.4s ease' }}

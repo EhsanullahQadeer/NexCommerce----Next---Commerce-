@@ -25,7 +25,7 @@ const Navbar = () => {
 
   return (
     <>
-      <header className="bg-white w-full">
+      <header className="relative bg-white w-full">
         <div className="relative flex max-w-container items-center justify-between mx-auto px-2.5">
           <div className="flex items-center">
             <div
@@ -72,8 +72,8 @@ const Navbar = () => {
             <CartDropdown />
           </div>
         </div>
+        <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
       </header>
-      <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
 
       <NavMobileView routes={routes} isActiveLink={isActiveLink} />
     </>
