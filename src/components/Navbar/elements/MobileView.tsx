@@ -14,7 +14,7 @@ interface NavMobileViewProps {
 }
 
 const baseStyles =
-  'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile overflow-y-auto z-99';
+  'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile overflow-y-auto z-[999]';
 
 const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
   const mobileNavRef = useRef<HTMLDivElement>(null);

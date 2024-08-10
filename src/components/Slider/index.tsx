@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import Button from '../Button';
 
 const navigationStyles =
-  'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[1] cursor-pointer';
+  'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[10] cursor-pointer';
 
 const Slider = () => {
   const navigationNextRef = useRef<HTMLDivElement | null>(null);
