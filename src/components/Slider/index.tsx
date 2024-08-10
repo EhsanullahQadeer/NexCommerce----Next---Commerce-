@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import Button from '../Button';
 
 const navigationStyles =
-  'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[10] cursor-pointer';
+  'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[50] cursor-pointer';
 
 const Slider = () => {
   const navigationNextRef = useRef<HTMLDivElement | null>(null);
@@ -21,6 +21,9 @@ const Slider = () => {
     <div className="relative h-[560px]">
       <Swiper
         rewind={true}
+        observer
+        observeParents
+        loop
         navigation={{
           nextEl: navigationNextRef.current,
           prevEl: navigationPrevRef.current,
