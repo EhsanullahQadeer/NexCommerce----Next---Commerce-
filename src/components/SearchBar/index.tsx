@@ -10,7 +10,7 @@ interface SearchBarProps {
 }
 
 const searchbarBaseStyles =
-  'absolute opacity-0 flex w-full h-full bg-white top-[-65px] justify-center align-center left-0 right-0 mx-auto';
+  '!hidden lg:absolute opacity-0 flex w-full h-full bg-white top-[-65px] justify-center align-center left-0 right-0 mx-auto';
 const searchbarActiveStyles = 'top-0 opacity-100';
 
 const SearchBar: FC<SearchBarProps> = ({ isOpen, setIsOpen }) => {

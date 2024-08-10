@@ -3,12 +3,12 @@ import type { RootState } from '@/store';
 
 // Define a type for the slice state
 export interface ProductsState {
-  product: [];
+  products: [];
 }
 
 // Define the initial state using that type
 const initialState: ProductsState = {
-  product: []
+  products: []
 }
 
 export const productsSlice = createSlice({
@@ -21,6 +21,6 @@ export const productsSlice = createSlice({
 })
 
 // selectors can use the imported `RootState`
-export const selectCount = (state: RootState) => state.products;
+export const selectCount = (state: RootState) => state.products.products;
 
 export default productsSlice.reducer;

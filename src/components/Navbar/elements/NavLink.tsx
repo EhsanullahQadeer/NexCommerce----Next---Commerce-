@@ -2,7 +2,7 @@ import { FC } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-interface NavLinkProps {
+export interface NavLinkProps {
   name: string;
   url: string;
   className?: string;

@@ -21,13 +21,20 @@ const config: Config = {
           75: '#333',
           100: '#666666',
           200: '#999999',
+          300: '#ebebeb',
+          400: 'rgba(255, 255, 255, 0.1)',
+          500: '#777',
         },
       },
       width: {
         container: '1188px',
       },
+      maxWidth: {
+        container: '1188px',
+      },
       boxShadow: {
         dropdown: '5px 10px 16px rgba(51, 51, 51, 0.05), -5px 10px 16px rgba(51, 51, 51, 0.05)',
+        'mobile-nav': '0.1rem 0 0.6rem 0 rgba(51, 51, 51, 0.5)',
       }
     },
   },

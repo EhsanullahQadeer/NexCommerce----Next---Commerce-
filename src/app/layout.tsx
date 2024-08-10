@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
-import Navbar from '@/components/Navbar';
 import { StoreProvider } from '@/store/StoreProvider';
 
 import './globals.css';
+import MainLayout from '@/components/layout/MainLayout';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -27,16 +27,13 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en">
         <head>
-        <link
-          rel="stylesheet"
-          href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
-        />
+          <link
+            rel="stylesheet"
+            href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
+          />
         </head>
         <body className={poppins.className}>
-          <Navbar />
-          <main className="bg-white min-h-screen">
-            {children}
-          </main>
+          <MainLayout>{children}</MainLayout>
         </body>
       </html>
     </StoreProvider>

@@ -44,6 +44,7 @@ const CartDropdown = () => {
           isActive && activeStyles
         )}
         style={{ transition: 'all .25s' }}
+        onClick={() => setisActive(false)}
       >
         <CartList />
         <CartList />
