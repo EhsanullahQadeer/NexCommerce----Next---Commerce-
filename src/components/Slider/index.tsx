@@ -3,19 +3,19 @@
 import { useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 
+// Define the types for the ref and swiper instance
+import type { Swiper as SwiperType } from 'swiper';
+
 const navigationStyles =
   'group absolute flex h-[42px] w-[42px] items-center justify-center top-0 bottom-0 my-auto z-[50] cursor-pointer';
 
-const Slider = () => {
-  const navigationNextRef = useRef<HTMLDivElement | null>(null);
-  const navigationPrevRef = useRef<HTMLDivElement | null>(null);
+const Slider: React.FC = () => {
+  const swiperRef = useRef<SwiperType | null>(null);
 
   return (
     <div className="relative h-[560px]">
@@ -24,12 +24,11 @@ const Slider = () => {
         observer
         observeParents
         loop
-        navigation={{
-          nextEl: navigationNextRef.current,
-          prevEl: navigationPrevRef.current,
-        }}
         modules={[Navigation]}
         className="h-full w-full"
+        onBeforeInit={(swiper) => {
+          swiperRef.current = swiper;
+        }}
       >
         <SwiperSlide className="bg-[url('/slide/slide-1.jpg')] bg-cover bg-center">
           <div className="flex items-center h-full max-w-container mx-auto">
@@ -68,20 +67,20 @@ const Slider = () => {
       </Swiper>
       <div>
         <div
-          ref={navigationPrevRef}
           className={cn(
             'left-[5%] text-[22px] transition-all',
             navigationStyles
           )}
+          onClick={() => swiperRef.current?.slidePrev()}
         >
           <i className="las la-angle-left text-black-500 group-hover:text-primary"></i>
         </div>
         <div
-          ref={navigationNextRef}
           className={cn(
             'right-[5%] text-[22px] transition-all',
             navigationStyles
           )}
+          onClick={() => swiperRef.current?.slideNext()}
         >
           <i className="las la-angle-right text-black-500 group-hover:text-primary"></i>
         </div>
