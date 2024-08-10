@@ -14,7 +14,7 @@ const btnSizeStyles = {
 const buttonVariants = {
   primary: 'bg-primary text-white border-primary hover:bg-secondary',
   outlined:
-    'bg-white text-primary border-primary hover:bg-primary hover:text-white',
+    'bg-transparent text-primary border-primary hover:bg-primary hover:text-white',
 };
 
 const Button: FC<ButtonProps> = ({

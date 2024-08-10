@@ -55,9 +55,8 @@ const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
         <nav>
           <ul className="flex flex-col mt-[15px]">
             {routes.map((item) => (
-              <li>
+              <li key={item.url}>
                 <Link
-                  key={item.url}
                   href={item.url}
                   className={cn(
                     'block text-xs font-extralight uppercase py-2.5 px-5 text-white border-b border-b-[#ffffff14] leading-[18px]',
