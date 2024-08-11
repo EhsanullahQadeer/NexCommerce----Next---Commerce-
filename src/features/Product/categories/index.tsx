@@ -1,5 +1,7 @@
+import dynamic from 'next/dynamic';
 import ProductFilters from "@/components/Filters/ProductFilters";
-import GridLayout from "@/components/GridLayout";
+ 
+const GridLayout = dynamic(() => import('@/components/GridLayout'), { ssr: false })
 
 const ProductCategories = () => {
   return (
