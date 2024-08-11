@@ -1,6 +1,5 @@
 import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import CategoryFilter from './CategoryFilters';
-import { productCategories, productSortCategories } from './data';
 import ColourFilters from './ColourFilters';
 import { cn } from '@/lib/utils';
 
@@ -17,9 +16,6 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
   const [price, setPrice] = useState(0);
   const filtersRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    console.log(filtersRef)
-  })
   return (
     <div
       ref={filtersRef}
@@ -31,10 +27,10 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
     >
       <div className="grid grid-cols-4 gap-5">
         <FilterColumn title="Category: ">
-          <CategoryFilter categories={productCategories} />
+          <CategoryFilter />
         </FilterColumn>
         <FilterColumn title="Sort by: ">
-          <CategoryFilter categories={productSortCategories} />
+          <CategoryFilter />
         </FilterColumn>
         <FilterColumn title="Colour: ">
           <ColourFilters />

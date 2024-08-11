@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import useOutsideClick from '@/hooks/useOutSideClick';
@@ -22,7 +24,7 @@ const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
   const isSidebarToggled = useSelector(selectSidebarToggle);
 
   useOutsideClick(mobileNavRef, () => {
-    window.innerWidth < 1024 && dispatch(hideSidebarOutSideClick());
+    window?.innerWidth < 1024 && dispatch(hideSidebarOutSideClick());
   });
 
   return (

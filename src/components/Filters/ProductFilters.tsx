@@ -3,17 +3,16 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import FilterCollapse from '../../features/Product/categories/FilterCollase';
-import Button from '../Button';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  handleFilterKeyChange,
+  selectProducts,
+} from '@/store/slices/products/productsSlice';
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const productCategories = [
-    'All',
-    'Furniture',
-    'Lighting',
-    'Accessories',
-    'Sale',
-  ];
+  const dispatch = useDispatch();
+  const { productCategories, filterKey } = useSelector(selectProducts);
 
   return (
     <div className="">
@@ -43,15 +42,16 @@ const ProductFilters = () => {
             isOpen && 'invisible opacity-0'
           )}
         >
-          {productCategories.map((cat, index) => (
+          {productCategories.map((item) => (
             <div
-              key={cat}
+              key={item.label}
               className={cn(
                 'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
-                index === 0 && 'text-primary border-b border-primary'
+                filterKey === item.key && 'text-primary border-b border-primary'
               )}
+              onClick={() => dispatch(handleFilterKeyChange(item.key))}
             >
-              {cat}
+              {item.label}
             </div>
           ))}
         </div>
