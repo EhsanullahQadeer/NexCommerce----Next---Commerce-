@@ -1,11 +1,19 @@
-import { Product } from '@/features/Product/categories/fakeProducts';
+import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
+import { cn } from '@/lib/utils';
 import Button from '../Button';
-import { productVerticalActionStyles, addToCartStyles, previewBtnStyles, addToCartLinkStyles } from './styles';
+import { Product } from '@/store/slices/products/fakeProducts';
+import {
+  productVerticalActionStyles,
+  addToCartStyles,
+  previewBtnStyles,
+  addToCartLinkStyles,
+} from './styles';
 
-export interface ProductCardProps extends Product {}
+export interface ProductCardProps extends Product {
+  className?: string;
+}
 
 const ProductCard: FC<ProductCardProps> = ({
   title,
@@ -14,16 +22,18 @@ const ProductCard: FC<ProductCardProps> = ({
   oldPrice,
   variants = false,
   label,
+  className,
 }) => {
   return (
-    <div className="group relative mb-2.5">
+    <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
-        <Link href="/products">
+        <Link href="/products" className='relative'>
           <Image
             src={src}
             alt="Product image"
             fill
-            className="!relative !w-full !h-auto"
+            className="!relative !w-full !h-[277px]"
+            sizes='277px'
           />
         </Link>
         {label && (
@@ -33,14 +43,9 @@ const ProductCard: FC<ProductCardProps> = ({
         )}
 
         <div className={productVerticalActionStyles}>
-          <Link
-            href="#"
-            className={addToCartLinkStyles}
-          >
+          <Link href="#" className={addToCartLinkStyles}>
             <i className="lar la-heart"></i>
-            <span className={addToCartStyles}>
-              Add to cart
-            </span>
+            <span className={addToCartStyles}>Add to cart</span>
           </Link>
         </div>
 
