@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'outlined';
+  variant?: 'primary' | 'outlined'  | 'white';
   size?: 'xs' | 'base';
 }
 
@@ -15,6 +15,7 @@ const buttonVariants = {
   primary: 'bg-primary text-white border-primary hover:bg-secondary',
   outlined:
     'bg-transparent text-primary border-primary hover:bg-primary hover:text-white',
+  white: 'border-none bg-white text-black-100 hover:bg-primary hover:text-white',
 };
 
 const Button: FC<ButtonProps> = ({
