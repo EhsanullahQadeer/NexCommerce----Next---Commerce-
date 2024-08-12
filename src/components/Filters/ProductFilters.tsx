@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import FilterCollapse from '../../features/Product/categories/FilterCollase';
+import FilterCollapse from '../../features/product/categories/FilterCollase';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   handleFilterKeyChange,
@@ -17,7 +17,7 @@ const ProductFilters = () => {
 
   return (
     <div className="">
-      <div className="relative flex flex-col md:flex-row items-center justify-between  gap-[30px]">
+      <div className="relative flex flex-col md:flex-row items-center justify-between  gap-2.5 md:gap-[30px]">
         <div
           className={cn(
             'flex items-center cursor-pointer gap-1.5 text-gray-75',
@@ -39,7 +39,7 @@ const ProductFilters = () => {
         </div>
         <div
           className={cn(
-            'flex items-center gap-2 visible opacity-100 transition-all duration-[0.35s] ease-in',
+            'flex items-center flex-wrap justify-center gap-2 visible opacity-100 transition-all duration-[0.35s] ease-in',
             isOpen && 'invisible opacity-0'
           )}
         >

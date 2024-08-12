@@ -29,10 +29,11 @@ const ProductCard: FC<ProductCardProps> = ({
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
         <Link href="/products" className="relative">
-          <img
+          <Image
+            fill
             src={src}
             alt="Product image"
-            className="!relative block !w-full !h-auto"
+            className="!relative block !w-full !h-auto min-h-[277px]"
           />
         </Link>
         {label && <TagLabel label={label} />}

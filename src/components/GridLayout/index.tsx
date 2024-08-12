@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Isotope from 'isotope-layout';
 import ProductCard from '../Cards/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -49,7 +49,7 @@ const GridLayout: React.FC = () => {
           <div
             key={item.id}
             className={cn(
-              'product-item p-2.5 float-left w-full max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
+              'product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
               item.category
             )}
           >
