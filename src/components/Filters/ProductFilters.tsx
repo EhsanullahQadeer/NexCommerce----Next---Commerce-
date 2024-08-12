@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import FilterCollapse from '../../features/product/categories/FilterCollase';
+import FilterCollapse from '../../features/Product/categories/FilterCollase';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   handleFilterKeyChange,

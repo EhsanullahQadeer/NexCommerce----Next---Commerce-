@@ -1,5 +1,5 @@
 import Slider from '@/components/Slider';
-import ProductCategories from '@/features/product/categories';
+import ProductCategories from '@/features/Product/categories';
 import { FC } from 'react';
 
 const Home: FC = () => {
