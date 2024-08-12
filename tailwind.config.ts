@@ -41,6 +41,9 @@ const config: Config = {
         variant: '0 0 0 1px #cccccc',
         thumbnail: '0 0 0 1px #c96',
       },
+      screens: {
+        'xs': '480px',
+      }
     },
   },
   plugins: [],

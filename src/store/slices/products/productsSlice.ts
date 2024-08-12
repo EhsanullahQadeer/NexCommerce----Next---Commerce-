@@ -13,6 +13,7 @@ export interface ProductsState {
   products: Product[];
   productCategories: ProductCategory[];
   isPreviewModalOpen: boolean;
+  isGalleryViewOpen: boolean;
 }
 
 // Define the initial state using that type
@@ -21,6 +22,7 @@ const initialState: ProductsState = {
   filterKey: '*',
   productCategories,
   isPreviewModalOpen: false,
+  isGalleryViewOpen: false,
 };
 
 export const productsSlice = createSlice({
@@ -33,10 +35,13 @@ export const productsSlice = createSlice({
     togglePreviewModal: (state, action: PayloadAction<boolean>) => {
       state.isPreviewModalOpen = action.payload;
     },
+    toggleGalleryModal: (state, action: PayloadAction<boolean>) => {
+      state.isGalleryViewOpen = action.payload;
+    }
   },
 });
 
-export const { handleFilterKeyChange, togglePreviewModal } =
+export const { handleFilterKeyChange, togglePreviewModal, toggleGalleryModal } =
   productsSlice.actions;
 
 // selectors can use the imported `RootState`
