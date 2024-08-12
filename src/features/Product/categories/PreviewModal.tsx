@@ -4,7 +4,7 @@ import ProductDetails from "../details";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts, togglePreviewModal } from "@/store/slices/products/productsSlice";
 
-const QuickPreviewModal = () => {
+const PreviewModal = () => {
   const { isPreviewModalOpen } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
@@ -25,4 +25,4 @@ const QuickPreviewModal = () => {
   )
 }
 
-export default QuickPreviewModal;
+export default PreviewModal;
