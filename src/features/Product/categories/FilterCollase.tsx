@@ -1,10 +1,11 @@
-import { FC, ReactNode, useRef, useState } from 'react';
+import { FC, ReactNode, useRef } from 'react';
 import CategoryFilter from './CategoryFilters';
 import ColourFilters from './ColourFilters';
 import { cn } from '@/lib/utils';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { useSelector } from 'react-redux';
 import { productSortCategories } from '@/store/slices/products/fakeProducts';
+import PriceRangeInput from '@/components/PriceRangeInput';
 
 interface FilterCollapseProps {
   isOpen?: boolean;
@@ -16,7 +17,6 @@ interface FilterColumnProps {
 }
 
 const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
-  const [price, setPrice] = useState(0);
   const filtersRef = useRef<HTMLDivElement>(null);
   const { productCategories } = useSelector(selectProducts);
 
@@ -42,24 +42,7 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
           <ColourFilters />
         </FilterColumn>
         <FilterColumn title="Price: ">
-          <div>
-            <label className="block text-sm text-gray-700 font-extralight mb-[18px]">
-              Price Range: <span>$0 - $750</span>
-            </label>
-            <input
-              type="range"
-              id="price-range"
-              className="w-full accent-black-75"
-              min="0"
-              max="750"
-              value={price}
-              onInput={(e: any) => setPrice(e.target.value)}
-            />
-          </div>
-          <div className="flex justify-between text-sm text-black-75">
-            <span id="minPrice">$0</span>
-            <span id="maxPrice">$750</span>
-          </div>
+          <PriceRangeInput />
         </FilterColumn>
       </div>
     </div>

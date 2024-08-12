@@ -15,10 +15,10 @@ const Select: FC<SelectProps> = ({ options, value, label }) => {
   return (
     <div className="grid">
       <i className="las la-angle-down flex items-center text-[10px] pointer-events-none z-10 right-1 relative col-start-1 row-start-1 h-4 w-4 self-center justify-self-end forced-colors:hidde"></i>
-      <select className={selectBaseStyles}>
-        <option selected={!value}>{label}</option>
+      <select className={selectBaseStyles} value={value}>
+        <option>{label}</option>
         {options.map(item => (
-          <option value={item.value}>{item.label}</option>
+          <option key={item.value} value={item.value}>{item.label}</option>
         ))}
       </select>
     </div>

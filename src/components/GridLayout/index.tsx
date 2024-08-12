@@ -22,9 +22,8 @@ const GridLayout: React.FC = () => {
       isotope.current = new Isotope(gridRef.current, {
         itemSelector: '.product-item',
         layoutMode: 'fitRows',
-        masonry: {
-          columnWidth: '.grid-sizer',
-          gutter: 20,
+        fitRows: {
+          gutter: 0,
         },
       });
     }
@@ -45,22 +44,19 @@ const GridLayout: React.FC = () => {
 
   return (
     <div className="bg-white">
-      <div
-        ref={gridRef}
-        className="grid-container !relative grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 !gap-5 mt-5"
-      >
-        <div className="grid-sizer"></div>
+      <div ref={gridRef} className="!relative mt-5">
         {products.map((item: Product) => (
           <div
             key={item.id}
-            className={cn('product-item p-2.5', item.category)}
+            className={cn(
+              'product-item p-2.5 float-left w-full max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
+              item.category
+            )}
           >
-            <div className="min-w-[277px] h-auto">
-              <ProductCard
-                {...item}
-                onPreview={() => dispatch(togglePreviewModal(true))}
-              />
-            </div>
+            <ProductCard
+              {...item}
+              onPreview={() => dispatch(togglePreviewModal(true))}
+            />
           </div>
         ))}
       </div>
