@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import Button from '../Button';
+import Button from '../../Button';
 import { cn } from '@/lib/utils';
 
 interface SlideContentProps {

@@ -4,7 +4,7 @@ export interface Product {
   src: string;
   price?: number;
   oldPrice?: number;
-  variants: boolean;
+  variants?: ColorVariant[];
   label?: string;
   category?: string;
 }
@@ -15,12 +15,16 @@ export interface ProductCategory {
   count?: number;
 }
 
+export interface ColorVariant {
+  id: number;
+  color: string;
+}
+
 export const products: Product[] = [
   {
     id: '1',
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
-    variants: false,
     label: 'Sale',
     category: 'furniture',
   },
@@ -30,7 +34,6 @@ export const products: Product[] = [
     src: '/products/product-card/product-6.jpg',
     price: 209,
     oldPrice: 220,
-    variants: false,
     category: 'accessories',
   },
   {
@@ -38,9 +41,18 @@ export const products: Product[] = [
     title: 'Cushion Set 3 Pieces',
     src: '/products/product-card/product-8.jpg',
     price: 99,
-    variants: false,
     label: 'Out of stock',
     category: 'lighting',
+    variants: [
+      {
+        id: 1,
+        color: '#cc9999'
+      },
+      {
+        id: 2,
+        color: '#999999'
+      }
+    ],
   },
   {
     id: '4',
@@ -48,16 +60,24 @@ export const products: Product[] = [
     src: '/products/product-card/product-11.jpg',
     price: 251,
     oldPrice: 280,
-    variants: false,
     category: 'accessories',
   },
   {
     id: '5',
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
-    variants: false,
     label: 'Sale',
     category: 'lighting',
+    variants: [
+      {
+        id: 1,
+        color: '#333333'
+      },
+      {
+        id: 2,
+        color: '#cba374'
+      }
+    ]
   },
   {
     id: '6',
@@ -65,7 +85,6 @@ export const products: Product[] = [
     src: '/products/product-card/product-6.jpg',
     price: 209,
     oldPrice: 220,
-    variants: false,
     category: 'furniture',
   },
   {
@@ -73,9 +92,18 @@ export const products: Product[] = [
     title: 'Cushion Set 3 Pieces',
     src: '/products/product-card/product-8.jpg',
     price: 99,
-    variants: false,
     label: 'Out of stock',
     category: 'sale',
+    variants: [
+      {
+        id: 1,
+        color: '#333333'
+      },
+      {
+        id: 2,
+        color: '#cba374'
+      }
+    ]
   },
   {
     id: '8',
@@ -83,7 +111,6 @@ export const products: Product[] = [
     src: '/products/product-card/product-11.jpg',
     price: 251,
     oldPrice: 280,
-    variants: false,
     category: 'furniture',
   },
 ];

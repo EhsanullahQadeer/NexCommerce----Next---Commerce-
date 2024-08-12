@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
-import { Product, ProductCategory, products, productCategories } from './fakeProducts';
+import {
+  Product,
+  ProductCategory,
+  products,
+  productCategories,
+} from './fakeProducts';
 
 // Define a type for the slice state
 export interface ProductsState {
   filterKey: string;
   products: Product[];
-  productCategories: ProductCategory[],
+  productCategories: ProductCategory[];
+  isPreviewModalOpen: boolean;
 }
 
 // Define the initial state using that type
@@ -14,6 +20,7 @@ const initialState: ProductsState = {
   products,
   filterKey: '*',
   productCategories,
+  isPreviewModalOpen: false,
 };
 
 export const productsSlice = createSlice({
@@ -23,10 +30,14 @@ export const productsSlice = createSlice({
     handleFilterKeyChange: (state, action: PayloadAction<string>) => {
       state.filterKey = action.payload;
     },
+    togglePreviewModal: (state, action: PayloadAction<boolean>) => {
+      state.isPreviewModalOpen = action.payload;
+    },
   },
 });
 
-export const { handleFilterKeyChange } = productsSlice.actions;
+export const { handleFilterKeyChange, togglePreviewModal } =
+  productsSlice.actions;
 
 // selectors can use the imported `RootState`
 export const selectProducts = (state: RootState) => state.products;

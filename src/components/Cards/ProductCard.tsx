@@ -4,15 +4,15 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { Product } from '@/store/slices/products/fakeProducts';
-import {
-  productVerticalActionStyles,
-  addToCartStyles,
-  previewBtnStyles,
-  addToCartLinkStyles,
-} from './styles';
+import { productVerticalActionStyles, previewBtnStyles } from './styles';
+import IconWithText from '../Icons/IconWithTextOverlay';
+import ColorVariants from '../ColorVariants';
+import TagLabel from './TagLabel';
+import CardPrice from './CardPrice';
 
 export interface ProductCardProps extends Product {
   className?: string;
+  onPreview?: () => void;
 }
 
 const ProductCard: FC<ProductCardProps> = ({
@@ -20,37 +20,38 @@ const ProductCard: FC<ProductCardProps> = ({
   src,
   price,
   oldPrice,
-  variants = false,
+  variants,
   label,
   className,
+  onPreview,
 }) => {
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
-        <Link href="/products" className='relative'>
+        <Link href="/products" className="relative">
           <Image
             src={src}
             alt="Product image"
             fill
             className="!relative !w-full !h-[277px]"
-            sizes='277px'
+            sizes="277px"
           />
         </Link>
-        {label && (
-          <span className="absolute text-[13px] font-extralight top-5 left-5 bg-white px-[9px] py-[5px]">
-            {label}
-          </span>
-        )}
+        {label && <TagLabel label={label} />}
 
-        <div className={productVerticalActionStyles}>
-          <Link href="#" className={addToCartLinkStyles}>
-            <i className="lar la-heart"></i>
-            <span className={addToCartStyles}>Add to cart</span>
-          </Link>
-        </div>
+        <Link href="#" className={productVerticalActionStyles}>
+          <IconWithText
+            icon={<i className="lar la-heart"></i>}
+            text="Add to cart"
+          />
+        </Link>
 
         <div className={previewBtnStyles}>
-          <Button className="w-full justify-center" variant="white">
+          <Button
+            className="w-full justify-center"
+            variant="white"
+            onClick={onPreview}
+          >
             quick view
           </Button>
         </div>
@@ -61,14 +62,10 @@ const ProductCard: FC<ProductCardProps> = ({
             {title}
           </Link>
         </h3>
-        {price && (
-          <div className="flex text-sm font-light gap-2 items-center">
-            <span className="text-primary">${price.toFixed(2)}</span>
-            {oldPrice && (
-              <span className="text-black-600">Was ${oldPrice.toFixed(2)}</span>
-            )}
-          </div>
-        )}
+        <CardPrice price={price} oldPrice={oldPrice} />
+        
+        <ColorVariants variants={variants} />
+
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <Link
             href="#"

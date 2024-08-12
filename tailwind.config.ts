@@ -12,6 +12,7 @@ const config: Config = {
       colors: {
         primary: {
           DEFAULT: '#cc9966',
+          50: '#c96'
         },
         secondary: {
           DEFAULT: '#cc6666',
@@ -37,7 +38,9 @@ const config: Config = {
       boxShadow: {
         dropdown: '5px 10px 16px rgba(51, 51, 51, 0.05), -5px 10px 16px rgba(51, 51, 51, 0.05)',
         'mobile-nav': '0.1rem 0 0.6rem 0 rgba(51, 51, 51, 0.5)',
-      }
+        variant: '0 0 0 1px #cccccc',
+        thumbnail: '0 0 0 1px #c96',
+      },
     },
   },
   plugins: [],
