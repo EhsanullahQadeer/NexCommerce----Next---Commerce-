@@ -9,10 +9,10 @@ interface StartsProps {
 const Stars: FC<StartsProps> = ({ count, reviewCount }) => {
   const ratings = arrayNumberGenerator(count);
   return (
-    <div className='flex items-center gap-2'>
+    <div className="flex items-center gap-2">
       <div className="flex items-center">
         {ratings.map((item) => (
-          <span className="flex items-center">
+          <span key={item} className="flex items-center">
             <i
               className={cn(
                 'las la-star text-sm',
@@ -22,7 +22,9 @@ const Stars: FC<StartsProps> = ({ count, reviewCount }) => {
           </span>
         ))}
       </div>
-      <span className='text-black-600 text-[13px] font-extralight'>( {reviewCount} Reviews )</span>
+      <span className="text-black-600 text-[13px] font-extralight">
+        ( {reviewCount} Reviews )
+      </span>
     </div>
   );
 };

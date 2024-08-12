@@ -24,7 +24,7 @@ const ProductCategories = () => {
       <div className="max-w-container mx-auto px-2.5 !pt-10">
         <ProductFilters />
       </div>
-      <div className="max-w-[1188px] mx-auto">
+      <div className="max-w-[1188px] mx-auto px-2.5">
         <GridLayout />
       </div>
       <Modal

@@ -1,0 +1,2 @@
+// Slider full view button styles
+export const sliderFullViewBtnStyles = 'absolute flex h-10 w-10 items-center justify-center right-5 bottom-5 bg-white text-black-500 cursor-pointer z-[1] hover:bg-primary hover:text-white'

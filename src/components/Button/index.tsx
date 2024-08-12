@@ -6,7 +6,7 @@ interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   size?: 'xs' | 'base';
 }
 
-const baseButtonStyles = 'flex font-light  items-center border ';
+const baseButtonStyles = 'flex font-light  items-center border transition-all duration-[0.35s] ease';
 const btnSizeStyles = {
   xs: 'text-[13px] px-[15px] py-[7.5px]',
   base: 'text-sm px-6 py-2',
