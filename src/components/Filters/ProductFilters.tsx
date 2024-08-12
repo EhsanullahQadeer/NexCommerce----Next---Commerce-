@@ -8,6 +8,7 @@ import {
   handleFilterKeyChange,
   selectProducts,
 } from '@/store/slices/products/productsSlice';
+import { clearButtonStyles } from './styles';
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +17,7 @@ const ProductFilters = () => {
 
   return (
     <div className="">
-      <div className="relative flex items-center justify-between  gap-[30px]">
+      <div className="relative flex flex-col md:flex-row items-center justify-between  gap-[30px]">
         <div
           className={cn(
             'flex items-center cursor-pointer gap-1.5 text-gray-75',
@@ -57,7 +58,7 @@ const ProductFilters = () => {
         </div>
         <span
           className={cn(
-            'absolute inline-flex items-center text-primary font-extralight text-base top-0 bottom-0 my-auto right-0 opacity-0 invisible transition-all duration-[0.6s] ease-in-out',
+            clearButtonStyles,
             isOpen && 'visible opacity-100'
           )}
         >

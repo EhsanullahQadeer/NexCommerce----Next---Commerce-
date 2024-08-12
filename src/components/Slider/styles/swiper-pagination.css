@@ -18,6 +18,11 @@
   background: #cccccc;
   border-radius: 30px;
 }
+.gallery-slider .swiper-pagination-bullet:hover,
+.gallery-slider .swiper-pagination-bullet-active {
+  border-color: #c96;
+  background: #c96;
+}
 
 .swiper-pagination-fraction,
 .swiper-pagination-custom,
@@ -26,8 +31,19 @@
   bottom: 20px;
 }
 
+.gallery-slider .swiper, .gallery-slider .swiper-wrapper {
+  width: auto;
+  max-width: 100%;
+}
+
 @media (min-width: 992px) {
-  .swiper-pagination-bullet {
+  .swiper-pagination {
     display: none;
   }
+
+  .gallery-slider .swiper-pagination {
+    display: block;
+  }
 }
+
+

@@ -1,34 +1,53 @@
-import { FC, ReactNode } from "react";
+import useOutsideClick from '@/hooks/useOutSideClick';
+import { cn } from '@/lib/utils';
+import React, { FC, ReactNode, useEffect, useRef } from 'react';
 
 interface ModalProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
 }
 
-const Modal: FC<ModalProps> = ({ open, onClose, children }) => {
+const baseModalStyles =
+  'fixed inset-0 flex justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-[.35s] ease-in-out px-2.5';
+const baseContentStyles =
+  'relative max-w-[1168px] w-full max-h-full my-auto mx-2.5 bg-white ransition-opacity duration-[0.6s] ease-in-out overflow-y-auto';
+const iconStyles = 'absolute flex h-[30px] w-[30px] right-5 top-3 items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
+
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(modalRef, () => {
+    onClose();
+  });
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }, [isOpen])
+
   return (
     <div
-      onClick={onClose}
-      className={`fixed inset-0 flex justify-center items-center transition-colors ${
-        open ? 'visible bg-black/20' : 'invisible'
-      }`}
+      className={cn(
+        baseModalStyles,
+        isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      )}
     >
       <div
-        onClick={(e) => e.stopPropagation()}
-        className={`bg-white rounded-xl shadow p-6 transition-all ${
-          open ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
-        }`}
+        className={cn(baseContentStyles, isOpen ? 'opacity-100' : 'opacity-0')}
+        ref={modalRef}
       >
-        <button
+        <span
+          className={iconStyles}
           onClick={onClose}
-          className="absolute top-2 right-2 p-1 rounded-lg text-gray-400 bg-white hover:bg-gray-50 hover:text-gray-600"
         >
-          <i className="las la-times cursor-pointer text-[16px] text-white"></i>
-        </button>
-
-        {children}
+          <i className="las la-times cursor-pointer text-[16px] text-100"></i>
+        </span>
+        <div className='overflow-y-auto'>
+          {children}
+        </div>
       </div>
     </div>
   );
 };
+
+export default Modal;
