@@ -17,7 +17,7 @@ const ProductFilters = () => {
 
   return (
     <div className="">
-      <div className="relative flex items-center justify-between  gap-[30px]">
+      <div className="relative flex flex-col md:flex-row items-center justify-between  gap-[30px]">
         <div
           className={cn(
             'flex items-center cursor-pointer gap-1.5 text-gray-75',

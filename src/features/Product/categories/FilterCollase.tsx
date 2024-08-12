@@ -1,7 +1,10 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode, useRef, useState } from 'react';
 import CategoryFilter from './CategoryFilters';
 import ColourFilters from './ColourFilters';
 import { cn } from '@/lib/utils';
+import { selectProducts } from '@/store/slices/products/productsSlice';
+import { useSelector } from 'react-redux';
+import { productSortCategories } from '@/store/slices/products/fakeProducts';
 
 interface FilterCollapseProps {
   isOpen?: boolean;
@@ -15,6 +18,7 @@ interface FilterColumnProps {
 const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
   const [price, setPrice] = useState(0);
   const filtersRef = useRef<HTMLDivElement>(null);
+  const { productCategories } = useSelector(selectProducts);
 
   return (
     <div
@@ -23,14 +27,16 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
         'h-[1px] transition-all duration-[0.5s] ease-in-out opacity-0 invisible',
         isOpen && 'h-auto opacity-100 visible'
       )}
-      style={{ height: isOpen ? `${filtersRef?.current?.scrollHeight}px` : '0px'}}
+      style={{
+        height: isOpen ? `${filtersRef?.current?.scrollHeight}px` : '0px',
+      }}
     >
-      <div className="grid grid-cols-4 gap-5">
+      <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <FilterColumn title="Category: ">
-          <CategoryFilter />
+          <CategoryFilter categories={productCategories} />
         </FilterColumn>
         <FilterColumn title="Sort by: ">
-          <CategoryFilter />
+          <CategoryFilter categories={productSortCategories} />
         </FilterColumn>
         <FilterColumn title="Colour: ">
           <ColourFilters />

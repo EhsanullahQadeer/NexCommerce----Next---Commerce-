@@ -46,12 +46,12 @@ export const products: Product[] = [
     variants: [
       {
         id: 1,
-        color: '#cc9999'
+        color: '#cc9999',
       },
       {
         id: 2,
-        color: '#999999'
-      }
+        color: '#999999',
+      },
     ],
   },
   {
@@ -71,13 +71,13 @@ export const products: Product[] = [
     variants: [
       {
         id: 1,
-        color: '#333333'
+        color: '#333333',
       },
       {
         id: 2,
-        color: '#cba374'
-      }
-    ]
+        color: '#cba374',
+      },
+    ],
   },
   {
     id: '6',
@@ -97,13 +97,13 @@ export const products: Product[] = [
     variants: [
       {
         id: 1,
-        color: '#333333'
+        color: '#333333',
       },
       {
         id: 2,
-        color: '#cba374'
-      }
-    ]
+        color: '#cba374',
+      },
+    ],
   },
   {
     id: '8',
@@ -121,4 +121,13 @@ export const productCategories: ProductCategory[] = [
   { key: 'lighting', label: 'Lighting', count: 4 },
   { key: 'accessories', label: 'Accessories', count: 2 },
   { key: 'sale', label: 'Sale', count: 3 },
+];
+
+export const productSortCategories: ProductCategory[] = [
+  { key: 'default', label: 'Default' },
+  { key: 'popularity', label: 'Popularity' },
+  { key: 'average-rating', label: 'Average Rating' },
+  { key: 'Newness', label: 'Newness' },
+  { key: 'price-low-to-high', label: 'Price: Low to High' },
+  { key: 'price-high-to-low', label: 'Price: High to Low' },
 ];
