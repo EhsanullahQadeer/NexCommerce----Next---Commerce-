@@ -1,10 +1,10 @@
 import { useEffect, RefObject } from 'react';
 
 /**
- * @param {RefObject<HTMLElement>} ref - Ref of your parent div
- * @param {() => void} callback - Callback which can be used to change your maintained state in your component
+ * Detects clicks outside of a specified element and invokes a callback function.
+ * @param {RefObject<HTMLElement>} ref - Reference to the HTMLElement that should detect outside clicks.
+ * @param {() => void} callback - Callback function to be invoked when an outside click is detected.
  */
-
 const useOutsideClick = (ref: RefObject<HTMLElement>, callback: () => void) => {
   useEffect(() => {
     const handleClickOutside = (evt: MouseEvent) => {

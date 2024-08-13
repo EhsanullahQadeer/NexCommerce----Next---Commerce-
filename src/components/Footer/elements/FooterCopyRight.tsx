@@ -11,7 +11,7 @@ const FooterCopyRight: FC<FooterCopyRightProps> = ({ hideSocialIcons }) => {
   return (
     <div className="font-extralight text-sm text-gray-500 flex items-center flex-col-reverse md:flex-row justify-between py-[22px] border-t border-black-300 gap-3">
       <div className="flex items-center flex-col-reverse md:flex-row gap-2">
-        <p className="leading-[26.04px]">
+        <p className="text-center leading-[26.04px]">
           Copyright © 2019 Molla Store. All Rights Reserved.
         </p>
         <FooterLinks />
