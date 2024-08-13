@@ -63,12 +63,20 @@ const Navbar = () => {
                 iconClass="text-black-75"
               />
             </div>
-            <NotificationIcon
-              icon="lar la-heart"
-              className="!hidden lg:!flex"
-              iconClass="!text-[28px]"
-              count={3}
-            />
+            <Link href="">
+              <NotificationIcon
+                icon="las la-user-circle"
+                iconClass='!text-[28px]'
+              />
+            </Link>
+            <Link href="">
+              <NotificationIcon
+                icon="lar la-heart"
+                className="!hidden lg:!flex"
+                iconClass="!text-[28px]"
+                count={3}
+              />
+            </Link>
             <CartDropdown />
           </div>
         </div>
