@@ -10,15 +10,17 @@ import {
 } from '@/store/slices/products/productsSlice';
 import { Product } from '@/store/slices/products/fakeProducts';
 import { cn } from '@/lib/utils';
+import { useImagesLoaded } from '@/hooks/useImagesLoaded';
 
 const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const imagesLoaded = useImagesLoaded(gridRef);
   const { filterKey, products } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (gridRef.current) {
+    if (imagesLoaded && gridRef.current && !isotope.current) {
       isotope.current = new Isotope(gridRef.current, {
         itemSelector: '.product-item',
         layoutMode: 'fitRows',
@@ -27,6 +29,7 @@ const GridLayout: React.FC = () => {
         },
       });
     }
+
     const handleResize = () => isotope.current?.reloadItems();
     window.addEventListener('resize', handleResize);
 
@@ -35,7 +38,7 @@ const GridLayout: React.FC = () => {
       isotope.current?.destroy();
       isotope.current = null;
     };
-  }, []);
+  }, [imagesLoaded]);
 
   useEffect(() => {
     if (isotope.current) {
