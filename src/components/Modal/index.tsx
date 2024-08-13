@@ -1,21 +1,24 @@
 import useOutsideClick from '@/hooks/useOutSideClick';
 import { cn } from '@/lib/utils';
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  fullWidth?: boolean;
+  id?: string;
 }
 
 const baseModalStyles =
-  'fixed inset-0 flex justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-[.35s] ease-in-out px-2.5';
+  'fixed inset-0 flex justify-center bg-black bg-opacity-50 z-50 transition-opacity duration-[.35s] ease-in-out';
 const baseContentStyles =
-  'relative max-w-[1168px] w-full max-h-full my-auto mx-2.5 bg-white transition-opacity duration-[0.6s] ease-in-out overflow-y-auto';
-const iconStyles = 'absolute flex h-[30px] w-[30px] right-5 top-3 items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
+  'relative w-full max-h-full my-auto bg-white transition-opacity duration-[0.6s] ease-in-out overflow-y-auto';
+const iconStyles =
+  'absolute flex h-[20px] w-[20px] right-5 top-[15px] items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
 
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Modal: FC<ModalProps> = ({ isOpen, onClose, children, fullWidth, id }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -37,7 +40,7 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
       const timer = setTimeout(() => setIsVisible(false), 600);
       return () => clearTimeout(timer);
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   if (!isVisible) return null;
 
@@ -45,25 +48,26 @@ const Modal: FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <div
       className={cn(
         baseModalStyles,
-        isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none',
+        !fullWidth && 'px-2.5'
       )}
     >
       <div
-        className={cn(baseContentStyles, isAnimating ? 'opacity-100' : 'opacity-0')}
+        className={cn(
+          baseContentStyles,
+          isAnimating ? 'opacity-100' : 'opacity-0',
+          !fullWidth && 'max-w-[1168px] mx-2.5'
+        )}
         ref={modalRef}
       >
-        <span
-          className={iconStyles}
-          onClick={onClose}
-        >
+        <span className={iconStyles} onClick={onClose}>
           <i className="las la-times cursor-pointer text-[16px] text-100"></i>
         </span>
-        <div className='overflow-y-auto'>
-          {children}
-        </div>
+        <div className="overflow-y-auto">{children}</div>
       </div>
     </div>,
-    document.body
+    document.body,
+    id
   );
 };
 

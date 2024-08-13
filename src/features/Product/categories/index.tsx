@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import ProductFilters from '@/components/Filters/ProductFilters';
 import PreviewModal from './PreviewModal';
+import GalleryModal from './GalleryModal';
 
 const GridLayout = dynamic(() => import('@/components/GridLayout'), {
   ssr: false,
@@ -18,6 +19,7 @@ const ProductCategories = () => {
         <GridLayout />
       </div>
       <PreviewModal />
+      <GalleryModal />
     </div>
   );
 };
