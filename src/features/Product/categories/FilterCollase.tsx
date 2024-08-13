@@ -21,15 +21,20 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
   const filtersRef = useRef<HTMLDivElement>(null);
   const { productCategories } = useSelector(selectProducts);
 
+  const handleCollase = () =>
+    setHeight(filtersRef?.current?.scrollHeight || 0);
+
   useEffect(() => {
-    const handleResize = () =>
-      setHeight(filtersRef?.current?.scrollHeight || 0);
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', handleCollase);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleCollase);
     };
   }, []);
+
+  useEffect(() => {
+    handleCollase();
+  }, [isOpen])
 
   return (
     <div

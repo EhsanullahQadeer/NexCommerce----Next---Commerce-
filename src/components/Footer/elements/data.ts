@@ -1,7 +1,12 @@
-type Icon = {
+export type Icon = {
   url: string;
   icon: string;
 };
+
+export type FooterLink = {
+  url: string;
+  name: string;
+}
 
 export const icons: Icon[] = [
   {
@@ -20,4 +25,15 @@ export const icons: Icon[] = [
     url: 'https://www.youtube.com/',
     icon: 'la-youtube text-[#e66262]',
   },
+];
+
+export const footerLinks: FooterLink[] = [
+  {
+    url: '',
+    name: 'Terms of Use',
+  },
+  {
+    url: '',
+    name: 'Privacy Policy',
+  }
 ];

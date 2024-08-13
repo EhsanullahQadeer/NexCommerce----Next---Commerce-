@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import { selectSidebarToggle } from '@/store/slice';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import Container from '../Container';
+import FooterCopyRight from '../Footer/elements/FooterCopyRight';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -23,7 +25,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     >
       <Navbar />
       <main>{children}</main>
-      <Footer />
+      <div>
+        <Container>
+          <FooterCopyRight />
+        </Container>
+      </div>
     </div>
   );
 };

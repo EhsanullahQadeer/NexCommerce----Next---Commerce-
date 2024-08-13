@@ -1,0 +1,22 @@
+import Link from 'next/link';
+import { icons } from './data';
+import { cn } from '@/lib/utils';
+
+const FooterSocialIcons = () => {
+  return (
+    <div className="flex items-center justify-center gap-5">
+      {icons.map((item) => (
+        <Link
+          key={item.url}
+          href={item.url}
+          target="_blank"
+          className="flex items-center"
+        >
+          <i className={cn('la text-lg hover:text-primary', item.icon)}></i>
+        </Link>
+      ))}
+    </div>
+  );
+};
+
+export default FooterSocialIcons;
