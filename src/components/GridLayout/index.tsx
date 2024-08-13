@@ -27,8 +27,11 @@ const GridLayout: React.FC = () => {
         },
       });
     }
+    const handleResize = () => isotope.current?.reloadItems();
+    window.addEventListener('resize', handleResize);
 
     return () => {
+      window.removeEventListener('resize', handleResize);
       isotope.current?.destroy();
       isotope.current = null;
     };

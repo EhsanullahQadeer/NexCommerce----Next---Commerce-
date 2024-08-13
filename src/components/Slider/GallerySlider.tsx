@@ -23,11 +23,13 @@ const images: string[] = [
 interface GallerySliderProps {
   direction?: 'vertical' | 'horizontal';
   showTotalSlides?: boolean;
+  onFullScreen?: () => void;
 }
 
 const GallerySlider: FC<GallerySliderProps> = ({
   direction = 'vertical',
   showTotalSlides,
+  onFullScreen,
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -71,12 +73,12 @@ const GallerySlider: FC<GallerySliderProps> = ({
   return (
     <div>
       {showTotalSlides && (
-        <div className="flex items-center justify-center text-sm font-extralight text-black-100 mb-2">
-          <span className="mr-1">{activeIndex + 1}</span>/
+        <div className="flex items-center justify-center text-sm font-extralight text-black-100 pt-4 mb-3">
+          <span className="mr-1">{activeIndex + 1}</span> /
           <span className="ml-1">{images.length}</span>
         </div>
       )}
-      <div className={cn('flex gap-2', isHorizontal && 'flex-cols')}>
+      <div className={cn('flex gap-2', isHorizontal && 'flex-col')}>
         {/* Thumbnails */}
         {direction === 'vertical' && renderSwiperThumbnail}
 
@@ -120,9 +122,11 @@ const GallerySlider: FC<GallerySliderProps> = ({
             />
           </div>
 
-          <div className={sliderFullViewBtnStyles}>
-            <i className="las la-expand-arrows-alt text-xl"></i>
-          </div>
+          {onFullScreen && (
+            <div className={sliderFullViewBtnStyles} onClick={onFullScreen}>
+              <i className="las la-expand-arrows-alt text-xl"></i>
+            </div>
+          )}
         </div>
 
         {/* Thumbnails */}

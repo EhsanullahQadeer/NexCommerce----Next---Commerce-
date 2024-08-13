@@ -1,4 +1,4 @@
-import { FC, ReactNode, useRef } from 'react';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import CategoryFilter from './CategoryFilters';
 import ColourFilters from './ColourFilters';
 import { cn } from '@/lib/utils';
@@ -17,8 +17,19 @@ interface FilterColumnProps {
 }
 
 const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
+  const [height, setHeight] = useState(0);
   const filtersRef = useRef<HTMLDivElement>(null);
   const { productCategories } = useSelector(selectProducts);
+
+  useEffect(() => {
+    const handleResize = () =>
+      setHeight(filtersRef?.current?.scrollHeight || 0);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div
@@ -28,7 +39,7 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
         isOpen && 'h-auto opacity-100 visible'
       )}
       style={{
-        height: isOpen ? `${filtersRef?.current?.scrollHeight}px` : '0px',
+        height: isOpen ? `${height}px` : '0px',
       }}
     >
       <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">

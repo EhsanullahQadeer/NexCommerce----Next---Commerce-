@@ -13,7 +13,7 @@ export interface ProductsState {
   products: Product[];
   productCategories: ProductCategory[];
   isPreviewModalOpen: boolean;
-  isGalleryViewOpen: boolean;
+  isGalleryFullView: boolean;
 }
 
 // Define the initial state using that type
@@ -22,7 +22,7 @@ const initialState: ProductsState = {
   filterKey: '*',
   productCategories,
   isPreviewModalOpen: false,
-  isGalleryViewOpen: false,
+  isGalleryFullView: false,
 };
 
 export const productsSlice = createSlice({
@@ -36,7 +36,7 @@ export const productsSlice = createSlice({
       state.isPreviewModalOpen = action.payload;
     },
     toggleGalleryModal: (state, action: PayloadAction<boolean>) => {
-      state.isGalleryViewOpen = action.payload;
+      state.isGalleryFullView = action.payload;
     }
   },
 });
