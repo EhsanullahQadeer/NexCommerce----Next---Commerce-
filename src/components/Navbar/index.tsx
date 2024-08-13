@@ -39,7 +39,7 @@ const Navbar = () => {
             </div>
             <Link href="/">
               <span className="sr-only">Molla</span>
-              <Image alt="" src="/logo.png" height={20} width={82} />
+              <Image alt="" src="/logo-dark.png" height={20} width={84} />
             </Link>
           </div>
 

@@ -37,7 +37,7 @@ export const productsSlice = createSlice({
     },
     toggleGalleryModal: (state, action: PayloadAction<boolean>) => {
       state.isGalleryFullView = action.payload;
-    }
+    },
   },
 });
 

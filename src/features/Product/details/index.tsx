@@ -53,8 +53,10 @@ const ProductDetails = () => {
         </Link>
       </div>
       <div className="flex items-center mt-[45px]">
-        <span className="mr-2 text-sm font-light text-black-500 tracking-[0.14px] leading-[16.8px]">Share: </span>
-        <SocialMobileIcons variant="dark" className='!mt-0 !gap-[5px]' />
+        <span className="mr-2 text-sm font-light text-black-500 tracking-[0.14px] leading-[16.8px]">
+          Share:{' '}
+        </span>
+        <SocialMobileIcons variant="dark" className="!mt-0 !gap-[5px]" />
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 import useOutsideClick from '@/hooks/useOutSideClick';
 import { cn } from '@/lib/utils';
-import React, { FC, ReactNode, useEffect, useId, useRef, useState } from 'react';
+import React, {
+  FC,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 interface ModalProps {
@@ -18,7 +24,13 @@ const baseContentStyles =
 const iconStyles =
   'absolute flex h-[20px] w-[20px] right-5 top-[15px] items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
 
-const Modal: FC<ModalProps> = ({ isOpen, onClose, children, fullWidth, id }) => {
+const Modal: FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  children,
+  fullWidth,
+  id,
+}) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);

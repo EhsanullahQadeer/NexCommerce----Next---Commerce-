@@ -14,7 +14,7 @@ const GalleryModal = () => {
   const handleCloseModal = () => {
     dispatch(togglePreviewModal(false));
     dispatch(toggleGalleryModal(false));
-  }
+  };
 
   return (
     <Modal
@@ -23,7 +23,7 @@ const GalleryModal = () => {
       fullWidth
       id="gallery-full-view"
     >
-      <div className='max-w-[654px] mx-auto px-5 mb-10'>
+      <div className="max-w-[654px] mx-auto px-5 mb-10">
         <GallerySlider direction="horizontal" showTotalSlides />
       </div>
     </Modal>
