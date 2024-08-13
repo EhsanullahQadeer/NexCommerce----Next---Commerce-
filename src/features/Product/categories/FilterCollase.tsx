@@ -21,8 +21,11 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
   const filtersRef = useRef<HTMLDivElement>(null);
   const { productCategories } = useSelector(selectProducts);
 
-  const handleCollase = () =>
-    setHeight(filtersRef?.current?.scrollHeight || 0);
+  const handleCollase = () => {
+    setHeight(
+      filtersRef?.current?.clientHeight || 0
+    );
+  }
 
   useEffect(() => {
     window.addEventListener('resize', handleCollase);
@@ -38,16 +41,15 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
 
   return (
     <div
-      ref={filtersRef}
       className={cn(
         'h-[1px] transition-all duration-[0.5s] ease-in-out opacity-0 invisible',
-        isOpen && 'h-auto opacity-100 visible'
+        isOpen && 'opacity-100 visible'
       )}
       style={{
         height: isOpen ? `${height}px` : '0px',
       }}
     >
-      <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <div ref={filtersRef} className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <FilterColumn title="Category: ">
           <CategoryFilter categories={productCategories} />
         </FilterColumn>
