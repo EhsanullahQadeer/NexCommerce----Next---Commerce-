@@ -15,7 +15,7 @@ import SocialMobileIcons from './SocialMobileIcons';
 const BASE_STYLES =
   'fixed lg:hidden top-0 bottom-0 left-[-280px] bg-black-75 shadow-nav-mobile z-[999] w-full max-w-[280px] h-full overflow-y-auto';
 const OVERLAY_STYLES =
-  'fixed inset-0 z-[998] bg-[rgba(25,25,25,0.25)] transition-opacity';
+  'fixed inset-0 z-[998] bg-[rgba(25,25,25,0.25)] transition-opacity lg:hidden';
 const ANIMATION_DELAY = 100;
 const ANIMATION_DURATION = 400;
 
