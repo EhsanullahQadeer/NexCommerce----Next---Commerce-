@@ -11,6 +11,7 @@ import {
 import { Product } from '@/store/slices/products/fakeProducts';
 import { cn } from '@/lib/utils';
 import { useImagesLoaded } from '@/hooks/useImagesLoaded';
+import Button from '../Button';
 
 const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);
@@ -65,6 +66,11 @@ const GridLayout: React.FC = () => {
             />
           </div>
         ))}
+      </div>
+      <div className="mt-10 mb-10">
+        <Button className="mx-auto">
+          More Products <i className="las la-sync ml-2"></i>
+        </Button>
       </div>
     </div>
   );
