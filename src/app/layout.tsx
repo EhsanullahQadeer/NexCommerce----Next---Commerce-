@@ -46,6 +46,7 @@ export default function RootLayout({
         </head>
         <body className={cn(poppins.className, 'overflow-x-hidden')}>
           <MainLayout>{children}</MainLayout>
+          <div id="sidebar-wrapper"></div>
         </body>
       </html>
     </StoreProvider>
