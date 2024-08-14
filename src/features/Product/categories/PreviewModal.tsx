@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import Modal from '@/components/Modal';
-import GallerySlider from '@/components/Slider/GallerySlider';
 import ProductDetails from '../details';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,6 +7,11 @@ import {
   toggleGalleryModal,
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
+import dynamic from 'next/dynamic';
+
+const GallerySlider = dynamic(import('@/components/Slider/GallerySlider'), {
+  ssr: false,
+});
 
 const PreviewModal: FC = () => {
   const { isPreviewModalOpen } = useSelector(selectProducts);

@@ -3,7 +3,6 @@ import {
   selectProductCategories,
   toggleFilters,
 } from '@/store/slices/categories/categoriesSlice';
-import Drawer from '@/components/Drawer';
 import ToggleFilters from '@/components/Filters/ToggleFilters';
 import CleanAllButton from '@/components/Filters/CleanAllButton';
 import Collapse from '@/components/Collapse';
@@ -15,6 +14,9 @@ import {
   sizeFiltersResults,
 } from '@/store/slices/categories/fakeProducts';
 import ColourFilters from '../Product/categories/ColourFilters';
+import dynamic from 'next/dynamic';
+
+const Drawer = dynamic(import('@/components/Drawer'), { ssr: false });
 
 const CategoryFilterDrawer = () => {
   const { isToggleFilters } = useSelector(selectProductCategories);
