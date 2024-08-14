@@ -1,25 +1,16 @@
 import Modal from '@/components/Modal';
 import GallerySlider from '@/components/Slider/GallerySlider';
+import { selectProducts, toggleGalleryModal } from '@/store/slices/products/productsSlice';
+import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  selectProducts,
-  toggleGalleryModal,
-  togglePreviewModal,
-} from '@/store/slices/products/productsSlice';
 
-const GalleryModal = () => {
+const GalleryModal: FC = () => {
   const { isGalleryFullView } = useSelector(selectProducts);
   const dispatch = useDispatch();
-
-  const handleCloseModal = () => {
-    dispatch(togglePreviewModal(false));
-    dispatch(toggleGalleryModal(false));
-  };
-
   return (
     <Modal
       isOpen={isGalleryFullView}
-      onClose={handleCloseModal}
+      onClose={() => dispatch(toggleGalleryModal(false))}
       fullWidth
       id="gallery-full-view"
     >

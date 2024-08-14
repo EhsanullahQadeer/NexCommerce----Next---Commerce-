@@ -11,7 +11,7 @@ import { createPortal } from 'react-dom';
 
 interface ModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
   fullWidth?: boolean;
   id?: string;
@@ -34,9 +34,9 @@ const Modal: FC<ModalProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
-
+  console.log(onClose)
   useOutsideClick(modalRef, () => {
-    onClose();
+    onClose?.();
   });
 
   useEffect(() => {

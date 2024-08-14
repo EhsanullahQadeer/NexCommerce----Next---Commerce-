@@ -23,7 +23,7 @@ const Select: FC<SelectProps> = ({ options, value, label, size = 'lg' }) => {
   return (
     <div className="grid">
       <i className={iconStyles}></i>
-      <select className={cn(selectBaseStyles, sizes[size])} value={value}>
+      <select className={cn(selectBaseStyles, sizes[size])} defaultValue={value}>
         {label && <option>{label}</option>}
         {options.map((item) => (
           <option key={item.value} value={item.value}>

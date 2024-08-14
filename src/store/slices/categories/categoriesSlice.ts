@@ -31,9 +31,12 @@ export const productCategoriesSlice = createSlice({
   },
 });
 
-export const { toggleFilters } = productCategoriesSlice.actions;
+export const {
+  toggleFilters,
+} = productCategoriesSlice.actions;
 
 // selectors can use the imported `RootState`
-export const selectProductCategories = (state: RootState) => state.productCategories;
+export const selectProductCategories = (state: RootState) =>
+  state.productCategories;
 
 export default productCategoriesSlice.reducer;
