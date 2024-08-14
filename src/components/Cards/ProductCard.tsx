@@ -37,7 +37,6 @@ const ProductCard: FC<ProductCardProps> = ({
             src={src}
             alt="Product image"
             className="!relative w-full height-auto min-h-[277px]"
-            priority
           />
         </Link>
         {label && <TagLabel label={label} />}

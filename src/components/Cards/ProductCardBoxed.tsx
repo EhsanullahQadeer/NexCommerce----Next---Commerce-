@@ -2,12 +2,8 @@ import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import Button from '../Button';
 import { Product } from '@/store/slices/products/fakeProducts';
-import {
-  productVerticalActionStyles,
-  previewBtnStyles,
-} from './elements/styles';
+import { productVerticalActionStyles } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
 import TagLabel from './elements/TagLabel';
