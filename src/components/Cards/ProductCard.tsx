@@ -33,11 +33,10 @@ const ProductCard: FC<ProductCardProps> = ({
       <div className="relative overflow-hidden">
         <Link href="/products" className="relative">
           <Image
-            fill
             src={src}
             alt="Product image"
-            className="!relative block !w-full !h-auto min-h-[277px]"
-            sizes="100vw"
+            height={277}
+            width={277}
             priority
           />
         </Link>
