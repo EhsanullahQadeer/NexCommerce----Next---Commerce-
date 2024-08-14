@@ -20,7 +20,11 @@ interface NavMobileViewProps {
 const baseStyles =
   'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile z-[999]';
 
-const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink, id }) => {
+const NavMobileView: FC<NavMobileViewProps> = ({
+  routes,
+  isActiveLink,
+  id,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const mobileNavRef = useRef<HTMLDivElement>(null);
