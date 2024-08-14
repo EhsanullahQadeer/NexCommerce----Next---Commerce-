@@ -4,7 +4,10 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { Product } from '@/store/slices/products/fakeProducts';
-import { productVerticalActionStyles, previewBtnStyles } from './elements/styles';
+import {
+  productVerticalActionStyles,
+  previewBtnStyles,
+} from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
 import TagLabel from './elements/TagLabel';
@@ -34,6 +37,9 @@ const ProductCard: FC<ProductCardProps> = ({
             src={src}
             alt="Product image"
             className="!relative block !w-full !h-auto min-h-[277px]"
+            sizes="(max-width: 640px) 100vw,
+              (max-width: 767px) 33vw,
+              (max-width: 1024px) 25vw"
           />
         </Link>
         {label && <TagLabel label={label} />}
@@ -62,7 +68,7 @@ const ProductCard: FC<ProductCardProps> = ({
           </Link>
         </h3>
         <CardPrice price={price} oldPrice={oldPrice} />
-        
+
         <ColorVariants variants={variants} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
