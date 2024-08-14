@@ -6,6 +6,7 @@ import { selectProducts } from '@/store/slices/products/productsSlice';
 import { useSelector } from 'react-redux';
 import { productSortCategories } from '@/store/slices/products/fakeProducts';
 import PriceRangeInput from '@/components/PriceRangeInput';
+import Collapse from '@/components/Collapse';
 
 interface FilterCollapseProps {
   isOpen?: boolean;
@@ -17,39 +18,11 @@ interface FilterColumnProps {
 }
 
 const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
-  const [height, setHeight] = useState(0);
-  const filtersRef = useRef<HTMLDivElement>(null);
   const { productCategories } = useSelector(selectProducts);
 
-  const handleCollase = () => {
-    setHeight(
-      filtersRef?.current?.clientHeight || 0
-    );
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', handleCollase);
-
-    return () => {
-      window.removeEventListener('resize', handleCollase);
-    };
-  }, []);
-
-  useEffect(() => {
-    handleCollase();
-  }, [isOpen])
-
   return (
-    <div
-      className={cn(
-        'h-[1px] transition-all duration-[0.5s] ease-in-out opacity-0 invisible',
-        isOpen && 'opacity-100 visible'
-      )}
-      style={{
-        height: isOpen ? `${height}px` : '0px',
-      }}
-    >
-      <div ref={filtersRef} className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <Collapse isOpen={isOpen}>
+      <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <FilterColumn title="Category: ">
           <CategoryFilter categories={productCategories} />
         </FilterColumn>
@@ -63,7 +36,7 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
           <PriceRangeInput />
         </FilterColumn>
       </div>
-    </div>
+    </Collapse>
   );
 };
 

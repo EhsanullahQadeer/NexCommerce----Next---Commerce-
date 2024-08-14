@@ -3,8 +3,9 @@ import { Poppins } from 'next/font/google';
 
 import { StoreProvider } from '@/store/StoreProvider';
 import MainLayout from '@/components/layout/MainLayout';
+import { siteConfig } from '@/data/siteConfig';
 
-import './globals.css';
+import '@/styles/globals.css';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -14,8 +15,17 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Next Project',
-  description: 'Next project',
+  applicationName: siteConfig.title,
+  title: `Home | ${siteConfig.title}`,
+  description: siteConfig.description,
+  metadataBase: siteConfig.url,
+  openGraph: {
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.title,
+    locale: 'en_US',
+  }
 };
 
 export default function RootLayout({

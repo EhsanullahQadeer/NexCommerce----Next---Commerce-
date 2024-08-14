@@ -4,4 +4,4 @@ export const productVerticalActionStyles =
 
 // product detail preview button styles
 export const previewBtnStyles =
-  'absolute text-center w-full -bottom-9 group-hover:bottom-0 transition-all duration-[0.35s] ease';
+  'absolute text-center w-full -bottom-[60px] group-hover:bottom-0 transition-all duration-[0.35s] ease';

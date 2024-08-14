@@ -7,6 +7,7 @@ export interface Product {
   variants?: ColorVariant[];
   label?: string;
   category?: string;
+  heading?: string;
 }
 
 export interface ProductCategory {
