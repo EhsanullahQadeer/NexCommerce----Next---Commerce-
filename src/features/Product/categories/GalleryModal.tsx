@@ -1,8 +1,15 @@
 import Modal from '@/components/Modal';
-import GallerySlider from '@/components/Slider/GallerySlider';
-import { selectProducts, toggleGalleryModal } from '@/store/slices/products/productsSlice';
+import {
+  selectProducts,
+  toggleGalleryModal,
+} from '@/store/slices/products/productsSlice';
+import dynamic from 'next/dynamic';
 import { FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+const GallerySlider = dynamic(import('@/components/Slider/GallerySlider'), {
+  ssr: false,
+});
 
 const GalleryModal: FC = () => {
   const { isGalleryFullView } = useSelector(selectProducts);
