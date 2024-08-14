@@ -7,11 +7,7 @@ import {
   toggleGalleryModal,
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
-import dynamic from 'next/dynamic';
-
-const GallerySlider = dynamic(import('@/components/Slider/GallerySlider'), {
-  ssr: false,
-});
+import GallerySlider from '@/components/Slider/GallerySlider';
 
 const PreviewModal: FC = () => {
   const { isPreviewModalOpen } = useSelector(selectProducts);

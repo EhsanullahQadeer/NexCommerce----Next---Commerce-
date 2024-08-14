@@ -1,6 +1,7 @@
 'use client';
 
-import { FC, useRef } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useOutsideClick from '@/hooks/useOutSideClick';
 import { cn } from '@/lib/utils';
@@ -13,33 +14,52 @@ import SocialMobileIcons from './SocialMobileIcons';
 interface NavMobileViewProps {
   routes: NavLinkProps[];
   isActiveLink: (path: string) => boolean;
+  id?: string;
 }
 
 const baseStyles =
-  'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile overflow-y-auto z-[999]';
+  'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile z-[999]';
 
-const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
+const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink, id }) => {
+  const [isVisible, setIsVisible] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
   const mobileNavRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const isSidebarToggled = useSelector(selectSidebarToggle);
 
   useOutsideClick(mobileNavRef, () => {
-    window?.innerWidth < 1024 && dispatch(hideSidebarOutSideClick());
+    dispatch(hideSidebarOutSideClick());
   });
 
-  return (
+  useEffect(() => {
+    if (isSidebarToggled) {
+      setIsVisible(true);
+      const timer = setTimeout(() => setIsAnimating(true), 100); // Small delay to trigger animation
+      return () => clearTimeout(timer);
+    } else {
+      setIsAnimating(false);
+
+      // Delay the close action to allow the animation to play
+      const timer = setTimeout(() => setIsVisible(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [isSidebarToggled]);
+
+  if (!isVisible) return null;
+
+  return createPortal(
     <>
       <div
         className={cn(
-          'lg:hidden h-full w-full left-0 top-0 z-[998] bg-[rgba(25,25,25,0.25)]',
-          isSidebarToggled && 'fixed flex'
+          'fixed lg:hidden h-full w-full left-0 top-0 invisible opacity-0 z-[998] bg-[rgba(25,25,25,0.25)]',
+          isAnimating && 'opacity-100 visible'
         )}
         style={{ transition: 'all 0.4s ease' }}
       ></div>
       <div
         className={cn(
           baseStyles,
-          isSidebarToggled && 'translate-x-[80px] lg:translate-x-0'
+          isAnimating && 'translate-x-[280px] lg:translate-x-0'
         )}
         style={{ transition: 'all 0.4s ease' }}
         ref={mobileNavRef}
@@ -74,7 +94,9 @@ const NavMobileView: FC<NavMobileViewProps> = ({ routes, isActiveLink }) => {
 
         <SocialMobileIcons />
       </div>
-    </>
+    </>,
+    document.body,
+    id
   );
 };
 

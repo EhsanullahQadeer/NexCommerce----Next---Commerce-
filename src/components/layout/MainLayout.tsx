@@ -1,13 +1,11 @@
 'use client';
 
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { cn } from '@/lib/utils';
 import { selectSidebarToggle } from '@/store/slice';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
-import Container from '../Container';
-import FooterCopyRight from '../Footer/elements/FooterCopyRight';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -15,6 +13,7 @@ interface MainLayoutProps {
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const isSidebarToggle = useSelector(selectSidebarToggle);
+
   return (
     <div
       className={cn(

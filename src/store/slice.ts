@@ -12,7 +12,7 @@ const initialState: RootSlice = {
 };
 
 export const rootSlice = createSlice({
-  name: 'counter',
+  name: 'root',
   initialState,
   reducers: {
     toggleSidebar: (state) => {

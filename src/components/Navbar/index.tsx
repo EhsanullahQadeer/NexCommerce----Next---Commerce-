@@ -50,15 +50,15 @@ const Navbar = () => {
     <>
       <header
         className={cn(
-          'sticky bg-white w-full top-0 transition-all duration-[0.4s] w-full top-[-60px] left-0 right-0 z-[90]',
-          isAffix && 'top-0 shadow-[0_3px_6px_rgba(51,51,51,0.05)]',
+          'sticky bg-white w-full top-0 lg:top-[-60px] transition-all duration-[0.4s] w-full left-0 right-0 z-[90]',
+          isAffix && 'lg:top-0 shadow-[0_3px_6px_rgba(51,51,51,0.05)]',
         )}
       >
         <div className="relative flex max-w-container items-center justify-between mx-auto px-2.5">
           <div className="flex items-center">
             <div
               className={cn(
-                'flex lg:hidden h-[30px] w-[30px] mx-2.5 justify-center cursor-pointer items-center',
+                'flex lg:hidden h-[30px] w-[30px] ml-0 lg:ml-2.5 mr-2.5 justify-center cursor-pointer items-center',
                 isSidebarToggled && '!pointer-events-none'
               )}
               onClick={() => dispatch(toggleSidebar())}
@@ -110,7 +110,7 @@ const Navbar = () => {
         <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
       </header>
 
-      <NavMobileView routes={routes} isActiveLink={isActiveLink} />
+      <NavMobileView routes={routes} isActiveLink={isActiveLink} id='nav-mobile' />
     </>
   );
 };
