@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useRef, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import useOutsideClick from '@/hooks/useOutSideClick';
@@ -11,14 +11,19 @@ import { NavLinkProps } from './NavLink';
 import Link from 'next/link';
 import SocialMobileIcons from './SocialMobileIcons';
 
+// Constants and Styles
+const BASE_STYLES =
+  'fixed lg:hidden top-0 bottom-0 left-[-280px] bg-black-75 shadow-nav-mobile z-[999] w-full max-w-[280px] h-full overflow-y-auto';
+const OVERLAY_STYLES =
+  'fixed inset-0 z-[998] bg-[rgba(25,25,25,0.25)] transition-opacity';
+const ANIMATION_DELAY = 100;
+const ANIMATION_DURATION = 400;
+
 interface NavMobileViewProps {
   routes: NavLinkProps[];
   isActiveLink: (path: string) => boolean;
   id?: string;
 }
-
-const baseStyles =
-  'fixed lg:hidden h-full w-full max-w-[280px] top-0 left-[-280px] bg-black-75 shadow-nav-mobile z-[999]';
 
 const NavMobileView: FC<NavMobileViewProps> = ({
   routes,
@@ -31,23 +36,27 @@ const NavMobileView: FC<NavMobileViewProps> = ({
   const dispatch = useDispatch();
   const isSidebarToggled = useSelector(selectSidebarToggle);
 
-  useOutsideClick(mobileNavRef, () => {
+  // Handle closing of sidebar
+  const handleCloseSidebar = useCallback(() => {
     dispatch(hideSidebarOutSideClick());
-  });
+  }, [dispatch]);
 
+  // Handle toggling of the sidebar with animations
   useEffect(() => {
     if (isSidebarToggled) {
       setIsVisible(true);
-      const timer = setTimeout(() => setIsAnimating(true), 100); // Small delay to trigger animation
+      document.body.style.overflow = 'hidden'; // Prevent body scroll
+      const timer = setTimeout(() => setIsAnimating(true), ANIMATION_DELAY);
       return () => clearTimeout(timer);
     } else {
       setIsAnimating(false);
-
-      // Delay the close action to allow the animation to play
-      const timer = setTimeout(() => setIsVisible(false), 600);
+      document.body.style.overflow = ''; // Restore body scroll
+      const timer = setTimeout(() => setIsVisible(false), ANIMATION_DURATION);
       return () => clearTimeout(timer);
     }
   }, [isSidebarToggled]);
+
+  useOutsideClick(mobileNavRef, handleCloseSidebar);
 
   if (!isVisible) return null;
 
@@ -55,23 +64,24 @@ const NavMobileView: FC<NavMobileViewProps> = ({
     <>
       <div
         className={cn(
-          'fixed lg:hidden h-full w-full left-0 top-0 invisible opacity-0 z-[998] bg-[rgba(25,25,25,0.25)]',
-          isAnimating && 'opacity-100 visible'
+          OVERLAY_STYLES,
+          isAnimating ? 'opacity-100 visible' : 'opacity-0 invisible'
         )}
-        style={{ transition: 'all 0.4s ease' }}
-      ></div>
+        style={{ transition: `opacity ${ANIMATION_DURATION}ms ease` }}
+        onClick={handleCloseSidebar}
+      />
       <div
         className={cn(
-          baseStyles,
+          BASE_STYLES,
           isAnimating && 'translate-x-[280px] lg:translate-x-0'
         )}
-        style={{ transition: 'all 0.4s ease' }}
+        style={{ transition: `transform ${ANIMATION_DURATION}ms ease` }}
         ref={mobileNavRef}
       >
         <div className="relative">
           <span
             className="absolute flex h-[30px] w-[30px] right-[17px] top-[7px] items-center justify-end cursor-pointer z-[99]"
-            onClick={() => dispatch(hideSidebarOutSideClick())}
+            onClick={handleCloseSidebar}
           >
             <i className="las la-times cursor-pointer text-[16px] text-white"></i>
           </span>
@@ -88,6 +98,7 @@ const NavMobileView: FC<NavMobileViewProps> = ({
                     'block text-xs font-extralight uppercase py-2.5 px-5 text-white border-b border-b-[#ffffff14] leading-[18px]',
                     isActiveLink(item.url) && 'text-primary'
                   )}
+                  onClick={handleCloseSidebar}
                 >
                   {item.name}
                 </Link>
