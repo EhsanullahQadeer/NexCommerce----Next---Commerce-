@@ -1,14 +1,16 @@
 'use client';
 
+import { useDispatch, useSelector } from 'react-redux';
 import Container from '@/components/Container';
 import CategoryFilterToggle from '@/components/Filters/CategoryFilterToggle';
-import CategoryFilterDrawer from './CategoryFilterDrawer';
 import { Product } from '@/store/slices/products/fakeProducts';
-import { useDispatch } from 'react-redux';
-import { togglePreviewModal } from '@/store/slices/products/productsSlice';
 import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
 import { products } from '@/store/slices/categories/fakeProducts';
 import Button from '@/components/Button';
+import CategoryFilterDrawer from './CategoryFilterDrawer';
+import PreviewModal from '../Product/categories/PreviewModal';
+import { togglePreviewModal } from '@/store/slices/products/productsSlice';
+import GalleryModal from '../Product/categories/GalleryModal';
 
 const ProductGrid = () => {
   const dispatch = useDispatch();
@@ -26,8 +28,12 @@ const ProductGrid = () => {
         ))}
       </div>
       <div className="mt-10 mb-10">
-        <Button className='mx-auto'>More Products <i className="las la-sync ml-2"></i></Button>
+        <Button className="mx-auto">
+          More Products <i className="las la-sync ml-2"></i>
+        </Button>
       </div>
+      <PreviewModal />
+      <GalleryModal />
     </Container>
   );
 };

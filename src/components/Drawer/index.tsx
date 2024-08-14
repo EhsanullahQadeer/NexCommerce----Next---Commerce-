@@ -31,7 +31,6 @@ const Drawer: FC<DrawerProps> = ({
   });
 
   useEffect(() => {
-    console.log(isOpen);
     if (isOpen) {
       setIsVisible(true);
       const timer = setTimeout(() => setIsAnimating(true), 100); // Small delay to trigger animation
