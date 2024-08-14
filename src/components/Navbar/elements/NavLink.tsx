@@ -10,16 +10,16 @@ export interface NavLinkProps {
 }
 
 const baseStyles =
-  'relative h-[60px] text-sm font-light uppercase text-[#222] flex items-center px-4 group';
+  'relative h-[60px] text-sm font-normal uppercase text-75 flex items-center px-4 group tracking-[0.14px] hover:text-primary';
 const linkBottomLineStyles =
-  'absolute h-[1px] w-full bg-black-50 bottom-[1rem] left-0 group-hover:left-auto group-hover:right-0 origin-[right_center] group-hover:origin-[left_center]';
+  'absolute h-[2px] w-full bg-primary bottom-[1rem] left-0 group-hover:left-auto group-hover:right-0 origin-[right_center] group-hover:origin-[left_center]';
 const noActiveLinkStyles =
   'scale-x-0 scale-y-100 group-hover:scale-x-100 group-hover:scale-y-100';
 const activeLinkStyles = '';
 
 const NavLink: FC<NavLinkProps> = ({ name, url, className, isActive }) => {
   return (
-    <Link href={url} className={cn(baseStyles, className)}>
+    <Link href={url} className={cn(baseStyles, isActive && 'text-primary', className)}>
       {name}
       <span
         className={cn(

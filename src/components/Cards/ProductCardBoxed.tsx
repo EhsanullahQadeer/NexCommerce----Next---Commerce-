@@ -4,18 +4,23 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
 import { Product } from '@/store/slices/products/fakeProducts';
-import { productVerticalActionStyles, previewBtnStyles } from './elements/styles';
+import {
+  productVerticalActionStyles,
+  previewBtnStyles,
+} from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
 import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
+import Stars from '../Stars';
+import CardActions from './elements/Actions';
 
-export interface ProductCardProps extends Product {
+export interface ProductCardBoxedProps extends Product {
   className?: string;
   onPreview?: () => void;
 }
 
-const ProductCard: FC<ProductCardProps> = ({
+const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   title,
   src,
   price,
@@ -24,9 +29,15 @@ const ProductCard: FC<ProductCardProps> = ({
   label,
   className,
   onPreview,
+  heading,
 }) => {
   return (
-    <div className={cn('group relative mb-2.5', className)}>
+    <div
+      className={cn(
+        'group relative mb-2.5 hover:shadow-[0_5px_20px_rgba(0,0,0,0.05)]',
+        className
+      )}
+    >
       <div className="relative overflow-hidden">
         <Link href="/products" className="relative">
           <Image
@@ -41,41 +52,29 @@ const ProductCard: FC<ProductCardProps> = ({
         <Link href="#" className={productVerticalActionStyles}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
-            text="Add to cart"
+            text="Add to whishlist"
           />
         </Link>
 
-        <div className={previewBtnStyles}>
-          <Button
-            className="w-full justify-center"
-            variant="white"
-            onClick={onPreview}
-          >
-            quick view
-          </Button>
-        </div>
+        <CardActions onPreview={onPreview} />
       </div>
-      <div className="pt-4 pb-5">
-        <h3 className="text-sm font-extralight text-black-100 mb-[3px]">
+      <div className="py-4 px-5">
+        <div className="text-gray-500 text-[13px] font-light tracking-[-0.13px] leading-[15.6px] mb-[3px]">
+          {heading}
+        </div>
+        <h3 className="text-base font-normal text-black-75 mb-[3px] tracking-[-0.16px] leading-[20px] mb-[2px]">
           <Link href="/products" className="hover:text-primary">
             {title}
           </Link>
         </h3>
-        <CardPrice price={price} oldPrice={oldPrice} />
-        
-        <ColorVariants variants={variants} />
-
-        <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
-          <Link
-            href="#"
-            className="text-sm font-extralight text-primary hover:shadow-[0_0.1rem_0_0_#cc9966] leading-[18px]"
-          >
-            Add to cart<i className="las la-long-arrow-alt-right ml-2.5"></i>
-          </Link>
+        <CardPrice price={price} oldPrice={oldPrice} isBoxed />
+        <div className="mb-[17px] mt-[13px]">
+          <Stars count={5} reviewCount={2} />
         </div>
+        <ColorVariants variants={variants} />
       </div>
     </div>
   );
 };
 
-export default ProductCard;
+export default ProductCardBoxed;

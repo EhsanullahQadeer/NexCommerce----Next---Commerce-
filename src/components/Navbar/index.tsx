@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,16 +16,44 @@ import CartDropdown from '../CartDropdown/CartDropdown';
 import NavMobileView from './elements/MobileView';
 
 const Navbar = () => {
-  const pathname = usePathname();
-  const dispatch = useDispatch();
+  const [isAffix, setIsAffix] = useState(false);
   const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
   const isSidebarToggled = useSelector(selectSidebarToggle);
+  const pathname = usePathname();
+  const dispatch = useDispatch();
 
   const isActiveLink = (path: string) => path === pathname;
 
+  const handleScroll = () => {
+    const offset = 200;
+    const scrollTop =
+      document.documentElement.scrollTop || document.body.scrollTop;
+
+    if (scrollTop >= offset) {
+      setIsAffix(true);
+    }
+
+    if (scrollTop <= offset) {
+      setIsAffix(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <>
-      <header className="relative bg-white w-full">
+      <header
+        className={cn(
+          'sticky bg-white w-full top-0 transition-all duration-[0.4s] w-full top-[-60px] left-0 right-0 z-[90]',
+          isAffix && 'top-0 shadow-[0_3px_6px_rgba(51,51,51,0.05)]',
+        )}
+      >
         <div className="relative flex max-w-container items-center justify-between mx-auto px-2.5">
           <div className="flex items-center">
             <div
@@ -39,7 +67,7 @@ const Navbar = () => {
             </div>
             <Link href="/">
               <span className="sr-only">Molla</span>
-              <Image alt="" src="/logo-dark.png" height={20} width={84} />
+              <Image alt="" src="/logo.png" height={24} width={105} />
             </Link>
           </div>
 
@@ -63,16 +91,15 @@ const Navbar = () => {
                 iconClass="text-black-75"
               />
             </div>
-            <Link href="">
+            <Link href="" className="!hidden lg:!flex">
               <NotificationIcon
                 icon="las la-user-circle"
-                iconClass='!text-[28px]'
+                iconClass="!text-[28px]"
               />
             </Link>
-            <Link href="">
+            <Link href="" className="!hidden lg:!flex">
               <NotificationIcon
                 icon="lar la-heart"
-                className="!hidden lg:!flex"
                 iconClass="!text-[28px]"
                 count={3}
               />

@@ -1,6 +1,6 @@
 import { FC, Fragment } from 'react';
 import Link from 'next/link';
-import { footerLinks } from './data';
+import { footerCopyrightLinks } from './data';
 import FooterSocialIcons from './SocialIcons';
 
 interface FooterCopyRightProps {
@@ -24,7 +24,7 @@ const FooterCopyRight: FC<FooterCopyRightProps> = ({ hideSocialIcons }) => {
 export const FooterLinks = () => {
   return (
     <ul className="flex items-center gap-2.5 ml-[6px] font-extralight text-sm text-gray-500">
-      {footerLinks.map((link, index) => (
+      {footerCopyrightLinks.map((link, index) => (
         <Fragment key={index}>
           <li>
             <Link
@@ -35,7 +35,7 @@ export const FooterLinks = () => {
               {link.name}
             </Link>
           </li>
-          {footerLinks.length > index + 1 && (
+          {footerCopyrightLinks.length > index + 1 && (
             <li className="w-[1px] h-3 bg-[#b5b5b5]" />
           )}
         </Fragment>

@@ -25,9 +25,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     >
       <Navbar />
       <main>{children}</main>
-      <Container>
-        <FooterCopyRight />
-      </Container>
+      <Footer />
     </div>
   );
 };

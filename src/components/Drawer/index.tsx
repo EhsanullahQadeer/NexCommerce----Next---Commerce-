@@ -1,35 +1,26 @@
+'use client';
+
 import useOutsideClick from '@/hooks/useOutSideClick';
 import { cn } from '@/lib/utils';
-import React, {
-  FC,
-  ReactNode,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { baseContentStyles, iconStyles } from './styles';
 
-interface ModalProps {
+interface DrawerProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
-  fullWidth?: boolean;
   id?: string;
+  title?: string;
+  hideCloseIcon?: boolean;
 }
 
-const baseModalStyles =
-  'fixed inset-0 flex justify-center bg-black bg-opacity-50 z-[999] transition-opacity duration-[.35s] ease-in-out';
-const baseContentStyles =
-  'relative w-full max-h-full my-auto bg-white transition-opacity duration-[0.6s] ease-in-out overflow-y-auto';
-const iconStyles =
-  'absolute flex h-[20px] w-[20px] right-5 top-[15px] items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
-
-const Modal: FC<ModalProps> = ({
+const Drawer: FC<DrawerProps> = ({
   isOpen,
   onClose,
   children,
-  fullWidth,
   id,
+  hideCloseIcon,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
@@ -40,7 +31,7 @@ const Modal: FC<ModalProps> = ({
   });
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    console.log(isOpen);
     if (isOpen) {
       setIsVisible(true);
       const timer = setTimeout(() => setIsAnimating(true), 100); // Small delay to trigger animation
@@ -57,30 +48,31 @@ const Modal: FC<ModalProps> = ({
   if (!isVisible) return null;
 
   return createPortal(
-    <div
-      className={cn(
-        baseModalStyles,
-        isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none',
-        !fullWidth && 'px-2.5'
-      )}
-    >
+    <>
+      <div
+        className={cn(
+          'fixed h-full w-full left-0 top-0 z-[998] bg-[rgba(25,25,25,0.25)]'
+        )}
+        style={{ transition: 'all 0.4s ease' }}
+      ></div>
       <div
         className={cn(
           baseContentStyles,
-          isAnimating ? 'opacity-100' : 'opacity-0',
-          !fullWidth && 'max-w-[1168px] mx-2.5'
+          isAnimating ? 'translate-x-0' : 'translate-x-[-350px]'
         )}
         ref={modalRef}
       >
-        <span className={iconStyles} onClick={onClose}>
-          <i className="las la-times cursor-pointer text-[16px] text-100"></i>
-        </span>
+        {!hideCloseIcon && (
+          <span className={iconStyles} onClick={onClose}>
+            <i className="las la-times cursor-pointer text-[16px] text-100"></i>
+          </span>
+        )}
         <div className="overflow-y-auto">{children}</div>
       </div>
-    </div>,
+    </>,
     document.body,
     id
   );
 };
 
-export default Modal;
+export default Drawer;

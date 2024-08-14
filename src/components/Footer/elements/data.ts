@@ -6,7 +6,7 @@ export type Icon = {
 export type FooterLink = {
   url: string;
   name: string;
-}
+};
 
 export const icons: Icon[] = [
   {
@@ -27,7 +27,7 @@ export const icons: Icon[] = [
   },
 ];
 
-export const footerLinks: FooterLink[] = [
+export const footerCopyrightLinks: FooterLink[] = [
   {
     url: '',
     name: 'Terms of Use',
@@ -35,5 +35,87 @@ export const footerLinks: FooterLink[] = [
   {
     url: '',
     name: 'Privacy Policy',
-  }
+  },
+];
+
+export const footerlinks: { category: string; links: FooterLink[] }[] = [
+  {
+    category: 'Useful Links',
+    links: [
+      {
+        url: '',
+        name: 'About Molla',
+      },
+      {
+        url: '',
+        name: 'How to shop on Molla',
+      },
+      {
+        url: '',
+        name: 'FAQ',
+      },
+      {
+        url: '',
+        name: 'Contact us',
+      },
+      {
+        url: '',
+        name: 'Log in',
+      },
+    ],
+  },
+  {
+    category: 'Customer Service',
+    links: [
+      {
+        url: '',
+        name: 'Payment Methods',
+      },
+      {
+        url: '',
+        name: 'Money-back guarantee!',
+      },
+      {
+        url: '',
+        name: 'Returns',
+      },
+      {
+        url: '',
+        name: 'Shipping',
+      },
+      {
+        url: '',
+        name: 'Terms and Conditions',
+      },
+      {
+        url: '',
+        name: 'Privacy Policy',
+      },
+    ],
+  },
+  {
+    category: 'My Account',
+    links: [
+      {
+        url: '',
+        name: 'Sign in',
+      },
+      {
+        url: '',
+        name: 'View Cart!',
+      },
+      {
+        url: '',
+        name: 'My Wishlist',
+      },
+      {
+        url: '',
+        name: 'Track My Order',
+      },
+      {
+        url: '',
+        name: 'Help',
+      },
+    ],
+  },
 ];
