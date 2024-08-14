@@ -6,6 +6,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { siteConfig } from '@/data/siteConfig';
 
 import '@/styles/globals.css';
+import { cn } from '@/lib/utils';
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -43,7 +44,7 @@ export default function RootLayout({
             href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
           />
         </head>
-        <body className={poppins.className}>
+        <body className={cn(poppins.className)}>
           <MainLayout>{children}</MainLayout>
         </body>
       </html>

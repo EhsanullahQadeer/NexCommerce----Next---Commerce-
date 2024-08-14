@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import ProductCategories from '@/features/Product/categories';
-import dynamic from 'next/dynamic';
-
-const Slider = dynamic(import('@/components/Slider'), { ssr: false });
+import Slider from '@/components/Slider';
 
 const Home: FC = () => {
   return (

@@ -1,7 +1,7 @@
-import useOutsideClick from '@/hooks/useOutSideClick';
-import { cn } from '@/lib/utils';
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import useOutsideClick from '@/hooks/useOutSideClick';
+import { cn } from '@/lib/utils';
 
 interface ModalProps {
   isOpen: boolean;
@@ -28,7 +28,6 @@ const Modal: FC<ModalProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
-  console.log(onClose);
   useOutsideClick(modalRef, () => {
     onClose?.();
   });

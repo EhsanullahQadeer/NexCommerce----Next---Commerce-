@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import FooterCopyRight from './elements/FooterCopyRight';
@@ -12,7 +14,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pb-[22px]">
           <div className='mb-10'>
             <Link href="/" className="inline-block mb-3">
-              <Image alt="" src="/logo.png" height={24} width={105} />
+              <Image alt="" src="/logo.png" height={24} width={105} priority />
             </Link>
             <p className="font-extralight text-sm text-gray-500 leading-[26.04px] mb-8 max-w-[260px]">
               Praesent dapibus, neque id cursus ucibus, tortor neque egestas
