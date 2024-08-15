@@ -6,7 +6,7 @@ import {
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
 import GallerySlider from '@/components/Slider/GallerySlider';
-import ProductDetailsColumn from '../Product/details/ProductDetailsColumn';
+import ProductDetailsColumn from '../product-details/ProductDetailsColumn';
 
 const Modal = lazy(() => import('@/components/Modal'));
 
