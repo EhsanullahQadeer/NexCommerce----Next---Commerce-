@@ -19,6 +19,7 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard: FC<ProductCardProps> = ({
+  id,
   title,
   src,
   price,
@@ -31,7 +32,7 @@ const ProductCard: FC<ProductCardProps> = ({
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
-        <Link href="/products" className="relative">
+        <Link href={`/products/${id}`} className="relative">
           <Image
             fill
             src={src}

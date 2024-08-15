@@ -1,6 +1,4 @@
-import { FC } from 'react';
-import Modal from '@/components/Modal';
-import ProductDetails from '../details';
+import { FC, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   selectProducts,
@@ -8,6 +6,9 @@ import {
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
 import GallerySlider from '@/components/Slider/GallerySlider';
+import ProductDetailsColumn from '../product/details/ProductDetailsColumn';
+
+const Modal = lazy(() => import('@/components/Modal'));
 
 const PreviewModal: FC = () => {
   const { isPreviewModalOpen } = useSelector(selectProducts);
@@ -16,22 +17,25 @@ const PreviewModal: FC = () => {
   const handleOnClosePreviewModal = () => {
     dispatch(togglePreviewModal(false));
   };
+
   return (
     <Modal
       isOpen={isPreviewModalOpen}
       onClose={handleOnClosePreviewModal}
       id="quick-preview-modal"
     >
-      <div className="grid grid-cols md:grid-cols-2 lg:grid-cols-[57%_43%] gap-5 px-5 py-10">
-        <div className="px-5">
-          <GallerySlider
-            onFullScreen={() => dispatch(toggleGalleryModal(true))}
-          />
-        </div>
-        <div className="px-5 mt-[30px] md:max-w-[450px]">
-          <ProductDetails />
-        </div>
+      <div
+      className='grid grid-cols md:grid-cols-2 gap-5 px-5 py-10'
+    >
+      <div>
+        <GallerySlider
+          onFullScreen={() => dispatch(toggleGalleryModal(true))}
+        />
       </div>
+      <div className='px-5 mt-[30px]'>
+        <ProductDetailsColumn isModal />
+      </div>
+    </div>
     </Modal>
   );
 };

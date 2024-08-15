@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -13,7 +13,8 @@ import NotificationIcon from './elements/NotificationIcon';
 import { routes } from './routes';
 import SearchBar from '../SearchBar';
 import CartDropdown from '../CartDropdown/CartDropdown';
-import NavMobileView from './elements/MobileView';
+
+const NavMobileView = lazy(() => import('./elements/MobileView'));
 
 const Navbar = () => {
   const [isAffix, setIsAffix] = useState(false);
@@ -22,7 +23,7 @@ const Navbar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const isActiveLink = (path: string) => path === pathname;
+  const isActiveLink = (path: string) => (path === pathname || path !== '/' && pathname.includes(path));
 
   const handleScroll = () => {
     const offset = 200;

@@ -17,6 +17,7 @@ export interface ProductCardBoxedProps extends Product {
 }
 
 const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
+  id,
   title,
   src,
   price,
@@ -27,6 +28,8 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   onPreview,
   heading,
 }) => {
+  const productUrl = `/products/${id}`;
+
   return (
     <div
       className={cn(
@@ -35,7 +38,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
       )}
     >
       <div className="relative overflow-hidden">
-        <Link href="/products" className="relative">
+        <Link href={productUrl} className="relative">
           <Image
             fill
             src={src}
@@ -59,7 +62,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
           {heading}
         </div>
         <h3 className="text-base font-normal text-black-75 mb-[3px] tracking-[-0.16px] leading-[20px] mb-[2px]">
-          <Link href="/products" className="hover:text-primary">
+          <Link href={productUrl} className="hover:text-primary">
             {title}
           </Link>
         </h3>
