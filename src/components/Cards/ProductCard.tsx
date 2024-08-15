@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
-import { Product } from '@/store/slices/products/fakeProducts';
 import {
   productVerticalActionStyles,
   previewBtnStyles,
@@ -12,6 +11,7 @@ import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
 import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
+import { Product } from '@/types/product';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -19,6 +19,7 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard: FC<ProductCardProps> = ({
+  id,
   title,
   src,
   price,
@@ -31,7 +32,7 @@ const ProductCard: FC<ProductCardProps> = ({
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
-        <Link href="/products" className="relative">
+        <Link href={`/products/${id}`} className="relative">
           <Image
             fill
             src={src}

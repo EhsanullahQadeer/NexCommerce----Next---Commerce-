@@ -1,32 +1,10 @@
-export interface Product {
-  id: string;
-  title: string;
-  src: string;
-  price?: number;
-  oldPrice?: number;
-  variants?: ColorVariant[];
-  label?: string;
-  category?: string;
-  heading?: string;
-}
-
-export interface ProductCategory {
-  key: string;
-  label: string;
-  count?: number;
-}
-
-export interface ColorVariant {
-  id: number;
-  color: string;
-}
+import { Product, ProductCategory, ProductLabel } from "@/types/product";
 
 export const products: Product[] = [
   {
     id: '1',
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
-    label: 'Sale',
     category: 'furniture',
   },
   {
@@ -36,13 +14,14 @@ export const products: Product[] = [
     price: 209,
     oldPrice: 220,
     category: 'accessories',
+    label: ProductLabel.SALE,
   },
   {
     id: '3',
     title: 'Cushion Set 3 Pieces',
     src: '/products/product-card/product-8.jpg',
     price: 99,
-    label: 'Out of stock',
+    label: ProductLabel.OUT_OF_STOCK,
     category: 'lighting',
     variants: [
       {
@@ -67,7 +46,7 @@ export const products: Product[] = [
     id: '5',
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
-    label: 'Sale',
+    label: ProductLabel.NEW,
     category: 'lighting',
     variants: [
       {
@@ -86,6 +65,7 @@ export const products: Product[] = [
     src: '/products/product-card/product-6.jpg',
     price: 209,
     oldPrice: 220,
+    label: ProductLabel.SALE,
     category: 'furniture',
   },
   {
@@ -93,7 +73,7 @@ export const products: Product[] = [
     title: 'Cushion Set 3 Pieces',
     src: '/products/product-card/product-8.jpg',
     price: 99,
-    label: 'Out of stock',
+    label: ProductLabel.OUT_OF_STOCK,
     category: 'sale',
     variants: [
       {
@@ -111,7 +91,7 @@ export const products: Product[] = [
     title: 'Butler Stool Ladder',
     src: '/products/product-card/product-11.jpg',
     price: 251,
-    oldPrice: 280,
+    label: ProductLabel.TOP,
     category: 'furniture',
   },
 ];

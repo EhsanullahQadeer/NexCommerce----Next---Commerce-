@@ -8,10 +8,10 @@ import {
   selectProducts,
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
-import { Product } from '@/store/slices/products/fakeProducts';
 import { cn } from '@/lib/utils';
 import { useImagesLoaded } from '@/hooks/useImagesLoaded';
 import Button from '../Button';
+import { Product } from '@/types/product';
 
 const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);

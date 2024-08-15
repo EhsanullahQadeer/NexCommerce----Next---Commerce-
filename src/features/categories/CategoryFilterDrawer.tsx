@@ -6,21 +6,22 @@ import {
 import ToggleFilters from '@/components/Filters/ToggleFilters';
 import CleanAllButton from '@/components/Filters/CleanAllButton';
 import Collapse from '@/components/Collapse';
-import CategoryFilter from '../Product/categories/CategoryFilters';
+import CategoryFilter from '../elements/CategoryFilters';
 import PriceRangeInput from '@/components/PriceRangeInput';
 import {
   brandResults,
   categoryFiltersResults,
   sizeFiltersResults,
 } from '@/store/slices/categories/fakeProducts';
-import ColourFilters from '../Product/categories/ColourFilters';
-import dynamic from 'next/dynamic';
+import ColourFilters from '../elements/ColourFilters';
+import { lazy } from 'react';
 
-const Drawer = dynamic(import('@/components/Drawer'), { ssr: false });
+const Drawer = lazy(() => import('@/components/Drawer'));
 
 const CategoryFilterDrawer = () => {
   const { isToggleFilters } = useSelector(selectProductCategories);
   const dispatch = useDispatch();
+
   return (
     <Drawer
       isOpen={isToggleFilters}

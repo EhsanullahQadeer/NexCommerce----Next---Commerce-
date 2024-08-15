@@ -1,13 +1,31 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface BreadcrumbProps {
   links: { url: string; name: string }[];
+  border?: 'top' | 'bottom' | 'both';
+  children?: ReactNode;
 }
 
-const Breadcrumb: FC<BreadcrumbProps> = ({ links }) => {
+const borderType = {
+  top: 'border-t',
+  bottom: 'border-b',
+  both: 'border-t border-b',
+};
+
+const Breadcrumb: FC<BreadcrumbProps> = ({
+  links,
+  border = 'bottom',
+  children,
+}) => {
   return (
-    <nav className="flex py-[14px] border-b border-[rgba(235,235,235,.55)]">
-      <ol className="flex items-center">
+    <nav
+      className={cn(
+        'flex py-[14px] border-[rgba(235,235,235,.55)]',
+        borderType[border]
+      )}
+    >
+      <ol className="flex items-center justify-between">
         {links.map((link, index) => {
           const isLastIndex = index === links.length - 1;
           return (
@@ -31,6 +49,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ links }) => {
           );
         })}
       </ol>
+      {children}
     </nav>
   );
 };

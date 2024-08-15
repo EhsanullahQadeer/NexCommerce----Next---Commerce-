@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { cn } from '@/lib/utils';
-import { ProductCategory } from '@/store/slices/products/fakeProducts';
+import { ProductCategory } from '@/types/product';
 
 interface ProductCategoriesListProps {
   productCategories: ProductCategory[];

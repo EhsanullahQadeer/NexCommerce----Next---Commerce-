@@ -14,7 +14,7 @@ const CategoryFilterToggle = () => {
     <div className="relative flex flex-col sm:flex-row items-center justify-between mb-5 gap-3">
       <ToggleFilters
         isToggle={isToggleFilters}
-        handleToggle={() => dispatch(toggleFilters(true))}
+        handleToggle={() => dispatch(toggleFilters(!isToggleFilters))}
         className='!self-auto'
       />
 

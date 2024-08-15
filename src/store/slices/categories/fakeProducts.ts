@@ -1,16 +1,4 @@
-import { Product } from "../products/fakeProducts";
-
-export interface ProductCategory {
-  key: string;
-  label: string;
-  count?: number;
-}
-
-export interface ColorVariant {
-  id: number;
-  color: string;
-}
-
+import { Product, ProductCategory, ProductLabel } from '@/types/product';
 
 export const products: Product[] = [
   {
@@ -18,7 +6,6 @@ export const products: Product[] = [
     title: 'Nunc dignissim risus',
     heading: 'Women',
     src: '/categories/product-1.jpg',
-    label: 'Sale',
     category: 'furniture',
   },
   {
@@ -28,6 +15,7 @@ export const products: Product[] = [
     src: '/categories/product-2.jpg',
     price: 209,
     oldPrice: 220,
+    label: ProductLabel.SALE,
     category: 'accessories',
   },
   {
@@ -36,7 +24,7 @@ export const products: Product[] = [
     heading: 'Dresses',
     src: '/categories/product-3.jpg',
     price: 99,
-    label: 'Out of stock',
+    label: ProductLabel.OUT_OF_STOCK,
     category: 'lighting',
     variants: [
       {
@@ -63,7 +51,7 @@ export const products: Product[] = [
     title: 'Dark yellow lace cut out swing dress',
     heading: 'Dresses',
     src: '/categories/product-3.jpg',
-    label: 'Sale',
+    label: ProductLabel.NEW,
     category: 'lighting',
     variants: [
       {
@@ -91,7 +79,6 @@ export const products: Product[] = [
     heading: 'Dresses',
     src: '/categories/product-4.jpg',
     price: 99,
-    label: 'Out of stock',
     category: 'sale',
     variants: [
       {
@@ -111,10 +98,10 @@ export const products: Product[] = [
     src: '/categories/product-2.jpg',
     price: 251,
     oldPrice: 280,
+    label: ProductLabel.TOP,
     category: 'furniture',
   },
 ];
-
 
 export const categoryFiltersResults: ProductCategory[] = [
   { key: 'dresses', label: 'Dresses', count: 23 },
@@ -128,9 +115,8 @@ export const sizeFiltersResults: ProductCategory[] = [
   { key: 'xs', label: 'XS' },
   { key: 's', label: 'S' },
   { key: 'm', label: 'M' },
-  { key: 'l', label: 'L' }
+  { key: 'l', label: 'L' },
 ];
-
 
 export const brandResults: ProductCategory[] = [
   { key: 'next', label: 'Next' },

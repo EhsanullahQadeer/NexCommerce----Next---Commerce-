@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { ColorVariant } from '@/store/slices/products/fakeProducts';
+import { ColorVariant } from '@/types/product';
 import { FC, useEffect, useState } from 'react';
 
 interface ColorVariantProps {
