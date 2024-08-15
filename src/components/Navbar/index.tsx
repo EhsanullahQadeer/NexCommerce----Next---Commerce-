@@ -23,7 +23,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const isActiveLink = (path: string) => (path === pathname || path !== '/' && pathname.includes(path));
+  const isActiveLink = (path: string) =>
+    path === pathname || (path !== '/' && pathname.includes(path));
 
   const handleScroll = () => {
     const offset = 200;
@@ -52,7 +53,7 @@ const Navbar = () => {
       <header
         className={cn(
           'sticky bg-white w-full lg:top-[-60px] transition-all duration-[0.4s] w-full left-0 right-0 z-[90]',
-          isAffix && 'lg:top-0 shadow-[0_3px_6px_rgba(51,51,51,0.05)]',
+          isAffix && 'lg:top-0 shadow-[0_3px_6px_rgba(51,51,51,0.05)]'
         )}
       >
         <div className="relative flex max-w-container items-center justify-between mx-auto px-2.5">
@@ -111,7 +112,11 @@ const Navbar = () => {
         <SearchBar isOpen={isSearchBarOpen} setIsOpen={setIsSearchBarOpen} />
       </header>
 
-      <NavMobileView routes={routes} isActiveLink={isActiveLink} id='nav-mobile' />
+      <NavMobileView
+        routes={routes}
+        isActiveLink={isActiveLink}
+        id="nav-mobile"
+      />
     </>
   );
 };

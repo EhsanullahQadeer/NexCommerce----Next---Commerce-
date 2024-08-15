@@ -21,7 +21,7 @@ const ProductFilters = () => {
     <div>
       <div
         className={cn(
-          'relative flex items-center justify-between  gap-2.5 md:gap-[30px]',
+          'relative flex items-center justify-between sm:items-start sm:justify-start gap-2.5 md:gap-[30px]',
           !isOpen ? 'flex-col sm:flex-row' : 'flex-row'
         )}
       >
