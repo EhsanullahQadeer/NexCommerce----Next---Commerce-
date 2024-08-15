@@ -1,6 +1,6 @@
 import Checkbox from '@/components/Checkbox';
+import { ProductCategory } from '@/types/product';
 import { FC } from 'react';
-import { ProductCategory } from '@/store/slices/products/fakeProducts';
 
 interface CategoryProps {
   categories: ProductCategory[];

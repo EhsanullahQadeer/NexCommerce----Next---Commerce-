@@ -2,7 +2,6 @@ import { FC } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { Product } from '@/store/slices/products/fakeProducts';
 import { productVerticalActionStyles } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
@@ -10,6 +9,7 @@ import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
 import Stars from '../Stars';
 import CardActions from './elements/Actions';
+import { Product } from '@/types/product';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;

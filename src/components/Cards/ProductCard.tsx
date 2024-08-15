@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Button from '../Button';
-import { Product } from '@/store/slices/products/fakeProducts';
 import {
   productVerticalActionStyles,
   previewBtnStyles,
@@ -12,6 +11,7 @@ import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
 import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
+import { Product } from '@/types/product';
 
 export interface ProductCardProps extends Product {
   className?: string;

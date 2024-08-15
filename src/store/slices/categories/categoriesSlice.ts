@@ -1,11 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
-import {
-  Product,
-  ProductCategory,
-  products,
-  productCategories,
-} from '../products/fakeProducts';
+import { Product, ProductCategory } from '@/types/product';
+import { products } from './fakeProducts';
+import { productCategories } from '../products/fakeProducts'
 
 // Define a type for the slice state
 export interface ProductCategoriesState {
