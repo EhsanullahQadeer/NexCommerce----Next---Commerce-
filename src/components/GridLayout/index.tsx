@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useRef } from 'react';
 import Isotope from 'isotope-layout';
 import ProductCard from '../Cards/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { useImagesLoaded } from '@/hooks/useImagesLoaded';
 import Button from '../Button';
 import { Product } from '@/types/product';
+import ProductCardSkeleton from '../Cards/ProductCardSkeleton';
 
 const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);
@@ -49,29 +50,33 @@ const GridLayout: React.FC = () => {
     }
   }, [filterKey]);
 
+  if(!imagesLoaded) {
+    return <ProductCardSkeleton />
+  }
+
   return (
     <div className="bg-white">
-      <div ref={gridRef} className="!relative mt-5">
-        {products.map((item: Product) => (
-          <div
-            key={item.id}
-            className={cn(
-              'product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
-              item.category
-            )}
-          >
-            <ProductCard
-              {...item}
-              onPreview={() => dispatch(togglePreviewModal(true))}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="mt-10 mb-10">
-        <Button className="mx-auto">
-          More Products <i className="las la-sync ml-2"></i>
-        </Button>
-      </div>
+        <div ref={gridRef} className="!relative mt-5">
+          {products.map((item: Product) => (
+            <div
+              key={item.id}
+              className={cn(
+                'product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
+                item.category
+              )}
+            >
+              <ProductCard
+                {...item}
+                onPreview={() => dispatch(togglePreviewModal(true))}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 mb-10">
+          <Button className="mx-auto">
+            More Products <i className="las la-sync ml-2"></i>
+          </Button>
+        </div>
     </div>
   );
 };

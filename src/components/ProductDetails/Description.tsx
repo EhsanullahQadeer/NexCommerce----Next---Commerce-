@@ -1,16 +1,22 @@
+import { FC } from 'react';
+import { cn } from '@/lib/utils';
 import Stars from '../Stars';
 
-const Description = () => {
+interface DescriptionProps {
+  className?: string;
+}
+
+const Description: FC<DescriptionProps> = ({ className }) => {
   return (
-    <div>
+    <div className={cn('mb-10', className)}>
       <h2 className="text-2xl text-black-75 font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
-        Linen-blend dress
+        Dark yellow lace cut out swing dress
       </h2>
-      <h3 className="text-2xl text-black-75 font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
+      <Stars count={5} reviewCount={2} className="mb-2.5" />
+      <h3 className="text-2xl text-primary font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
         $60.00
       </h3>
-      <Stars count={5} reviewCount={2} />
-      <p className='mt-[17px] mb-10 font-extralight text-sm text-black-100 leading-[26.04px]'>
+      <p className="mt-[17px] font-extralight text-sm text-black-100 leading-[26.04px]">
         Sed egestas, ante et vulputate volutpat, eros pede semper est, vitae
         luctus metus libero eu augue.
       </p>

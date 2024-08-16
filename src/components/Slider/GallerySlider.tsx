@@ -1,35 +1,31 @@
 import React, { FC, useRef, useState } from 'react';
+import Image from 'next/image';
 import type { Swiper as SwiperType } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Swiper as SwiperCore } from 'swiper/types';
 import { Navigation, Pagination, Thumbs } from 'swiper/modules';
 import SlideArrow from './elements/SlideArrow';
+import { cn } from '@/lib/utils';
+import { sliderFullViewBtnStyles } from './styles/sliderStyles';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
-import './styles/swiper-pagination.css';
-import { cn } from '@/lib/utils';
-import Image from 'next/image';
-import { sliderFullViewBtnStyles } from './styles/sliderStyles';
-
-const images: string[] = [
-  '/products/product-preview/1.jpg',
-  '/products/product-preview/2.jpg',
-  '/products/product-preview/3.jpg',
-  '/products/product-preview/2.jpg',
-];
+import './styles/slider.css';
 
 interface GallerySliderProps {
   direction?: 'vertical' | 'horizontal';
   showTotalSlides?: boolean;
   onFullScreen?: () => void;
+  images: string[];
 }
 
 const GallerySlider: FC<GallerySliderProps> = ({
-  direction = 'vertical',
   showTotalSlides,
   onFullScreen,
+  images,
+  direction = 'vertical',
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -37,8 +33,8 @@ const GallerySlider: FC<GallerySliderProps> = ({
 
   const isHorizontal = direction === 'horizontal';
 
-  const renderSwiperThumbnail = (
-    <div className={cn('flex', !isHorizontal && 'flex-cols')}>
+  const renderThumnail = (
+    <div className={cn('flex', isHorizontal && 'items-center justify-center')}>
       <Swiper
         onSwiper={setThumbsSwiper}
         direction={direction}
@@ -80,7 +76,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
       )}
       <div className={cn('flex gap-2', isHorizontal && 'flex-col')}>
         {/* Thumbnails */}
-        {direction === 'vertical' && renderSwiperThumbnail}
+        {!isHorizontal && renderThumnail}
 
         {/* Main Slider */}
         <div className="relative gallery-slider w-full">
@@ -128,9 +124,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
             </div>
           )}
         </div>
-
-        {/* Thumbnails */}
-        {direction === 'horizontal' && renderSwiperThumbnail}
+        {isHorizontal && renderThumnail}
       </div>
     </div>
   );

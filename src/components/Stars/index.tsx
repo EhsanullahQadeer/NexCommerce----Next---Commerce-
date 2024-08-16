@@ -3,13 +3,14 @@ import { arrayNumberGenerator, cn } from '@/lib/utils';
 
 interface StartsProps {
   count: number;
-  reviewCount: number;
+  reviewCount?: number;
+  className?: string;
 }
 
-const Stars: FC<StartsProps> = ({ count, reviewCount }) => {
+const Stars: FC<StartsProps> = ({ count, reviewCount, className }) => {
   const ratings = arrayNumberGenerator(count);
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <div className="flex items-center">
         {ratings.map((item) => (
           <span key={item} className="flex items-center">
@@ -22,9 +23,11 @@ const Stars: FC<StartsProps> = ({ count, reviewCount }) => {
           </span>
         ))}
       </div>
-      <span className="text-black-600 text-[13px] font-extralight">
-        ( {reviewCount} Reviews )
-      </span>
+      {reviewCount && (
+        <span className="text-black-600 text-[13px] font-extralight">
+          ( {reviewCount} Reviews )
+        </span>
+      )}
     </div>
   );
 };

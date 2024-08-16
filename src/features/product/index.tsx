@@ -5,9 +5,7 @@ import ProductFilters from '@/components/Filters/ProductFilters';
 import PreviewModal from '../elements/PreviewModal';
 import GalleryModal from '../elements/GalleryModal';
 
-const GridLayout = dynamic(() => import('@/components/GridLayout'), {
-  ssr: false,
-});
+const GridLayout = dynamic(() => import('@/components/GridLayout'), { ssr: false });
 
 const ProductCategories = () => {
   return (
