@@ -25,7 +25,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
   showTotalSlides,
   onFullScreen,
   images,
-  direction = 'vertical'
+  direction = 'vertical',
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
@@ -35,36 +35,36 @@ const GallerySlider: FC<GallerySliderProps> = ({
 
   const renderThumnail = (
     <div className={cn('flex', isHorizontal && 'items-center justify-center')}>
-          <Swiper
-            onSwiper={setThumbsSwiper}
-            direction={direction}
-            spaceBetween={10}
-            slidesPerView={4}
-            modules={[Navigation, Thumbs]}
-            className="w-auto"
+      <Swiper
+        onSwiper={setThumbsSwiper}
+        direction={direction}
+        spaceBetween={10}
+        slidesPerView={4}
+        modules={[Navigation, Thumbs]}
+        className="w-auto"
+      >
+        {images.map((img, index) => (
+          <SwiperSlide
+            key={index}
+            className="max-h-[75px] lg:max-h-[125px] !w-auto"
           >
-            {images.map((img, index) => (
-              <SwiperSlide
-                key={index}
-                className="max-h-[75px] lg:max-h-[125px] !w-auto"
-              >
-                <Image
-                  fill
-                  src={img}
-                  alt={`Thumbnail ${index + 1}`}
-                  className={cn(
-                    '!relative max-h-[125px] md:min-w-[60px] md:max-h-[80px] lg:max-h-[125px] h-full object-cover cursor-pointer',
-                    activeIndex === index
-                      ? 'opacity-100'
-                      : 'opacity-60 hover:opacity-100',
-                    activeIndex === index && 'border border-primary-50'
-                  )}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-  )
+            <Image
+              fill
+              src={img}
+              alt={`Thumbnail ${index + 1}`}
+              className={cn(
+                '!relative max-h-[125px] md:min-w-[60px] md:max-h-[80px] lg:max-h-[125px] h-full object-cover cursor-pointer',
+                activeIndex === index
+                  ? 'opacity-100'
+                  : 'opacity-60 hover:opacity-100',
+                activeIndex === index && 'border border-primary-50'
+              )}
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
+  );
 
   return (
     <div>
