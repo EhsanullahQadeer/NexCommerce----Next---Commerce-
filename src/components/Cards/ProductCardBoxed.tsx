@@ -33,7 +33,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   return (
     <div
       className={cn(
-        'group relative mb-2.5 hover:shadow-[0_5px_20px_rgba(0,0,0,0.05)]',
+        'group relative mb-2.5 hover:shadow-[0_5px_20px_rgba(0,0,0,0.05)] h-full',
         className
       )}
     >

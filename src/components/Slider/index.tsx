@@ -6,9 +6,8 @@ import SlideContent from './elements/SlideContent';
 import BaseSlider from './elements/BaseSlider';
 
 const Slider: React.FC = () => {
-
   return (
-    <BaseSlider>
+    <BaseSlider className='h-[460px] lg:h-[480px] xl:h-[560px]'>
       <SwiperSlide className="bg-[url('/slide/slide-1.jpg')] bg-cover bg-center">
         <SlideContent
           title="SEASONAL PICKS"

@@ -2,6 +2,7 @@
 
 import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
+import ProductDetails from "@/features/product-details";
 
 const ProductDetailPage = () => {
   const links = [
@@ -22,8 +23,8 @@ const ProductDetailPage = () => {
     <div>
       <Container>
         <Breadcrumb links={links} border="top"/>
-        <h1 className="text-center">Product details page under contstruction!!</h1>
       </Container>
+      <ProductDetails />
     </div>
   )
 }

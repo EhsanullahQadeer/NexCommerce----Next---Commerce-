@@ -13,10 +13,9 @@ interface ProductDetailsColumnProps {
 }
 
 const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
-  console.log(!isModal)
   return (
     <div>
-      <Description />
+      <Description className='!mb-2.5' />
       
       <div className="flex items-center mb-5">
         <Label text="Color" />
