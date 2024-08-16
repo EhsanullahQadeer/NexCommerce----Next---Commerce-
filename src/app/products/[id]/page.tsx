@@ -3,6 +3,7 @@
 import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
 import ProductDetails from "@/features/product-details";
+import StickyBarBottom from "@/features/product-details/StickyBarBottom";
 
 const ProductDetailPage = () => {
   const links = [
@@ -25,6 +26,7 @@ const ProductDetailPage = () => {
         <Breadcrumb links={links} border="top"/>
       </Container>
       <ProductDetails />
+      <StickyBarBottom />
     </div>
   )
 }

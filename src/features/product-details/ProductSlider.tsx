@@ -22,14 +22,16 @@ const ProductSlider = () => {
 
   return (
     <div>
-      <h2 className="font-medium text-black-75 text-2xl font-normal mb-10 text-center">You May Also Like</h2>
+      <h2 className="font-medium text-black-75 text-2xl font-normal mb-10 text-center">
+        You May Also Like
+      </h2>
       <div className="relative product-slider -ml-2.5 -mr-2.5">
         <Swiper
           observeParents
           observer
           modules={[Navigation, Pagination]}
           slidesPerView="auto"
-          className='h-full w-full'
+          className="h-full w-full"
           pagination={{ clickable: true }}
           onBeforeInit={(swiper) => {
             swiperRef.current = swiper;
@@ -39,15 +41,18 @@ const ProductSlider = () => {
               slidesPerView: 2,
             },
             768: {
-              slidesPerView: 3
+              slidesPerView: 3,
             },
             992: {
-              slidesPerView: 4
-            }
+              slidesPerView: 4,
+            },
           }}
         >
           {products.map((item: Product) => (
-            <SwiperSlide key={item.id} className="!h-full max-w-[297px] pb-[50px] px-2.5">
+            <SwiperSlide
+              key={item.id}
+              className="!h-full max-w-[297px] px-2.5"
+            >
               <ProductCardBoxed
                 {...item}
                 onPreview={() => dispatch(togglePreviewModal(true))}
@@ -55,19 +60,18 @@ const ProductSlider = () => {
             </SwiperSlide>
           ))}
         </Swiper>
-          <div className="hidden lg:flex">
-            <SlideArrow
-              className="left-[-5%]"
-              icon="la-angle-left"
-              onClick={() => swiperRef.current?.slidePrev()}
-            />
-            <SlideArrow
-              className="right-[-5%]"
-              icon="la-angle-right"
-              onClick={() => swiperRef.current?.slideNext()}
-            />
-
-          </div>
+        <div className="hidden lg:flex">
+          <SlideArrow
+            className="left-[-5%]"
+            icon="la-angle-left"
+            onClick={() => swiperRef.current?.slidePrev()}
+          />
+          <SlideArrow
+            className="right-[-5%]"
+            icon="la-angle-right"
+            onClick={() => swiperRef.current?.slideNext()}
+          />
+        </div>
       </div>
     </div>
   );

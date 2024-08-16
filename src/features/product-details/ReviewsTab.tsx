@@ -48,13 +48,13 @@ const ReviewsTab: FC = () => {
             <div className="flex items-center gap-4">
               <Link
                 href=""
-                className="text-xs font-extralight text-black-500 leading-[22.32px]  hover:text-primary hover:shadow-[0_1px_0_#cc9966]"
+                className="text-xs font-extralight text-black-500 leading-[22.32px] hover:text-primary hover:shadow-[0_1px_0_#cc9966]"
               >
                 <i className="lar la-thumbs-down"></i> Helpful (2)
               </Link>
               <Link
                 href=""
-                className="text-sm font-extralight text-black-500 leading-[22.32px]  hover:text-primary hover:shadow-[0_1px_0_#cc9966]"
+                className="text-sm font-extralight text-black-500 leading-[22.32px] hover:text-primary hover:shadow-[0_1px_0_#cc9966]"
               >
                 <i className="lar xs-thumbs-up"></i> Unhelpful (0)
               </Link>
