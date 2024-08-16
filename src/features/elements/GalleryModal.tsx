@@ -8,7 +8,7 @@ import {
 
 const Modal = lazy(() => import('@/components/Modal'));
 
-const images = [
+export const images = [
   '/products/product-preview/1.jpg',
   '/products/product-preview/2.jpg',
   '/products/product-preview/3.jpg',

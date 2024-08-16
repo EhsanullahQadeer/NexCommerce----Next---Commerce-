@@ -1,11 +1,11 @@
 'use client';
 
-import { lazy } from 'react';
+import dynamic from 'next/dynamic';
 import ProductFilters from '@/components/Filters/ProductFilters';
 import PreviewModal from '../elements/PreviewModal';
 import GalleryModal from '../elements/GalleryModal';
 
-const GridLayout = lazy(() => import('@/components/GridLayout'));
+const GridLayout = dynamic(() => import('@/components/GridLayout'), { ssr: false });
 
 const ProductCategories = () => {
   return (

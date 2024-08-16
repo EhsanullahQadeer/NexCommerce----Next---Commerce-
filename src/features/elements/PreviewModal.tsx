@@ -7,6 +7,7 @@ import {
 } from '@/store/slices/products/productsSlice';
 import GallerySlider from '@/components/Slider/GallerySlider';
 import ProductDetailsColumn from '../product-details/ProductDetailsColumn';
+import { images } from './GalleryModal';
 
 const Modal = lazy(() => import('@/components/Modal'));
 
@@ -29,6 +30,7 @@ const PreviewModal: FC = () => {
     >
       <div>
         <GallerySlider
+          images={images}
           onFullScreen={() => dispatch(toggleGalleryModal(true))}
         />
       </div>
