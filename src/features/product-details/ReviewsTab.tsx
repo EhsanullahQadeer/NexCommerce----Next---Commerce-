@@ -25,7 +25,7 @@ const ReviewsTab: FC = () => {
         Reviews (2)
       </h3>
       {reviews.map((review, index) => (
-        <div key={index} className="flex flex-col sm: flex-row sm:gap-5 pb-[13px] mb-5 border-b border-black-300">
+        <div key={index} className="flex flex-col sm:flex-row sm:gap-5 pb-[13px] mb-5 border-b border-black-300">
           <div className="min-w-[100px]">
             <Link
               href="#"
