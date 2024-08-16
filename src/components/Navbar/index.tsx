@@ -67,7 +67,7 @@ const Navbar = () => {
             >
               <i className="las la-bars text-[25.5px]"></i>
             </div>
-            <Link href="/">
+            <Link href="/" aria-label='Logo'>
               <span className="sr-only">Molla</span>
               <Image alt="" src="/logo.png" height={24} width={105} />
             </Link>

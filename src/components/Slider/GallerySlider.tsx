@@ -34,14 +34,24 @@ const GallerySlider: FC<GallerySliderProps> = ({
   const isHorizontal = direction === 'horizontal';
 
   const renderThumnail = (
-    <div className={cn('flex', isHorizontal && 'items-center justify-center')}>
+    <div
+      className={cn(
+        'flex',
+        isHorizontal
+          ? 'gallery-slider-thumbnail-horizontal'
+          : 'gallery-slider-thumbnail-vertical'
+      )}
+    >
       <Swiper
         onSwiper={setThumbsSwiper}
         direction={direction}
         spaceBetween={10}
         slidesPerView={4}
         modules={[Navigation, Thumbs]}
-        className="w-auto"
+        className={cn(
+          'w-auto',
+          !isHorizontal && '[&_.swiper_wrapper]:!flex-col'
+        )}
       >
         {images.map((img, index) => (
           <SwiperSlide
@@ -99,7 +109,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
                   fill
                   src={img}
                   alt={`Slide ${index + 1}`}
-                  className="!relative w-full h-full object-cover"
+                  className="!relative !w-full !h-full min-h-[475px] object-cover"
                 />
               </SwiperSlide>
             ))}

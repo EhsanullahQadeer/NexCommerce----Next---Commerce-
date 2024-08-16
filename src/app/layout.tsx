@@ -41,7 +41,7 @@ export default function RootLayout({
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link
             rel="stylesheet"
-            href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css"
           />
         </head>
         <body className={cn(poppins.className, 'overflow-x-hidden')}>

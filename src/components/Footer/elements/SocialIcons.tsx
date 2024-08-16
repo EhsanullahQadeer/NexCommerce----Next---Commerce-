@@ -11,6 +11,7 @@ const FooterSocialIcons = () => {
           href={item.url}
           target="_blank"
           className="flex items-center"
+          aria-label={item.name}
         >
           <i className={cn('la text-lg hover:text-primary', item.icon)}></i>
         </Link>

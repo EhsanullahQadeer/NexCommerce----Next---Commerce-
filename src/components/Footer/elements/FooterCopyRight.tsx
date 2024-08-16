@@ -31,6 +31,7 @@ export const FooterLinks = () => {
               href={link.url}
               className="shadow-[0_1px_0_#b5b5b5] hover:text-primary hover:shadow-[0_1px_0_#cc9966]"
               style={{ transition: 'color 0.3s ease' }}
+              aria-label={link.name}
             >
               {link.name}
             </Link>
