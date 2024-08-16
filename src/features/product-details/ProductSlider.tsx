@@ -9,6 +9,11 @@ import { useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import SlideArrow from '@/components/Slider/elements/SlideArrow';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+import 'swiper/css/pagination';
 import '@/components/Slider/styles/slider.css';
 
 const ProductSlider = () => {
@@ -23,15 +28,13 @@ const ProductSlider = () => {
           observeParents
           observer
           modules={[Navigation, Pagination]}
-          slidesPerView={4}
+          slidesPerView="auto"
           className='h-full w-full'
+          pagination={{ clickable: true }}
           onBeforeInit={(swiper) => {
             swiperRef.current = swiper;
           }}
           breakpoints={{
-            320: {
-              slidesPerView: 1,
-            },
             480: {
               slidesPerView: 2,
             },

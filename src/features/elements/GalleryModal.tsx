@@ -8,6 +8,13 @@ import {
 
 const Modal = lazy(() => import('@/components/Modal'));
 
+const images = [
+  '/products/product-preview/1.jpg',
+  '/products/product-preview/2.jpg',
+  '/products/product-preview/3.jpg',
+  '/products/product-preview/2.jpg',
+]
+
 const GalleryModal: FC = () => {
   const { isGalleryFullView } = useSelector(selectProducts);
   const dispatch = useDispatch();
@@ -19,7 +26,7 @@ const GalleryModal: FC = () => {
       id="gallery-full-view"
     >
       <div className="max-w-[654px] mx-auto px-5 mb-10">
-        <GallerySlider direction="horizontal" showTotalSlides />
+        <GallerySlider direction="horizontal" showTotalSlides images={images} />
       </div>
     </Modal>
   );

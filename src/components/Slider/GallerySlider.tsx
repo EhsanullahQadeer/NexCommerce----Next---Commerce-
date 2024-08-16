@@ -14,41 +14,30 @@ import 'swiper/css/thumbs';
 import 'swiper/css/pagination';
 import './styles/slider.css';
 
-const images: string[] = [
-  '/products/product-preview/1.jpg',
-  '/products/product-preview/2.jpg',
-  '/products/product-preview/3.jpg',
-  '/products/product-preview/2.jpg',
-];
-
 interface GallerySliderProps {
   direction?: 'vertical' | 'horizontal';
   showTotalSlides?: boolean;
   onFullScreen?: () => void;
+  images: string[];
 }
 
 const GallerySlider: FC<GallerySliderProps> = ({
   showTotalSlides,
   onFullScreen,
+  images,
+  direction = 'vertical'
 }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperCore | null>(null);
   const swiperRef = useRef<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  return (
-    <div>
-      {showTotalSlides && (
-        <div className="flex items-center justify-center text-sm font-extralight text-black-100 pt-4 mb-3">
-          <span className="mr-1">{activeIndex + 1}</span> /
-          <span className="ml-1">{images.length}</span>
-        </div>
-      )}
-      <div className={cn('flex gap-2')}>
-        {/* Thumbnails */}
-        <div className={cn('flex')}>
+  const isHorizontal = direction === 'horizontal';
+
+  const renderThumnail = (
+    <div className={cn('flex', isHorizontal && 'items-center justify-center')}>
           <Swiper
             onSwiper={setThumbsSwiper}
-            direction={'vertical'}
+            direction={direction}
             spaceBetween={10}
             slidesPerView={4}
             modules={[Navigation, Thumbs]}
@@ -75,6 +64,19 @@ const GallerySlider: FC<GallerySliderProps> = ({
             ))}
           </Swiper>
         </div>
+  )
+
+  return (
+    <div>
+      {showTotalSlides && (
+        <div className="flex items-center justify-center text-sm font-extralight text-black-100 pt-4 mb-3">
+          <span className="mr-1">{activeIndex + 1}</span> /
+          <span className="ml-1">{images.length}</span>
+        </div>
+      )}
+      <div className={cn('flex gap-2', isHorizontal && 'flex-col')}>
+        {/* Thumbnails */}
+        {!isHorizontal && renderThumnail}
 
         {/* Main Slider */}
         <div className="relative gallery-slider w-full">
@@ -122,6 +124,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
             </div>
           )}
         </div>
+        {isHorizontal && renderThumnail}
       </div>
     </div>
   );

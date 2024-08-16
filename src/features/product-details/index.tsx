@@ -7,7 +7,7 @@ import GalleryModal from '@/features/elements/GalleryModal';
 import ProductSlider from './ProductSlider';
 import Tabs from '@/components/Tabs';
 import TabDescription from './DescriptionTab';
-import { additionalInformation, description, shipping } from './data';
+import { additionalInformation, description, images, shipping } from './data';
 import ReviewsTab from './ReviewsTab';
 
 const tabs = [
@@ -37,6 +37,7 @@ const ProductDetails = () => {
         <div className="grid grid-cols md:grid-cols-2 gap-5 pb-10">
           <div className="[&_.swiper]:max-h-[470px]">
             <GallerySlider
+              images={images}
               onFullScreen={() => dispatch(toggleGalleryModal(true))}
             />
           </div>
