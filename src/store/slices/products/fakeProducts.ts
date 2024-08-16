@@ -5,7 +5,7 @@ export const products: Product[] = [
     id: '1',
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
-    category: 'furniture',
+    category: 'accessories',
   },
   {
     id: '2',
@@ -13,7 +13,7 @@ export const products: Product[] = [
     src: '/products/product-card/product-6.jpg',
     price: 209,
     oldPrice: 220,
-    category: 'accessories',
+    category: 'sale',
     label: ProductLabel.SALE,
   },
   {
@@ -47,7 +47,7 @@ export const products: Product[] = [
     title: 'Flow Slim Armchair',
     src: '/products/product-card/product-1.jpg',
     label: ProductLabel.NEW,
-    category: 'lighting',
+    category: 'sale',
     variants: [
       {
         id: 1,

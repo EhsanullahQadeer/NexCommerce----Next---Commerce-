@@ -1,6 +1,7 @@
 export type Icon = {
   url: string;
   icon: string;
+  name: string;
 };
 
 export type FooterLink = {
@@ -12,18 +13,22 @@ export const icons: Icon[] = [
   {
     url: 'https://www.facebook.com/',
     icon: 'la-facebook text-[#8f79ed]',
+    name: 'Twitter',
   },
   {
     url: 'https://www.twitter.com/',
     icon: 'la-twitter text-[#79c8ed]',
+    name: 'Twitter',
   },
   {
     url: 'https://www.instagram.com/',
     icon: 'la-instagram text-[#dd6d9a]',
+    name: 'Twitter',
   },
   {
     url: 'https://www.youtube.com/',
     icon: 'la-youtube text-[#e66262]',
+    name: 'Twitter',
   },
 ];
 

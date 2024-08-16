@@ -5,7 +5,7 @@ import { Product } from '@/types/product';
 import { togglePreviewModal } from '@/store/slices/products/productsSlice';
 import { SwiperSlide } from 'swiper/react';
 import { Swiper } from 'swiper/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Swiper as SwiperType } from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import SlideArrow from '@/components/Slider/elements/SlideArrow';
@@ -20,6 +20,39 @@ const ProductSlider = () => {
   const swiperRef = useRef<SwiperType | null>(null);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const handleResize = () => {
+      const slides = document.querySelectorAll('.swiper-slide');
+      let maxHeight = 0;
+
+      // Reset all slides height
+      slides.forEach((slide) => {
+        (slide as HTMLElement).style.height = 'auto';
+      });
+
+      // Calculate the maximum height of all slides
+      slides.forEach((slide) => {
+        const height = (slide as HTMLElement).offsetHeight;
+        if (height > maxHeight) maxHeight = height;
+      });
+
+      // Set all slides to the maximum height
+      slides.forEach((slide) => {
+        (slide as HTMLElement).style.height = `${maxHeight}px`;
+      });
+    };
+
+    // Initial call
+    handleResize();
+
+    // Recalculate heights on window resize
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div>
       <h2 className="font-medium text-black-75 text-2xl font-normal mb-10 text-center">
@@ -31,7 +64,6 @@ const ProductSlider = () => {
           observer
           modules={[Navigation, Pagination]}
           slidesPerView="auto"
-          className="h-full w-full"
           pagination={{ clickable: true }}
           onBeforeInit={(swiper) => {
             swiperRef.current = swiper;
@@ -51,7 +83,7 @@ const ProductSlider = () => {
           {products.map((item: Product) => (
             <SwiperSlide
               key={item.id}
-              className="!h-full max-w-[297px] px-2.5"
+              className="max-w-[297px] px-2.5 mb-[50px]"
             >
               <ProductCardBoxed
                 {...item}

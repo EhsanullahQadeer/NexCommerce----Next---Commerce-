@@ -3,7 +3,6 @@ import Container from '@/components/Container';
 import GallerySlider from '@/components/Slider/GallerySlider';
 import ProductDetailsColumn from './ProductDetailsColumn';
 import { toggleGalleryModal } from '@/store/slices/products/productsSlice';
-import GalleryModal from '@/features/elements/GalleryModal';
 import ProductSlider from './ProductSlider';
 import Tabs from '@/components/Tabs';
 import TabDescription from './DescriptionTab';
@@ -50,7 +49,6 @@ const ProductDetails = () => {
         </div>
         <ProductSlider />
       </Container>
-      <GalleryModal />
     </>
   );
 };
