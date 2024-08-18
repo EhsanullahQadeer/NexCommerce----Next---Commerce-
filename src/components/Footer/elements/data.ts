@@ -102,15 +102,15 @@ export const footerlinks: { category: string; links: FooterLink[] }[] = [
     category: 'My Account',
     links: [
       {
-        url: '',
+        url: '/auth',
         name: 'Sign in',
       },
       {
-        url: '',
+        url: '/cart',
         name: 'View Cart!',
       },
       {
-        url: '',
+        url: '/whishlist',
         name: 'My Wishlist',
       },
       {
