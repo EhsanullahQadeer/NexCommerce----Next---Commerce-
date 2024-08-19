@@ -17,7 +17,7 @@ const Products: FC = () => {
   ]
   return (
     <div>
-      <Hero title="Product Categories" subTitle='Shop' />
+      <Hero title="Products" subTitle='Shop' />
       <Container>
         <Breadcrumb links={links}/>
       </Container>
