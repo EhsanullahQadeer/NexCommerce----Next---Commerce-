@@ -68,7 +68,7 @@ export const tableHeader: ColumnHeaders[] = [
     key: 'actions',
     title: '',
     renderCell: () => (
-      <div className="w-[38px] absolute top-4 right-0 lg:relative">
+      <div className="w-[38px] absolute top-4 right-4 lg:right-[unset] lg:top-[unset] lg:relative">
         <i className="las la-times text-[17px] text-black-600 hover:text-black-75 cursor-pointer"></i>
       </div>
     ),

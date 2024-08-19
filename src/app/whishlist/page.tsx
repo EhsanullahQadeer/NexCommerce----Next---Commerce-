@@ -1,11 +1,9 @@
-'use client';
-
 import Breadcrumb from '@/components/Breadcrumb';
 import Container from '@/components/Container';
 import Hero from '@/components/Hero';
-import CheckoutComponent from '@/features/checkout';
+import WhistlistComponent from '@/features/whishlist';
 
-const Checkout = () => {
+const WhishListPage = () => {
   const links = [
     {
       url: '/',
@@ -16,20 +14,20 @@ const Checkout = () => {
       name: 'Shop',
     },
     {
-      url: '/checkout',
-      name: 'Checkout',
+      url: '/whishlist',
+      name: 'Whishlist',
     },
   ];
 
   return (
     <div>
-      <Hero title="Checkout" subTitle="Shop" />
+      <Hero title="Whishlist" subTitle="Shop" />
       <Breadcrumb links={links} />
       <Container>
-        <CheckoutComponent />
+        <WhistlistComponent />
       </Container>
     </div>
   );
 };
 
-export default Checkout;
+export default WhishListPage;

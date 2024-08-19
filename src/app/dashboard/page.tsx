@@ -1,13 +1,30 @@
-import { FC } from 'react';
+'use client';
 
-const Dashboard: FC = () => {
+import Breadcrumb from '@/components/Breadcrumb';
+import Hero from '@/components/Hero';
+
+const DashboardPage = () => {
+  const links = [
+    {
+      url: '/',
+      name: 'Home',
+    },
+    {
+      url: '#',
+      name: 'Shop',
+    },
+    {
+      url: '/dashboard',
+      name: 'Dashboard',
+    },
+  ];
+
   return (
     <div>
-      <h1 className="text-lg text-center text-primary">
-        Dashboard page under construction!!
-      </h1>
+      <Hero title="My Account" subTitle="Shop" />
+      <Breadcrumb links={links} />
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
