@@ -6,6 +6,8 @@ import { cn } from '@/lib/utils';
 import { selectSidebarToggle } from '@/store/slice';
 import Navbar from '../Navbar';
 import Footer from '../Footer';
+import TopBar from '../TopBar';
+import Notification from '../Notification';
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -22,6 +24,8 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       )}
       style={{ transition: 'all 0.4s ease' }}
     >
+      <Notification />
+      <TopBar />
       <Navbar />
       <main>{children}</main>
       <Footer />

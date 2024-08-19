@@ -25,7 +25,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
         borderType[border]
       )}
     >
-      <ol className="flex items-center justify-between">
+      <ol className="w-full max-w-container mx-auto px-2.5">
         {links.map((link, index) => {
           const isLastIndex = index === links.length - 1;
           return (

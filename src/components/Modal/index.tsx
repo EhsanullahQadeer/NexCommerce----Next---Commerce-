@@ -9,6 +9,7 @@ interface ModalProps {
   children: ReactNode;
   fullWidth?: boolean;
   id?: string;
+  className?: string;
 }
 
 const baseModalStyles =
@@ -24,6 +25,7 @@ const Modal: FC<ModalProps> = ({
   children,
   fullWidth,
   id,
+  className,
 }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
@@ -61,7 +63,8 @@ const Modal: FC<ModalProps> = ({
         className={cn(
           baseContentStyles,
           isAnimating ? 'opacity-100' : 'opacity-0',
-          !fullWidth && 'max-w-[1168px] mx-2.5'
+          !fullWidth && 'max-w-[1168px] mx-2.5',
+          className,
         )}
         ref={modalRef}
       >

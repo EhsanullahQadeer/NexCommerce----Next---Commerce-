@@ -56,14 +56,14 @@ const GallerySlider: FC<GallerySliderProps> = ({
         {images.map((img, index) => (
           <SwiperSlide
             key={index}
-            className="max-h-[75px] lg:max-h-[125px] !w-auto"
+            className="max-h-[75px] lg:max-h-[120px] !w-auto"
           >
             <Image
               fill
               src={img}
               alt={`Thumbnail ${index + 1}`}
               className={cn(
-                '!relative max-h-[125px] md:min-w-[60px] md:max-h-[80px] lg:max-h-[125px] h-full object-cover cursor-pointer',
+                '!relative max-h-[125px] md:min-w-[60px] md:max-h-[80px] lg:max-h-[110px] h-full object-cover cursor-pointer',
                 activeIndex === index
                   ? 'opacity-100'
                   : 'opacity-60 hover:opacity-100',

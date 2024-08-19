@@ -15,7 +15,7 @@ const Hero: FC<HeroProps> = ({ title, subTitle, className }) => {
       <h1 className="text-[32px] sm:text-[40px] text-black-75 tracking-[-1px] leading-[44px]">
         {title}
       </h1>
-      <h3 className="text-base sm:text-xl text-primary tracking-[-1px]">{subTitle}</h3>
+      <h3 className="text-base sm:text-xl font-light text-primary tracking-[-1px] mt-[5px]">{subTitle}</h3>
     </div>
   );
 };

@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils';
-import { FC, HTMLAttributes } from 'react';
+import { FC, HTMLAttributes, ReactNode } from 'react';
 import CheckedIcon from '../Icons/CheckedIcon';
 
 export interface CheckboxProps extends HTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: ReactNode;
   labelClass?: string;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ label, ...props }) => (
+const Checkbox: FC<CheckboxProps> = ({ label, labelClass, ...props }) => (
   <div className="w-full flex items-center gap-2.5">
     <input
       className="
@@ -23,7 +23,10 @@ const Checkbox: FC<CheckboxProps> = ({ label, ...props }) => (
     {label && (
       <label
         htmlFor={props.id}
-        className={cn('text-sm font-extralight text-black-100 leading-[26.04px] cursor-pointer')}
+        className={cn(
+          'text-sm font-extralight text-black-100 leading-[26.04px] cursor-pointer',
+          labelClass
+        )}
       >
         {label}
       </label>
