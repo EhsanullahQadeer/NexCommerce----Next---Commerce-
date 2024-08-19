@@ -11,7 +11,7 @@ const CategoryFilterToggle = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="relative flex flex-col sm:flex-row items-center justify-between mb-5 gap-3">
+    <div className="relative flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
       <ToggleFilters
         isToggle={isToggleFilters}
         handleToggle={() => dispatch(toggleFilters(!isToggleFilters))}
