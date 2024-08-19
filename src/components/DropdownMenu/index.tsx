@@ -63,8 +63,9 @@ const DropdownMenu = ({
       {isOpen && (
         <div aria-label="Dropdown menu" className={dropdownClass}>
           <ul role="menu" aria-orientation="vertical">
-            {items?.map((item) => (
+            {items?.map((item, index) => (
               <li
+                key={index}
                 className={cn(
                   'flex items-center cursor-pointer px-4 py-[3px] text-[13px] leading-[25px] font-light hover:text-primary'
                 )}

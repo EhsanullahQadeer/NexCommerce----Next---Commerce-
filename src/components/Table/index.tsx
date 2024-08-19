@@ -29,8 +29,9 @@ const Table: FC<TableProps> = ({ headers, data, className }) => {
     >
       <thead className="hidden lg:table-header-group">
         <tr className="border-b border-black-300">
-          {headers?.map((header) => (
+          {headers?.map((header, index) => (
             <th
+              key={index}
               className={cn(
                 'text-black-200 text-sm font-light leading-[1.5] py-[14px] text-left',
                 header.class,
