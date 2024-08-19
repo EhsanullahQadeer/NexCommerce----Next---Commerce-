@@ -1,11 +1,29 @@
 import { FC } from 'react';
+import Breadcrumb from '@/components/Breadcrumb';
+import Container from '@/components/Container';
+import Hero from '@/components/Hero';
+import ProductCategoriesComponent from '@/features/categories';
 
-const Categories: FC = () => {
+const ProductCategories: FC = () => {
+  const links = [
+    {
+      url: '/',
+      name: 'Home',
+    },
+    {
+      url: '/categories',
+      name: 'Categories',
+    }
+  ]
   return (
-    <div className="flex items-center justify-center mt-10">
-      <h1>Categories page is under construction</h1>
+    <div>
+      <Hero title="Product Categories" subTitle='Shop' />
+      <Breadcrumb links={links}/>
+      <Container>
+        <ProductCategoriesComponent />
+      </Container>
     </div>
   );
 };
 
-export default Categories;
+export default ProductCategories;
