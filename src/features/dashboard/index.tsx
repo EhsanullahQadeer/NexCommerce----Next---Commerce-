@@ -25,7 +25,7 @@ const DashboardComponent = () => {
 
   return (
     <div className="flex flex-col md:flex-row w-full gap-5 mt-[30px] mb-[50px]">
-      <ul className="flex flex-col md:max-w-[335px] border-gray-300 mb-[30px]">
+      <ul className="flex flex-col w-full max-w-full md:max-w-[250px] lg:max-w-[335px] border-gray-300 mb-[30px]">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
