@@ -99,7 +99,7 @@ const Navbar = () => {
                 iconClass="!text-[28px]"
               />
             </Link>
-            <Link href="" className="!hidden lg:!flex">
+            <Link href="/whishlist" className="!hidden lg:!flex">
               <NotificationIcon
                 icon="lar la-heart"
                 iconClass="!text-[28px]"
