@@ -1,10 +1,10 @@
 export interface Blog {
     id: string;
     title: string;
-    description: string;
+    description?: string;
     src: string;
     categories?: string[];
-    publishedAt: string;
+    publishedAt?: string;
 }
 
 export interface BlogCategory {
