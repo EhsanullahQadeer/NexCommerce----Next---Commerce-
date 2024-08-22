@@ -7,6 +7,7 @@ interface HeroProps {
   className?: string;
   customBg?: string;
   textColor?: string;
+  bgColor?: string;
 }
 
 const heroBaseStyles =
@@ -18,10 +19,11 @@ const Hero: FC<HeroProps> = ({
   className,
   customBg,
   textColor,
+  bgColor
 }) => {
   return (
     <div
-      className={cn(heroBaseStyles, className)}
+      className={cn(`${bgColor}`, heroBaseStyles, className)}
       style={{ backgroundImage: `url(${customBg})` }}
     >
       <h1
