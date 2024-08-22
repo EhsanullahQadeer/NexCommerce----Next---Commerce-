@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import rootReducer from './slice';
+import blogs from './slices/blogs/blogsSlice';
 import products from './slices/products/productsSlice';
 import productCategories from './slices/categories/categoriesSlice';
 
 const store = configureStore({
   reducer: {
     root: rootReducer,
+    blogs,
     products,
     productCategories,
   },

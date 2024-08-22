@@ -1,65 +1,35 @@
-'use client';
+"use client";
 
-import { useDispatch, useSelector } from 'react-redux';
-import Container from '@/components/Container';
-import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
-import { products } from '@/store/slices/categories/fakeProducts';
-import Button from '@/components/Button';
-import CategoryFilterDrawer from './CategoryFilterDrawer';
-import PreviewModal from '../elements/PreviewModal';
-import { togglePreviewModal } from '@/store/slices/products/productsSlice';
-import GalleryModal from '../elements/GalleryModal';
-import { Product } from '@/types/product';
-import BlogTabs from '@/components/Tabs/BlogTabs';
-import BlogCard from '@/components/Cards/BlogCard';
-
-const tabs = [
-  {
-    label: { text: 'All Blog Posts', availableItems: 8 },
-    content: <h1>Description</h1>,
-  },
-  {
-    label: { text: 'Lifestyle', availableItems: 3 },
-    content: <h1>Additional Information</h1>,
-  },
-  {
-    label: { text: 'Shopping', availableItems: 1 },
-    content: <h1>Shipping & Returns</h1>,
-  },
-  {
-    label: { text: 'Fashion', availableItems: 2 },
-    content: <h1>Reviews (2)</h1>,
-  },
-  {
-    label: { text: 'Travel', availableItems: 3 },
-    content: <h1>Reviews (2)</h1>,
-  },
-  {
-    label: { text: 'Hobbies', availableItems: 2 },
-    content: <h1>Reviews (2)</h1>,
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import Container from "@/components/Container";
+import CategoryFilterDrawer from "./CategoryFilterDrawer";
+import BlogTabs from "@/components/Tabs/BlogTabs";
+import BlogCard from "@/components/Cards/BlogCard";
+import { Blog } from "@/types/blog";
+import { handleFilterKeyChange } from "@/store/slices/blogs/blogsSlice";
+import { RootState } from "@/store";
+import Pagination from "@/components/Pagination";
 
 const BlogGrid = () => {
   const dispatch = useDispatch();
+  const categoryFilters = useSelector(
+    (state: RootState) => state.blogs.blogCategories
+  );
+  const blogs = useSelector((state: RootState) => state.blogs.blogs);
+
   return (
     <>
       <Container className="mt-5">
-        <BlogTabs tabs={tabs} />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5 gap-5">
-          {products.map((item: Product) => (
-            <BlogCard
-              key={item.id}
-              {...item}
-              onPreview={() => dispatch(togglePreviewModal(true))}
-            />
+        <BlogTabs
+          tabs={categoryFilters}
+          onTabChange={(tab: string) => dispatch(handleFilterKeyChange(tab))}
+        />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5 gap-5 py-[27px] px-[30px]">
+          {blogs.map((item: Blog) => (
+            <BlogCard key={item.id} {...item} />
           ))}
         </div>
-        {/* <div className="mt-10 mb-10">
-          <Button className="mx-auto">
-            More Products <i className="las la-sync ml-2"></i>
-          </Button>
-        </div> */}
+        <Pagination numberOfPages={2} currentPage={1} onPageChange={() => {}} />
       </Container>
       <CategoryFilterDrawer />
     </>

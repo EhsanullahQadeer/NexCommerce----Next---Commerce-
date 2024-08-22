@@ -1,44 +1,40 @@
-import { cn } from '@/lib/utils';
-import { FC, ReactNode, useState } from 'react';
+import { FC } from "react";
+import { cn } from "@/lib/utils";
+import { RootState } from "@/store";
+import { BlogCategory } from "@/types/blog";
+import { useSelector } from "react-redux";
 
 interface TabsProps {
-    tabs: {
-        label: {
-            text: string;
-            availableItems: number;
-        }; content: ReactNode
-    }[];
+  tabs: BlogCategory[];
+  onTabChange: (tab: string) => void;
 }
 
-const BlogTabs: FC<TabsProps> = ({ tabs }) => {
-    const [activeTabIndex, setActiveTabIndex] = useState(0);
+const BlogTabs: FC<TabsProps> = ({ tabs, onTabChange }) => {
+  const activeFilter = useSelector((state: RootState) => state.blogs.filterKey);
 
-    return (
-        <div>
-            <div className="flex items-center justify-center gap-1 flex-wrap sm:gap-5">
-                {tabs.map((tab, idx) => {
-                    return (
-                        <button
-                            key={idx}
-                            className={cn(
-                                'flex items-center gap-x-2 py-[6px] mx-2 text-sm font-light border-b transition-colors duration-300 tracking-[-0.16px] leading-[18px] text-[#333333] hover:text-primary',
-                                idx === activeTabIndex
-                                    ? 'text-primary border-primary'
-                                    : 'border-transparent hover:primary'
-                            )}
-                            onClick={() => setActiveTabIndex(idx)}
-                        >
-                            <span>{tab.label.text}</span><span className='text-[#cccccc]'>{tab.label.availableItems}</span>
-                        </button>
-                    );
-                })}
-            </div>
-
-            <div className="mt-[-1px] py-[27px] px-[30px]">
-                {tabs[activeTabIndex].content}
-            </div>
-        </div>
-    );
+  return (
+    <div>
+      <div className="flex items-center justify-center gap-1 flex-wrap sm:gap-5">
+        {tabs.map((tab, idx) => {
+          return (
+            <button
+              key={idx}
+              className={cn(
+                "flex items-center gap-x-2 py-[6px] mx-2 text-sm font-light border-b transition-colors duration-300 tracking-[-0.16px] leading-[18px] text-[#333333] hover:text-primary",
+                tab.key === activeFilter
+                  ? "text-primary border-primary"
+                  : "border-transparent hover:primary"
+              )}
+              onClick={() => onTabChange(tab.key)}
+            >
+              <span>{tab.label}</span>
+              <span className="text-[#cccccc]">{tab.count}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 export default BlogTabs;
