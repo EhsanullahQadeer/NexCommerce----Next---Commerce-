@@ -11,7 +11,7 @@ interface HeroProps {
 }
 
 const heroBaseStyles =
-  "flex flex-col items-center justify-center pt-[46px] pb-[50px] bg-[url('/products/category-bg.jpg')] bg-cover bg-center";
+  "flex flex-col items-center justify-center pt-[46px] pb-[50px] bg-cover bg-center";
 
 const Hero: FC<HeroProps> = ({
   title,
@@ -19,12 +19,18 @@ const Hero: FC<HeroProps> = ({
   className,
   customBg,
   textColor,
-  bgColor
+  bgColor,
 }) => {
   return (
     <div
       className={cn(`${bgColor}`, heroBaseStyles, className)}
-      style={{ backgroundImage: `url(${customBg})` }}
+      style={{
+        backgroundImage: customBg
+          ? `url(${customBg})`
+          : !bgColor
+          ? "url('/products/category-bg.jpg')"
+          : undefined,
+      }}
     >
       <h1
         className={`text-[32px] sm:text-[40px] ${
