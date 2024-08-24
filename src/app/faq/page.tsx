@@ -103,7 +103,7 @@ const AboutUs: FC = () => {
         <Hero title="F.A.Q" subTitle="Pages" />
         <Breadcrumb links={links} />
         <div className="flex flex-col items-center">
-          <span className="text-xl my-8">Shipping Information</span>
+          <span className="text-[22px] my-8">Shipping Information</span>
           {shippingInformation.accordions.map((item, index) => {
             return (
               <Accordion
@@ -120,12 +120,19 @@ const AboutUs: FC = () => {
                         : index,
                   })
                 }
+                className={
+                  index === 0
+                    ? "rounded-t"
+                    : index === shippingInformation.accordions.length - 1
+                    ? "rounded-b"
+                    : ""
+                }
               />
             );
           })}
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-xl my-8">Orders and Returns</span>
+          <span className="text-[22px] my-8">Orders and Returns</span>
           {ordersAndReturns.accordions.map((item, index) => {
             return (
               <Accordion
@@ -142,12 +149,19 @@ const AboutUs: FC = () => {
                         : index,
                   })
                 }
+                className={
+                  index === 0
+                    ? "rounded-t"
+                    : index === ordersAndReturns.accordions.length - 1
+                    ? "rounded-b"
+                    : ""
+                }
               />
             );
           })}
         </div>
         <div className="flex flex-col items-center">
-          <span className="text-xl my-8">Payments</span>
+          <span className="text-[22px] my-8">Payments</span>
           {payments.accordions.map((item, index) => {
             return (
               <Accordion
@@ -164,11 +178,38 @@ const AboutUs: FC = () => {
                         : index,
                   })
                 }
+                className={
+                  index === 0
+                    ? "rounded-t"
+                    : index === payments.accordions.length - 1
+                    ? "rounded-b"
+                    : ""
+                }
               />
             );
           })}
         </div>
       </Container>
+      <div
+        className="w-full h-auto min-h-[150px] py-8 px-4 flex flex-col gap-y-4 justify-center sm:flex-row sm:items-center sm:justify-between"
+        style={{
+          backgroundImage: "url('/categories/faq-bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="flex flex-col">
+          <span className="text-2xl font-medium text-white">
+            If You Have More Questions
+          </span>
+          <span className="text-white font-extralight">
+            Quisque volutpat mattis eros
+          </span>
+        </div>
+        <Button className="w-max gap-x-3 !px-3.5 !border-white !text-white hover:!border-primary">
+          CONTACT US <i className="las la-arrow-right" />
+        </Button>
+      </div>
     </div>
   );
 };

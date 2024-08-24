@@ -6,6 +6,7 @@ interface AccordionProps {
   content: string;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  className?: string;
 }
 
 const Accordion: FC<AccordionProps> = ({
@@ -13,9 +14,12 @@ const Accordion: FC<AccordionProps> = ({
   content,
   isOpen,
   setIsOpen,
+  className,
 }) => {
   return (
-    <div className="w-full flex flex-col border border-gray-200">
+    <div
+      className={cn("w-full flex flex-col border border-gray-200", className)}
+    >
       <button
         className={`flex items-center justify-between p-4 text-left ${
           isOpen ? "bg-white text-primary" : "bg-[#fafafa]"
