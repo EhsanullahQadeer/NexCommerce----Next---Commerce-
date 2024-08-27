@@ -5,7 +5,7 @@ import Input from "@/components/Input";
 import { useLoginMutation } from "@/store/api/authApi";
 import { useAppSelector } from "@/store/hook";
 import Link from "next/link";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIcon from "@/components/Icons/ProgressIcon";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const response = await login({
