@@ -14,13 +14,20 @@ const LoginForm = () => {
   const userDetails = useAppSelector((state) => state.auth);
 
   const [login, { isLoading }] = useLoginMutation();
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
 
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      const { username, password } = formData;
       const response = await login({
         email: username,
         password,
@@ -32,29 +39,22 @@ const LoginForm = () => {
         router.push("/dashboard");
       }
     } catch (error) {
-      console.log(error);
+      console.error("Login failed:", error);
     }
   };
 
-  const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
   return (
     <div>
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={onSubmit}>
         <div className="relative">
           <Input
-            name="email"
-            label="Username or email address *"
+            name="username"
+            label="Email address *"
             type="email"
             autoComplete="username"
             required
-            value={username}
-            onChange={handleUsernameChange}
+            value={formData.username}
+            onChange={handleInputChange}
           />
         </div>
 
@@ -65,15 +65,14 @@ const LoginForm = () => {
             type="password"
             autoComplete="current-password"
             required
-            value={password}
-            onChange={handlePasswordChange}
+            value={formData.password}
+            onChange={handleInputChange}
           />
         </div>
 
         <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between mb-[23px] pb-[30px] border-b border-black-300 gap-y-[6px] sm:gap-y-0">
           <div className="w-full flex flex-col-reverse sm:flex-row">
             <Button
-              onClick={onSubmit}
               className="!max-w-full !w-full sm:!max-w-[115px] sm:!w-full !h-[40px] !px-[15px] sm:mr-4 mt-2.5 sm:mt-0 justify-center uppercase"
             >
               {isLoading ? (

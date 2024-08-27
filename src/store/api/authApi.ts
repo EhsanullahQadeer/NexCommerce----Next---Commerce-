@@ -4,6 +4,7 @@ import { userLoggedIn } from "../slices/auth/authSlice";
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    // login endpoint here
     login: builder.mutation({
       query: (data) => ({
         url: "user/login",
@@ -24,7 +25,23 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    // signup endpoint here
+    signUp: builder.mutation({
+      query: (data) => ({
+        url: "user/register",
+        method: "POST",
+        body: data,
+      }),
+
+      async onQueryStarted(arg, { queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+        } catch (error: any) {
+          console.log("Registration Error:", error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useSignUpMutation, useLoginMutation } = authApi;
