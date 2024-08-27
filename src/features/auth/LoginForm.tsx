@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import Input from "@/components/Input";
@@ -17,11 +18,12 @@ const LoginForm = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
+    e.preventDefault();
     try {
       const response = await login({
-        email: "abcd@yopmail.com",
-        password: "12345678", //test data
+        email: username,
+        password,
       });
       if (response.data.errors || !response.data.data) {
         console.log("Incorrect username or password.");

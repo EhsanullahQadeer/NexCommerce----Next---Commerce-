@@ -1,3 +1,4 @@
+'use client'
 import { apiSlice } from "../slices/api/apiSlice";
 import { userLoggedIn } from "../slices/auth/authSlice";
 
