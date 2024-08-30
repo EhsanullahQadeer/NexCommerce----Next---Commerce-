@@ -8,6 +8,9 @@ import { siteConfig } from '@/data/siteConfig';
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
@@ -45,7 +48,21 @@ export default function RootLayout({
           />
         </head>
         <body className={cn(poppins.className, 'overflow-x-hidden')}>
-          <MainLayout>{children}</MainLayout>
+          <MainLayout>
+            {children}
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </MainLayout>
           <div id="sidebar-wrapper"></div>
         </body>
       </html>
