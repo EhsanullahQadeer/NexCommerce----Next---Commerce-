@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegsiterForm';
 import { cn } from '@/lib/utils';
@@ -8,7 +8,11 @@ import Container from '@/components/Container';
 const tabButtonStyles =
   'w-1/2 text-center p-2.5 text-black-75 font-normal text-xl sm:text-2xl transition-colors duration-300 tracking-[-0.6px]';
 
-const AuthComponent = () => {
+interface AuthComponentProps {
+  setIsOpen?: (isOpen: boolean) => void;
+}
+
+const AuthComponent: FC<AuthComponentProps> = ({ setIsOpen }) => {
   const [activeTab, setActiveTab] = useState('login');
 
   return (
@@ -34,7 +38,7 @@ const AuthComponent = () => {
         </button>
       </div>
       <div className="border-t border-gray-200 pt-5 -mt-[1px]">
-        {activeTab === 'login' ? <LoginForm /> : <RegisterForm />}
+        {activeTab === 'login' ? <LoginForm setIsOpen={setIsOpen} /> : <RegisterForm setIsOpen={setIsOpen} />}
       </div>
       <div className="mt-[23px]">
         <p className="text-sm text-center text-black-500 font-light mb-[27px]">

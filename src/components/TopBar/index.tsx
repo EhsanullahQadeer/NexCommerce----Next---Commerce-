@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
@@ -8,10 +8,13 @@ import { currencies, langauges, LinkType, topBarLinks } from './data';
 import DropdownMenu from '../DropdownMenu';
 import Modal from '../Modal';
 import AuthComponent from '@/features/auth';
+import { useDispatch } from 'react-redux';
+import { userLoggedIn } from '@/store/slices/auth/authSlice';
 
 const TopBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const dispatch = useDispatch()
   const filteredLinks: LinkType[] = topBarLinks.filter(
     (link) => link.url !== pathname
   );
@@ -19,6 +22,18 @@ const TopBar = () => {
     e.preventDefault();
     setIsOpen(true);
   };
+
+  useEffect(() => {
+    const userData = localStorage.getItem('user') || '{}'
+
+    dispatch(
+      userLoggedIn({
+        user: JSON.parse(userData),
+      })
+    );
+
+  }, [[]])
+
   return (
     <div className="relative bg-white text-black-500 text-xs z-[91]">
       <Container>
@@ -64,7 +79,7 @@ const TopBar = () => {
         </div>
       </Container>
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} className='!max-w-[575px]'>
-        <AuthComponent />
+        <AuthComponent setIsOpen={setIsOpen} />
       </Modal>
     </div>
   );
