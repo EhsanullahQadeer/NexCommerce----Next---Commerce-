@@ -25,7 +25,7 @@ export const authApi = apiSlice.injectEndpoints({
             const message = result.data.message
             toast.success(message)
           }
-
+          localStorage.setItem("user", JSON.stringify(result.data.data.user ||''));
           dispatch(
             userLoggedIn({
               user: result.data.data.user,
@@ -44,7 +44,7 @@ export const authApi = apiSlice.injectEndpoints({
         body: data,
       }),
 
-      async onQueryStarted(arg, { queryFulfilled }) {
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
           if (!result.data.data) {
@@ -55,6 +55,12 @@ export const authApi = apiSlice.injectEndpoints({
             const message = result.data.message
             toast.success(message)
           }
+          localStorage.setItem("user", JSON.stringify(result.data.data.user ||''));
+          dispatch(
+            userLoggedIn({
+              user: result.data.data.user,
+            })
+          );
         } catch (error: any) {
           console.log("Registration Error:", error);
         }

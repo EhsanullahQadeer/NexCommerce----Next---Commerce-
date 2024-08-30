@@ -6,8 +6,10 @@ import DownloadsTab from './DownloadsTab';
 import AddressTab from './AddressTab';
 import AccountDetailsTab from './AccountDetailsTab';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
-const DashboardComponent = () => {
+const DashboardComponent = () => { 
+
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<number>(1);
   const tabs = [
