@@ -1,16 +1,19 @@
 import Link from "next/link";
 import { FC } from "react";
+import { useSelector } from "react-redux";
 
 interface DashboardTabProps {
   handleTabChange: (tab: number) => void;
 }
 
 const DashboardTab: FC<DashboardTabProps> = ({ handleTabChange }) => {
+  const data: any = useSelector(state => state)
+  const {email, name} = data?.auth?.user || {}
   return (
     <div className="mt-1.5">
       <p className="text-black-500 font-extralight text-sm leading-[30.01px]">
-        Hello <span className="font-normal text-black-75">User</span> (not{' '}
-        <span className="font-normal text-black-75">User</span>?{' '}
+        Hello <span className="font-normal text-black-75">{name || "User"}</span> (not{' '}
+        <span className="font-normal text-black-75">{name || "User"}</span>?{' '}
         <Link href="/login" className="text-primary">Log out</Link>)
         <br />
         From your account dashboard you can view your{' '}
