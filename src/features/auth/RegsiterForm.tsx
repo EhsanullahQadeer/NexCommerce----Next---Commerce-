@@ -1,44 +1,98 @@
-import Button from '@/components/Button';
-import Checkbox from '@/components/Checkbox';
-import Input from '@/components/Input';
-import Link from 'next/link';
+import Button from "@/components/Button";
+import Checkbox from "@/components/Checkbox";
+import ProgressIcon from "@/components/Icons/ProgressIcon";
+import Input from "@/components/Input";
+import { useSignUpMutation } from "@/store/api/authApi";
+import Link from "next/link";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 const RegisterForm = () => {
+  const [signUp, { isLoading }] = useSignUpMutation();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const { username, email, password } = formData;
+      const response = await signUp({ name: username, email, password });
+
+      if (response.data.status_code != "200") {
+        console.log("Error occurred during registration");
+      } else {
+        window.location.href = "/auth";
+      }
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
+  };
+
   return (
     <div>
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={onSubmit}>
+        <div className="relative">
+          <Input
+            name="username"
+            label="Your name *"
+            type="text"
+            autoComplete="name"
+            required
+            value={formData.username}
+            onChange={handleInputChange}
+          />
+        </div>
         <div className="relative">
           <Input
             name="email"
-            label="You email address *"
+            label="Your email address *"
             type="email"
             autoComplete="email"
             required
+            value={formData.email}
+            onChange={handleInputChange}
           />
         </div>
-
         <div className="relative">
           <Input
             name="password"
             label="Password *"
-            autoComplete="current-password"
             type="password"
+            autoComplete="current-password"
             required
+            value={formData.password}
+            onChange={handleInputChange}
           />
         </div>
 
         <div className="flex flex-col-reverse sm:flex-row items-center mb-[23px] pb-[30px] border-b border-black-300 gap-y-2.5 sm:gap-y-0">
-          <Button className="!max-w-full !w-full sm:!max-w-auto sm:!w-auto sm:mr-4 !h-[40px] justify-center uppercase !px-[15px]">
-            Register
-            <i className="las la-long-arrow-alt-right ml-2.5 text-ms"></i>
+          <Button
+            className="!max-w-full !w-full sm:!max-w-auto sm:!w-auto sm:mr-4 !h-[40px] justify-center uppercase !px-[15px]"
+          >
+            {isLoading ? (
+              <ProgressIcon />
+            ) : (
+              <>
+                Register
+                <i className="las la-long-arrow-alt-right ml-2.5 text-ms"></i>
+              </>
+            )}
           </Button>
           <Checkbox
             label={
               <>
-                I agree to the{' '}
+                I agree to the{" "}
                 <Link href="#" className="underline hover:text-primary">
                   privacy policy
-                </Link>{' '}
+                </Link>{" "}
                 *
               </>
             }
