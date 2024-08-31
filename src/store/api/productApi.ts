@@ -14,9 +14,6 @@ export const productsApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
 
-          console.log("result", result);
-
-
           if (result.data.data && result.data.data.length) {
             dispatch(
               handleProduct(result.data.data)

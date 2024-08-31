@@ -7,6 +7,7 @@ interface ColorVariantProps {
 }
 
 const ColorVariants: FC<ColorVariantProps> = ({ variants }) => {
+
   const [isActive, setIsActive] = useState<string | null>(null);
 
   useEffect(() => {

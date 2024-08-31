@@ -108,11 +108,12 @@ export const productCategories: ProductCategory[] = []
 //   { key: 'sale', label: 'Sale', count: 3 },
 // ];
 
-export const productSortCategories: ProductCategory[] = [
-  { key: 'default', label: 'Default' },
-  { key: 'popularity', label: 'Popularity' },
-  { key: 'average-rating', label: 'Average Rating' },
-  { key: 'Newness', label: 'Newness' },
-  { key: 'price-low-to-high', label: 'Price: Low to High' },
-  { key: 'price-high-to-low', label: 'Price: High to Low' },
-];
+export const productSortCategories: ProductCategory[] = []
+// export const productSortCategories: ProductCategory[] = [
+//   { key: 'default', label: 'Default' },
+//   { key: 'popularity', label: 'Popularity' },
+//   { key: 'average-rating', label: 'Average Rating' },
+//   { key: 'Newness', label: 'Newness' },
+//   { key: 'price-low-to-high', label: 'Price: Low to High' },
+//   { key: 'price-high-to-low', label: 'Price: High to Low' },
+// ];

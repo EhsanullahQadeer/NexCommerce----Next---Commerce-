@@ -9,24 +9,14 @@ import {
 } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
-import TagLabel from './elements/TagLabel';
+// import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
-import { Product } from '@/types/product';
+import { ColorVariant, Product, ProductVariant } from '@/types/product';
 
 export interface ProductCardProps extends Product {
   className?: string;
   onPreview?: () => void;
 }
-
-// {
-//   "id": "2",
-//   "name": "Original Stonewashed Beanbag",
-//   "src": "/products/product-card/product-6.jpg",
-//   "price": 209,
-//   "oldPrice": 220,
-//   "category": "sale",
-//   "label": "Sale"
-// }
 
 const ProductCard: FC<ProductCardProps> = ({
   id,
@@ -37,6 +27,22 @@ const ProductCard: FC<ProductCardProps> = ({
   className,
   onPreview,
 }) => {
+
+  const colorVarientFilter = (varients: ProductVariant[]) => {
+    let colorsvarients: ColorVariant[] = []
+
+    varients.map((el) => {
+      el?.attribute_values?.map((item) => {
+        if(item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour"){
+          const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
+          !checkColor && colorsvarients.push({id: item.id, color: item.value.toLowerCase()})
+        }
+      })
+    })
+
+    return colorsvarients
+  }
+
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
@@ -49,7 +55,7 @@ const ProductCard: FC<ProductCardProps> = ({
             blurDataURL='/default_image.jpg'
           />
         </Link>
-        {name && <TagLabel label={name} />}
+        {/* {name && <TagLabel label={name}/>} */}
 
         <Link href="#" className={productVerticalActionStyles}>
           <IconWithText
@@ -76,7 +82,7 @@ const ProductCard: FC<ProductCardProps> = ({
         </h3>
         <CardPrice price={price} oldPrice={0} />
 
-        <ColorVariants variants={product_variants} />
+        <ColorVariants variants={colorVarientFilter(product_variants)} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <Link

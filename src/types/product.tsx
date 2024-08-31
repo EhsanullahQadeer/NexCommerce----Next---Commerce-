@@ -40,7 +40,7 @@ export interface ProductCategory {
 
 export interface ColorVariant {
   id: number;
-  color: string;
+  color: any;
 }
 
 export interface ProductTag {

@@ -9,7 +9,7 @@ import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
 import Stars from '../Stars';
 import CardActions from './elements/Actions';
-import { Product } from '@/types/product';
+import { ColorVariant, Product, ProductVariant } from '@/types/product';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -18,17 +18,30 @@ export interface ProductCardBoxedProps extends Product {
 
 const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   id,
-  title,
-  src,
+  name,
+  image,
   price,
-  oldPrice,
-  variants,
-  label,
+  product_variants,
   className,
   onPreview,
-  heading,
+  // heading,
 }) => {
   const productUrl = `/products/${id}`;
+
+  const colorVarientFilter = (varients: ProductVariant[]) => {
+    let colorsvarients: ColorVariant[] = []
+
+    varients.map((el) => {
+      el?.attribute_values?.map((item) => {
+        if(item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour"){
+          const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
+          !checkColor && colorsvarients.push({id: item.id, color: item.value.toLowerCase()})
+        }
+      })
+    })
+
+    return colorsvarients
+  }
 
   return (
     <div
@@ -41,12 +54,12 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
         <Link href={productUrl} className="relative">
           <Image
             fill
-            src={src}
+            src={image}
             alt="Product image"
             className="!relative block !w-full !h-auto min-h-[277px]"
           />
         </Link>
-        {label && <TagLabel label={label} />}
+        {/* {label && <TagLabel label={label} />} */}
 
         <Link href="#" className={productVerticalActionStyles}>
           <IconWithText
@@ -59,18 +72,18 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
       </div>
       <div className="py-4 px-5">
         <div className="text-gray-500 text-[13px] font-light tracking-[-0.13px] leading-[15.6px] mb-[3px]">
-          {heading}
+          {/* {heading} */}
         </div>
         <h3 className="text-base font-normal text-black-75 mb-[3px] tracking-[-0.16px] leading-[20px] mb-[2px]">
           <Link href={productUrl} className="hover:text-primary">
-            {title}
+            {name}
           </Link>
         </h3>
-        <CardPrice price={price} oldPrice={oldPrice} isBoxed />
+        <CardPrice price={price} oldPrice={0} isBoxed />
         <div className="mb-[17px] mt-[13px]">
           <Stars count={5} reviewCount={2} />
         </div>
-        <ColorVariants variants={variants} />
+        <ColorVariants variants={colorVarientFilter(product_variants)} />
       </div>
     </div>
   );
