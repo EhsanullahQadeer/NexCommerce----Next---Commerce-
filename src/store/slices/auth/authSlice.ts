@@ -15,7 +15,7 @@ const authSlice = createSlice({
       state.initialTransaction = action.payload;
     },
     userLoggedIn: (state, action) => {
-      state.isAuthenticated = true;
+      state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
     },
   },
