@@ -9,9 +9,9 @@ import {
 } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
 import ColorVariants from '../ColorVariants';
-import TagLabel from './elements/TagLabel';
+// import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
-import { Product } from '@/types/product';
+import { ColorVariant, Product, ProductVariant } from '@/types/product';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -20,27 +20,42 @@ export interface ProductCardProps extends Product {
 
 const ProductCard: FC<ProductCardProps> = ({
   id,
-  title,
-  src,
+  name,
+  image,
   price,
-  oldPrice,
-  variants,
-  label,
+  product_variants,
   className,
   onPreview,
 }) => {
+
+  const colorVarientFilter = (varients: ProductVariant[]) => {
+    let colorsvarients: ColorVariant[] = []
+
+    varients.map((el) => {
+      el?.attribute_values?.map((item) => {
+        if(item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour"){
+          const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
+          !checkColor && colorsvarients.push({id: item.id, color: item.value.toLowerCase()})
+        }
+      })
+    })
+
+    return colorsvarients
+  }
+
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
         <Link href={`/products/${id}`} className="relative">
           <Image
             fill
-            src={src}
+            src={image}
             alt="Product image"
             className="!relative w-full height-auto min-h-[277px]"
+            blurDataURL='/default_image.jpg'
           />
         </Link>
-        {label && <TagLabel label={label} />}
+        {/* {name && <TagLabel label={name}/>} */}
 
         <Link href="#" className={productVerticalActionStyles}>
           <IconWithText
@@ -62,12 +77,12 @@ const ProductCard: FC<ProductCardProps> = ({
       <div className="pt-4 pb-5">
         <h3 className="text-sm font-extralight text-black-100 mb-[3px]">
           <Link href="/products" className="hover:text-primary">
-            {title}
+            {name}
           </Link>
         </h3>
-        <CardPrice price={price} oldPrice={oldPrice} />
+        <CardPrice price={price} oldPrice={0} />
 
-        <ColorVariants variants={variants} />
+        <ColorVariants variants={colorVarientFilter(product_variants)} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <Link

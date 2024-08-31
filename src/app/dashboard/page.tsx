@@ -4,6 +4,8 @@ import Breadcrumb from '@/components/Breadcrumb';
 import Container from '@/components/Container';
 import Hero from '@/components/Hero';
 import DashboardComponent from '@/features/dashboard';
+import withAuth from '@/components/withAuth/withAuth';
+
 
 const DashboardPage = () => {
   const links = [
@@ -32,4 +34,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default withAuth(DashboardPage);

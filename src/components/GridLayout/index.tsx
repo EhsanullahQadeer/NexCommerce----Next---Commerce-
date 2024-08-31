@@ -14,11 +14,19 @@ import Button from '../Button';
 import { Product } from '@/types/product';
 import ProductCardSkeleton from '../Cards/ProductCardSkeleton';
 
+const createCatFilter = (item: any) => {
+  if(item && item.length){
+    return "cat-" + item[0].category_id
+  }
+  
+  return "cat-0"
+}
+
 const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const imagesLoaded = useImagesLoaded(gridRef);
-  const { filterKey, products } = useSelector(selectProducts);
+  const { filterKey, products, productCategories } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -32,7 +40,9 @@ const GridLayout: React.FC = () => {
       });
     }
 
-    const handleResize = () => isotope.current?.reloadItems();
+    const handleResize = () => {
+      isotope.current?.layout();
+    };
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -40,7 +50,8 @@ const GridLayout: React.FC = () => {
       isotope.current?.destroy();
       isotope.current = null;
     };
-  }, [imagesLoaded]);
+  }, [products, filterKey, productCategories]);
+
 
   useEffect(() => {
     if (isotope.current) {
@@ -48,7 +59,7 @@ const GridLayout: React.FC = () => {
         filter: filterKey !== '*' ? `.${filterKey}` : '*',
       });
     }
-  }, [filterKey]);
+  }, [products, filterKey, productCategories]);
 
   if(!imagesLoaded) {
     return <ProductCardSkeleton />
@@ -62,7 +73,7 @@ const GridLayout: React.FC = () => {
               key={item.id}
               className={cn(
                 'product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
-                item.category
+                createCatFilter(item.product_categories)
               )}
             >
               <ProductCard
