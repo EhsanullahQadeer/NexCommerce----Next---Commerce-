@@ -17,7 +17,12 @@ const AddressModal = ({ toggleModal }: ModalProps) => {
         >
           <i className="las la-times-circle"></i>
         </div>
-        <h2 className="text-lg font-semibold mb-4">Add Address</h2>
+        <h1
+          className={`text-[22px] sm:text-[22px] text-black-75
+         tracking-[-1px] leading-[44px]`}
+        >
+          Add Address
+        </h1>
         <div className="space-y-4">
           <div>
             <Input label="Address Name" placeholder="Enter address name" />

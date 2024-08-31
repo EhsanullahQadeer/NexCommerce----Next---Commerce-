@@ -15,16 +15,23 @@ const Notifications = () => {
 
   return (
     <div className="mt-1.5 flex-1">
-      <h2 className="text-xl font-semibold mb-4">Notifications</h2>
+      <h1
+        className={`text-[22px] sm:text-[22px] text-black-75
+         tracking-[-1px] leading-[44px]`}
+      >
+        Notifications
+      </h1>
 
-      <p className="text-sm font-normal mb-4 text-black-500">
+      <p className="text-black-500 font-extralight text-sm mb-2.5 leading-[30.1px]">
         Manage your notification preferences for email and SMS.
       </p>
 
       <div className="space-y-5">
         <div className="flex items-center justify-between rounded-lg">
           <div className="">
-            <p className="text-sm">Email Notifications</p>
+            <p className=" font-extralight leading-[30.1px]">
+              Email Notifications
+            </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -51,7 +58,9 @@ const Notifications = () => {
 
         <div className="flex items-center justify-between rounded-lg">
           <div className="">
-            <p className="text-sm">SMS Notifications</p>
+            <p className=" font-extralight leading-[30.1px]">
+              SMS Notifications
+            </p>
           </div>
           <label className="relative inline-flex items-center cursor-pointer">
             <input

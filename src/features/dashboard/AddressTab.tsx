@@ -28,7 +28,12 @@ const AddressTab = () => {
     <div className="mt-1.5">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold mb-4">Addresses</h2>
+          <h1
+            className={`text-[22px] sm:text-[22px] text-black-75
+         tracking-[-1px] leading-[44px]`}
+          >
+            Addresses
+          </h1>
           <p className="text-black-500 font-extralight text-sm mb-2.5 leading-[30.1px]">
             The following addresses will be used on the checkout page by
             default.

@@ -3,6 +3,7 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import NotificationIcon from "@/components/Navbar/elements/NotificationIcon";
+import OrderExpanded from "./OrderExpanded";
 
 const orders = [
   {
@@ -92,7 +93,12 @@ const OrderTab = () => {
 
   return (
     <div className="mt-1.5 flex-1 px-4 md:px-8">
-      <h2 className="text-xl font-semibold mb-4">My Orders</h2>
+      <h1
+        className={`text-[22px]  mb-4 sm:text-[22px] text-black-75
+         tracking-[-1px] leading-[44px]`}
+      >
+        My orders
+      </h1>
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 space-y-2 md:space-y-0">
         <div className="flex w-full md:w-auto items-center justify-center gap-1">
@@ -155,34 +161,33 @@ const OrderTab = () => {
                 />
               </div>
               <div className="w-full md:w-[30%] mt-2 md:mt-0 text-center md:text-left">
-                <p className="text-black-500">
+                <p className="text-black-75 text-sm">
                   <span className="font-light text-xs">Order no:</span>{" "}
-                  <span className="font-semibold text-sm">
-                    ORD{order.orderNumber}
-                  </span>
+                  <span className="text-sm">ORD{order.orderNumber}</span>
                 </p>
               </div>
 
               <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
-                <p className="text-black-75 text-sm font-bold">
+                <p className="text-black-75 text-sm">
                   <i className={`${order.statusIcon}`}></i> {order.status}
                 </p>
               </div>
 
               <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
                 <div className="text-center md:text-right">
-                  <p className="text-black-500 text-sm">{order.date}</p>
-                  <p className="text-sm font-bold text-green-600">
-                    {order.price}
-                  </p>
+                  <p className="text-black-75 text-sm">{order.date}</p>
+
+                  <p className="text-green-600 text-sm">{order.price}</p>
                 </div>
                 <i
                   className={`las ${
                     expandedOrder === order.id ? "la-angle-up" : "la-angle-down"
-                  } text-lg ml-2`}
+                  } text-lg ml-2 font-bold mt-2`}
                 ></i>
               </div>
             </div>
+
+            {expandedOrder === order.id && <OrderExpanded order={order} />}
           </div>
         ))}
       </div>
