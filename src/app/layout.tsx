@@ -61,6 +61,7 @@ export default function RootLayout({
               draggable
               pauseOnHover
               theme="light"
+              limit={1}
             />
           </MainLayout>
           <div id="sidebar-wrapper"></div>

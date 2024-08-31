@@ -17,6 +17,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import "swiper/css/pagination";
 import "@/components/Slider/styles/slider.css";
+import { Blog } from "@/types/blog";
 
 
 const RelatedPosts = () => {
@@ -85,7 +86,7 @@ const RelatedPosts = () => {
             },
           }}
         >
-          {blogs.map((item: Product) => (
+          {blogs.map((item: Blog) => (
             <SwiperSlide
               key={item.id}
               className="max-w-[297px] px-2.5 mb-[50px]"

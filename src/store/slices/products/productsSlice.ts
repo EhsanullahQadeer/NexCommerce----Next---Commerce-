@@ -28,6 +28,13 @@ export const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
+    handleProduct: (state, action: PayloadAction<Product[]>) => {
+      state.products = action.payload;
+    },
+    handleProductCategories: (state, action: PayloadAction<ProductCategory[]>) => {
+      state.productCategories = action.payload;
+    },
+    
     handleFilterKeyChange: (state, action: PayloadAction<string>) => {
       state.filterKey = action.payload;
     },
@@ -40,7 +47,7 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { handleFilterKeyChange, togglePreviewModal, toggleGalleryModal } =
+export const { handleProduct, handleProductCategories, handleFilterKeyChange, togglePreviewModal, toggleGalleryModal } =
   productsSlice.actions;
 
 // selectors can use the imported `RootState`

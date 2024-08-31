@@ -22,16 +22,25 @@ const ProductCategoriesList: FC<ProductCategoriesListProps> = ({
         isOpen && 'invisible opacity-0 hidden'
       )}
     >
-      {productCategories.map((item) => (
-        <div
-          key={item.label}
+      <div
           className={cn(
             'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
-            filterKey === item.key && 'text-primary border-b border-primary'
+            filterKey === `0` && 'text-primary border-b border-primary'
           )}
-          onClick={() => onCategorySelect(item.key)}
+          onClick={() => onCategorySelect(`*`)}
         >
-          {item.label}
+          All
+        </div>
+      {productCategories.map((item) => (
+        <div
+          key={`category-${item.id}`}
+          className={cn(
+            'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
+            filterKey === `cat-${item.id}` && 'text-primary border-b border-primary'
+          )}
+          onClick={() => onCategorySelect(`cat-${item.id}`)}
+        >
+          {item.name}
         </div>
       ))}
     </div>

@@ -15,7 +15,7 @@ const CardPrice: FC<CardPriceProps> = ({ price, oldPrice, isBoxed }) => {
       <span className={cn('text-primary', isBoxed && 'text-base font-normal')}>
         ${price.toFixed(2)}
       </span>
-      {oldPrice && (
+      {/* {oldPrice && (
         <span
           className={cn(
             'text-black-600',
@@ -24,7 +24,7 @@ const CardPrice: FC<CardPriceProps> = ({ price, oldPrice, isBoxed }) => {
         >
           {!isBoxed && 'Was'} ${oldPrice.toFixed(2)}
         </span>
-      )}
+      )} */}
     </div>
   );
 };

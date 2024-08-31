@@ -11,7 +11,6 @@ const AccountDetailsTab = () => {
   const data: any = useSelector(state => state)
   const {email, name} = data?.auth?.user || {}
 
-  console.log("data", email, name);
   return (
     <form className="mt-1.5">
       <div className="flex flex-col gap-[13px]">
