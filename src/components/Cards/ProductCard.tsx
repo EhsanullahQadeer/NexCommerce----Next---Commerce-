@@ -18,14 +18,22 @@ export interface ProductCardProps extends Product {
   onPreview?: () => void;
 }
 
+// {
+//   "id": "2",
+//   "name": "Original Stonewashed Beanbag",
+//   "src": "/products/product-card/product-6.jpg",
+//   "price": 209,
+//   "oldPrice": 220,
+//   "category": "sale",
+//   "label": "Sale"
+// }
+
 const ProductCard: FC<ProductCardProps> = ({
   id,
-  title,
-  src,
+  name,
+  image,
   price,
-  oldPrice,
-  variants,
-  label,
+  product_variants,
   className,
   onPreview,
 }) => {
@@ -35,12 +43,13 @@ const ProductCard: FC<ProductCardProps> = ({
         <Link href={`/products/${id}`} className="relative">
           <Image
             fill
-            src={src}
+            src={image}
             alt="Product image"
             className="!relative w-full height-auto min-h-[277px]"
+            blurDataURL='/default_image.jpg'
           />
         </Link>
-        {label && <TagLabel label={label} />}
+        {name && <TagLabel label={name} />}
 
         <Link href="#" className={productVerticalActionStyles}>
           <IconWithText
@@ -62,12 +71,12 @@ const ProductCard: FC<ProductCardProps> = ({
       <div className="pt-4 pb-5">
         <h3 className="text-sm font-extralight text-black-100 mb-[3px]">
           <Link href="/products" className="hover:text-primary">
-            {title}
+            {name}
           </Link>
         </h3>
-        <CardPrice price={price} oldPrice={oldPrice} />
+        <CardPrice price={price} oldPrice={0} />
 
-        <ColorVariants variants={variants} />
+        <ColorVariants variants={product_variants} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <Link
