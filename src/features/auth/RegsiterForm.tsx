@@ -32,7 +32,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
       const { username, email, password } = formData;
       const response = await signUp({ name: username, email, password });
 
-      if (response.data.status_code != "200") {
+      if (response?.data?.status_code != "200") {
         console.log("Error occurred during registration");
       } else {
         setIsOpen && setIsOpen(false)

@@ -32,14 +32,14 @@ const TopBar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('access_token');
-    dispatch(userLoggedIn({ user: undefined }));
+    dispatch(userLoggedIn({ user: undefined, isAuthenticated: false }));
     setDropdownOpen(false)
     return router.push("/")
   };
 
   useEffect(() => {
-    const userData = localStorage.getItem('user') || '{}';
-    dispatch(userLoggedIn({ user: JSON.parse(userData) }));
+    const userData = localStorage.getItem('user');
+    dispatch(userLoggedIn({ user: JSON.parse(userData || '{}'), isAuthenticated: userData ? true : false }));
   }, []);
 
   return (
