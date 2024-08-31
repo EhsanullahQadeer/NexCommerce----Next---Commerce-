@@ -5,11 +5,15 @@ import Input from "@/components/Input";
 import { useLoginMutation } from "@/store/api/authApi";
 import { useAppSelector } from "@/store/hook";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIcon from "@/components/Icons/ProgressIcon";
 
-const LoginForm = () => {
+interface LoginFormProps {
+  setIsOpen?: (isOpen: boolean) => void;
+}
+
+const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
   const router = useRouter();
   const userDetails = useAppSelector((state) => state.auth);
 
@@ -32,12 +36,10 @@ const LoginForm = () => {
         email: username,
         password,
       });
-      if (response.data.errors || !response.data.data) {
-        console.log("Incorrect username or password.");
-      } else {
-        localStorage.setItem("access_token", response.data.data.token);
-        router.push("/dashboard");
-      }
+      localStorage.setItem("access_token", response.data.data.token);
+      setIsOpen && setIsOpen(false)
+
+      router.push('/dashboard')
     } catch (error) {
       console.error("Login failed:", error);
     }

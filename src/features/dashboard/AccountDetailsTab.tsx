@@ -1,7 +1,17 @@
 import Button from '@/components/Button';
 import Input from '@/components/Input';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const AccountDetailsTab = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+  });
+  const data: any = useSelector(state => state)
+  const {email, name} = data?.auth?.user || {}
+
+  console.log("data", email, name);
   return (
     <form className="mt-1.5">
       <div className="flex flex-col gap-[13px]">

@@ -1,14 +1,16 @@
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import AccountDetailsTab from "./AccountDetailsTab";
-import AddressTab from "./AddressTab";
-import DashboardTab from "./DashboardTab";
-import DownloadsTab from "./DownloadsTab";
-import OrderTab from "./OrderTab";
+import { cn } from '@/lib/utils';
+import { useState } from 'react';
+import DashboardTab from './DashboardTab';
+import OrderTab from './OrderTab';
+import DownloadsTab from './DownloadsTab';
+import AddressTab from './AddressTab';
+import AccountDetailsTab from './AccountDetailsTab';
 import Notifications from "./NotificationsTab";
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
-const DashboardComponent = () => {
+const DashboardComponent = () => { 
+
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<number>(1);
   const tabs = [

@@ -4,9 +4,15 @@ import ProgressIcon from "@/components/Icons/ProgressIcon";
 import Input from "@/components/Input";
 import { useSignUpMutation } from "@/store/api/authApi";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 
-const RegisterForm = () => {
+interface RegisterFormProps {
+  setIsOpen?: (isOpen: boolean) => void;
+}
+
+const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
+  const router = useRouter()
   const [signUp, { isLoading }] = useSignUpMutation();
 
   const [formData, setFormData] = useState({
@@ -29,7 +35,8 @@ const RegisterForm = () => {
       if (response.data.status_code != "200") {
         console.log("Error occurred during registration");
       } else {
-        window.location.href = "/auth";
+        setIsOpen && setIsOpen(false)
+        router.push('/dashboard')
       }
     } catch (error) {
       console.error("Registration failed:", error);
