@@ -5,6 +5,7 @@ import Isotope from 'isotope-layout';
 import ProductCard from '../Cards/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  addQuickViewProduct,
   handleMoreProduct,
   selectProducts,
   togglePreviewModal,
@@ -15,6 +16,7 @@ import Button from '../Button';
 import { Product } from '@/types/product';
 import ProductCardSkeleton from '../Cards/ProductCardSkeleton';
 import { useFetchFilteredProductsMutation } from '@/store/api/productApi';
+import { useRouter } from 'next/navigation';
 
 const createCatFilter = (item: any) => {
   if (item && item.length) {
@@ -25,12 +27,12 @@ const createCatFilter = (item: any) => {
 }
 
 const GridLayout: React.FC = () => {
+  const router = useRouter()
   const isotope = useRef<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const imagesLoaded = useImagesLoaded(gridRef);
-  const { filterKey, products, productCategories, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter, skip } = useSelector(selectProducts);
+  const { filterKey, products, productCategories, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter } = useSelector(selectProducts);
 
-  // const [fetchProductList] = useFetchProductListMutation();
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
   const dispatch = useDispatch();
 
@@ -110,18 +112,25 @@ const GridLayout: React.FC = () => {
           >
             <ProductCard
               {...item}
-              onPreview={() => dispatch(togglePreviewModal(true))}
+              onPreview={() => { dispatch(togglePreviewModal(true)); dispatch(addQuickViewProduct(item)) }}
             />
           </div>
         ))}
       </div>
 
       <div className="mt-10 mb-10">
-        {
+        {/* {
           products.length == currentPage * limitFilter && <Button className="mx-auto" onClick={fetchMoreProducts}>
             More Products <i className="las la-sync ml-2"></i>
           </Button>
+        } */}
+        
+        {
+          products.length == currentPage * limitFilter && <Button className="mx-auto" onClick={() => router.push("/products")}>
+            More Products <i className="las la-sync ml-2"></i>
+          </Button>
         }
+
       </div>
     </div>
   );

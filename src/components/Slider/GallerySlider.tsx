@@ -54,7 +54,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
         )}
       >
         {images.map((img, index) => (
-          <SwiperSlide
+          !!img && <SwiperSlide
             key={index}
             className="max-h-[75px] lg:max-h-[120px] !w-auto"
           >

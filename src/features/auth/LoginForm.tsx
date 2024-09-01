@@ -3,7 +3,6 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import Input from "@/components/Input";
 import { useLoginMutation } from "@/store/api/authApi";
-import { useAppSelector } from "@/store/hook";
 import Link from "next/link";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -15,7 +14,6 @@ interface LoginFormProps {
 
 const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
   const router = useRouter();
-  const userDetails = useAppSelector((state) => state.auth);
 
   const [login, { isLoading }] = useLoginMutation();
   const [formData, setFormData] = useState({

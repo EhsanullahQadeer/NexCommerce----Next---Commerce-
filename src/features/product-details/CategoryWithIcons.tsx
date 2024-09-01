@@ -8,12 +8,13 @@ interface CategoryWithIconsProps {
 }
 
 const CategoryWithIcons: FC<CategoryWithIconsProps> = ({ isModal }) => {
+
   return (
     <div
       className={cn(
         'border-t border-black-300 pt-5',
         !isModal &&
-          'flex flex-col sm:flex-row sm:justify-between sm:items-center gap-5'
+        'flex flex-col sm:flex-row sm:justify-between sm:items-center gap-5'
       )}
     >
       <div

@@ -18,7 +18,7 @@ export interface Product {
   created_at: string
   updated_at: string
   currency_id: number
-  images: any[]
+  images: string[]
   product_tags: ProductTag[]
   product_categories: Category[]
   product_variants: ProductVariant[]
@@ -47,6 +47,12 @@ export interface ProductSortKeys {
 export interface ColorVariant {
   id: number;
   color: any;
+}
+
+export interface SizeVariant {
+  id: number;
+  label: string;
+  value: string;
 }
 
 export interface ProductTag {

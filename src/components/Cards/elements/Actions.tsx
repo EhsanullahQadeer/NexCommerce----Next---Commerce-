@@ -40,7 +40,7 @@ const CardActions: FC<CardActionsProps> = ({
         <i className="las la-binoculars text-primary text-lg"></i>
         quick view
       </Button>
-      <Button
+      {/* <Button
         className={cn(
           buttonStyles,
           '!border-solid border-0 !border-l !border-l-[#e5e5e5]'
@@ -51,7 +51,7 @@ const CardActions: FC<CardActionsProps> = ({
       >
         <i className="las la-random text-primary text-lg"></i>
         compare
-      </Button>
+      </Button> */}
     </div>
   );
 };

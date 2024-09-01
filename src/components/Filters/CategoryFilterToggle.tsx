@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { productSortCategories } from '@/store/slices/products/fakeProducts';
 import ToggleFilters from './ToggleFilters';
 import Select from '../Select';
 import { useDispatch, useSelector } from 'react-redux';
