@@ -9,32 +9,37 @@ import {
   titleStyles,
   transition,
 } from './cardComponentStyles';
+import { ProductCategory } from '@/types/product';
+import { useDispatch } from 'react-redux';
+import { clearFilter, handleCategoriesFilter, selectCategoryFilter } from '@/store/slices/products/productsSlice';
+import { useRouter } from 'next/navigation';
 
-interface CardComponentProps {
-  src: string;
-  title: string;
-  subTitle: string;
-  className?: string;
-}
-
-const CardComponent: FC<CardComponentProps> = ({
-  src,
-  title,
-  subTitle,
-  className,
+const CardComponent: FC<ProductCategory> = ({
+  image,
+  name,
+  products_count,
+  id
 }) => {
+  const route = useRouter()
+  const dispatch = useDispatch()
+  const filterCategoryhandler = () => {
+    dispatch(clearFilter())
+    dispatch(selectCategoryFilter(id))
+    route.push("/products")
+  }
+
   return (
-    <div className={cn('group relative', className)}>
-      <Link href="#">
+    <div className={cn('group relative', "")}>
+      <button onClick={(filterCategoryhandler)}>
         <Image
           fill
-          src={src}
+          src={image}
           alt="product card"
           className="!relative !w-full !h-auto"
         />
         <div className={cn(overlayStyles, transition)} />
-      </Link>
-      <Link href="#" className={cn(overlayLinkStyles, transition)}>
+      </button>
+      <button className={cn(overlayLinkStyles, transition)} onClick={(filterCategoryhandler)}>
         <h3
           className={cn(
             titleStyles,
@@ -42,7 +47,7 @@ const CardComponent: FC<CardComponentProps> = ({
             'group-hover/link:opacity-0 group-hover/link:invisible group-hover/link:translate-y-full'
           )}
         >
-          {title}
+          {name}
         </h3>
         <h4
           className={cn(
@@ -51,7 +56,7 @@ const CardComponent: FC<CardComponentProps> = ({
             'group-hover/link:opacity-0 group-hover/link:invisible group-hover/link:translate-y-full'
           )}
         >
-          {subTitle}
+          {products_count} Products
         </h4>
         <span
           className={cn(
@@ -62,7 +67,7 @@ const CardComponent: FC<CardComponentProps> = ({
         >
           Shop now
         </span>
-      </Link>
+      </button>
     </div>
   );
 };

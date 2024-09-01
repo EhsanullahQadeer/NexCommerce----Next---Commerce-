@@ -88,6 +88,11 @@ export const productsSlice = createSlice({
       }
       state.currentPage = 1
     },
+    selectCategoryFilter: (state, action: PayloadAction<number>) => {
+      state.products = []
+      state.categoriesFilter = [action.payload]
+      state.currentPage = 1
+    },
     handleSortFilter: (state, action: PayloadAction<SortPayload>) => {
       state.products = []
       state.sortByFilter = action.payload
@@ -132,7 +137,7 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { handleProduct, handleProductCategories, handleCategoriesFilter,
+export const { handleProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
   togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct } =
   productsSlice.actions;
