@@ -108,6 +108,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
             )}
           </Button>
           <Checkbox
+            required={true}
             label={
               <>
                 I agree to the{" "}

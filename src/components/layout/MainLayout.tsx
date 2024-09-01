@@ -4,18 +4,20 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { selectSidebarToggle } from "@/store/slice";
-import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation, useFetchProductListMutation } from '@/store/api/productApi';
+import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation} from '@/store/api/productApi';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import TopBar from "../TopBar";
 import Notification from "../Notification";
+import { RootState } from "@/store";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
   const [hideLayout, setHideLayout] = useState(false);
   const isSidebarToggle = useSelector(selectSidebarToggle);
 

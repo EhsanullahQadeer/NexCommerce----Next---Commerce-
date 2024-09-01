@@ -36,6 +36,8 @@ export interface ProductsState {
   limitFilter: number;
   currentPage: number;
   searchFilter: string;
+  sizeFilter: string;
+  quickViewProduct: Product | null;
 }
 
 
@@ -52,11 +54,13 @@ const initialState: ProductsState = {
     order: "DESC"
   },
   colorFilter: "",
-  priceRangeFilter: '110',
+  priceRangeFilter: '5000',
   skip: 0,
   limitFilter: 8,
   currentPage: 1,
-  searchFilter: ""
+  searchFilter: "",
+  sizeFilter: "",
+  quickViewProduct: null
 };
 
 export const productsSlice = createSlice({
@@ -120,12 +124,17 @@ export const productsSlice = createSlice({
       state.currentPage = 1
       state.searchFilter = ""
     },
+    addQuickViewProduct: (state, action: PayloadAction<Product | null>) => {
+      console.log("action.payload", action.payload);
+      
+      state.quickViewProduct = action.payload
+    },
   },
 });
 
 export const { handleProduct, handleProductCategories, handleCategoriesFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
-  togglePreviewModal, toggleGalleryModal, clearFilter } =
+  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct } =
   productsSlice.actions;
 
 // selectors can use the imported `RootState`

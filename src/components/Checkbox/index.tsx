@@ -6,9 +6,10 @@ export interface CheckboxProps extends HTMLAttributes<HTMLInputElement> {
   label?: ReactNode;
   labelClass?: string;
   checked?: boolean;
+  required?: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ label, labelClass, checked, ...props }) => (
+const Checkbox: FC<CheckboxProps> = ({ label, labelClass, checked, required, ...props }) => (
   <div className="w-full flex items-center gap-2.5">
     <input
       className="
@@ -20,6 +21,7 @@ const Checkbox: FC<CheckboxProps> = ({ label, labelClass, checked, ...props }) =
       type="checkbox"
       {...props}
       checked={checked}
+      required={required}
     />
     <CheckedIcon className="absolute w-3 h-3 ml-[2px] pointer-events-none hidden peer-checked:block" />
     {label && (

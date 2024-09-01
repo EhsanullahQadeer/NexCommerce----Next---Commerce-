@@ -22,14 +22,14 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
         )}
       >
         <LinkButton url="#" label="Add to Whishlist" icon="lar la-heart" />
-        <LinkButton
+        {/* <LinkButton
           url="#"
           label="Add to Compare"
           icon="las la-random"
           className={cn(
             !isModal && 'pl-4 border-l border-border-dotted border-[#e5e5e5]'
           )}
-        />
+        /> */}
       </div>
 
       <div className={cn(isModal ? 'mb-10' : 'w-full')}>

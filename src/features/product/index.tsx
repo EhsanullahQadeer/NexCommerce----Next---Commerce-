@@ -18,8 +18,8 @@ const ProductCategories = () => {
       <div className="max-w-[1208px] mx-auto px-2.5">
         <GridLayout />
       </div>
-      <PreviewModal />
       <GalleryModal />
+      <PreviewModal />
     </div>
   );
 };

@@ -7,13 +7,44 @@ import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
 import Button from '@/components/Button';
 import CategoryFilterDrawer from './CategoryFilterDrawer';
 import PreviewModal from '../elements/PreviewModal';
-import { selectProducts, togglePreviewModal } from '@/store/slices/products/productsSlice';
+import { handleMoreProduct, selectProducts, togglePreviewModal } from '@/store/slices/products/productsSlice';
 import GalleryModal from '../elements/GalleryModal';
 import { Product } from '@/types/product';
+import { useFetchFilteredProductsMutation } from '@/store/api/productApi';
 
 const ProductGrid = () => {
+  const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
+  const { filterKey, products, sizeFilter, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter } = useSelector(selectProducts);
   const dispatch = useDispatch();
-  const { products } = useSelector(selectProducts);
+
+  const fetchMoreProducts = async () => {
+    try {
+      if (products.length == currentPage * limitFilter) {
+
+        let skipData = currentPage * limitFilter
+
+        const filter = {
+          "filters": {
+            "categories": categoriesFilter,
+            "sort": sortByFilter,
+            "color": colorFilter,
+            "size": sizeFilter,
+            "priceRange": `1-${priceRangeFilter}`
+          },
+          "pagination": {
+            "skip": skipData,
+            "limit": limitFilter
+          }
+        }
+        await fetchFilteredProducts(filter).unwrap();
+        dispatch(handleMoreProduct())
+      }
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
   return (
     <>
       <Container className="mt-5">
@@ -28,9 +59,11 @@ const ProductGrid = () => {
           ))}
         </div>
         <div className="mt-10 mb-10">
-          <Button className="mx-auto">
-            More Products <i className="las la-sync ml-2"></i>
-          </Button>
+          {
+            products.length == currentPage * limitFilter && <Button className="mx-auto" onClick={fetchMoreProducts}>
+              More Products <i className="las la-sync ml-2"></i>
+            </Button>
+          }
         </div>
         <PreviewModal />
         <GalleryModal />

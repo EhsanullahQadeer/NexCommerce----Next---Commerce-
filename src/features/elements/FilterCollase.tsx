@@ -1,7 +1,6 @@
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { FC, ReactNode } from 'react';
 import CategoryFilter from './CategoryFilters';
 import ColourFilters from './ColourFilters';
-import { cn } from '@/lib/utils';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { useSelector } from 'react-redux';
 import { productSortCategories } from '@/store/slices/products/fakeProducts';

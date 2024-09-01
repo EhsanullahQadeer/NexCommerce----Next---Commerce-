@@ -4,28 +4,6 @@ import { handleProduct, handleProductCategories } from "../slices/products/produ
 
 export const productsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchProductList: builder.mutation({
-      query: ({ tag_name }) => ({
-        url: 'product-list',
-        method: 'POST',
-        body: { tag_name },
-      }),
-      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-        try {
-          const result = await queryFulfilled;
-
-          if (result.data.data && result.data.data.length) {
-            dispatch(
-              handleProduct(result.data.data)
-            )
-          }
-
-
-        } catch (error: any) {
-          console.error('Fetch Product List Error:', error);
-        }
-      },
-    }),
     fetchFilteredProducts: builder.mutation({
       query: ({ filters, pagination }) => ({
         url: 'filtered-product-list',
@@ -70,4 +48,4 @@ export const productsApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useFetchProductListMutation, useFetchFilteredProductsMutation, useFetchCategoriesListMutation } = productsApi;
+export const { useFetchFilteredProductsMutation, useFetchCategoriesListMutation } = productsApi;

@@ -17,14 +17,14 @@ const PriceRangeInput: FC = () => {
           id="price-range"
           className="w-full accent-black-75"
           min="0"
-          max="750"
+          max="5000"
           value={priceRangeFilter}
           onInput={(e: any) => dispatch(handleOtherFilter({key: "priceRangeFilter", value: e.target.value}))}
         />
       </div>
       <div className="flex justify-between text-sm text-black-75">
         <span id="minPrice">$0</span>
-        <span id="maxPrice">$750</span>
+        <span id="maxPrice">$5000</span>
       </div>
     </>
   );

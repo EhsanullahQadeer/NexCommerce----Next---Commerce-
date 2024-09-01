@@ -8,10 +8,6 @@ import CleanAllButton from '@/components/Filters/CleanAllButton';
 import Collapse from '@/components/Collapse';
 import CategoryFilter from '../elements/CategoryFilters';
 import PriceRangeInput from '@/components/PriceRangeInput';
-import {
-  brandResults,
-  sizeFiltersResults,
-} from '@/store/slices/categories/fakeProducts';
 import ColourFilters from '../elements/ColourFilters';
 import { lazy } from 'react';
 import { clearFilter, selectProducts } from '@/store/slices/products/productsSlice';
@@ -22,6 +18,12 @@ const CategoryFilterDrawer = () => {
   const { productCategories } = useSelector(selectProducts);
   const { isToggleFilters } = useSelector(selectProductCategories);
   const dispatch = useDispatch();
+  const sizeFiltersResults = [
+    { key: 'Small', label: 'Small' },
+    { key: 'Medium', label: 'Medium' },
+    { key: 'Large', label: 'Large' }
+  ]
+
 
   return (
     <Drawer
@@ -42,14 +44,11 @@ const CategoryFilterDrawer = () => {
         <Collapse title="Category" isOpen>
           <CategoryFilter categories={productCategories} />
         </Collapse>
-        <Collapse title="Size" isOpen>
+        {/* <Collapse title="Size" isOpen>
           <CategoryFilter categories={sizeFiltersResults} />
-        </Collapse>
+        </Collapse> */}
         <Collapse title="Colour" isOpen>
           <ColourFilters isHorizontal />
-        </Collapse>
-        <Collapse title="Brand" isOpen>
-          <CategoryFilter categories={brandResults} />
         </Collapse>
         <Collapse title="Price Range" isOpen>
           <PriceRangeInput />
