@@ -13,10 +13,12 @@ import NotificationIcon from './elements/NotificationIcon';
 import { routes } from './routes';
 import SearchBar from '../SearchBar';
 import CartDropdown from '../CartDropdown/CartDropdown';
+import { RootState } from '@/store';
 
 const NavMobileView = lazy(() => import('./elements/MobileView'));
 
 const Navbar = () => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [isAffix, setIsAffix] = useState(false);
   const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
   const isSidebarToggled = useSelector(selectSidebarToggle);
@@ -74,13 +76,16 @@ const Navbar = () => {
           </div>
 
           <nav className="hidden lg:flex items-center gap-2">
-            {routes.map((item) => (
-              <NavLink
+            {routes.map((item) => {
+              if (!isAuthenticated && item.url == "/dashboard") {
+                return ""
+              }
+              return <NavLink
                 key={item.url}
                 {...item}
                 isActive={isActiveLink(item.url)}
               />
-            ))}
+            })}
           </nav>
 
           <div className="flex items-center gap-[1.5rem]">
