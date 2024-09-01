@@ -2,10 +2,12 @@ import Button from "@/components/Button";
 import { useState } from "react";
 import { dotColors, statusColors, TICKET, tickets } from "./data";
 import TicketsDetails from "./TicketDetail";
+import CreateTicketForm from "./CreateTicket";
 
 const SupportTickets = () => {
   const [visibleTickets, setVisibleTickets] = useState(4);
   const [selectedTicket, setSelectedTicket] = useState<TICKET | null>(null);
+  const [showForm, setShowForm] = useState<Boolean>(false);
 
   const loadMoreTickets = () => {
     setVisibleTickets((prev) => prev + 4);
@@ -13,7 +15,9 @@ const SupportTickets = () => {
 
   return (
     <div className="mt-1.5">
-      {selectedTicket ? (
+      {showForm ? (
+        <CreateTicketForm setShowForm={setShowForm} />
+      ) : selectedTicket ? (
         <TicketsDetails
           data={selectedTicket}
           setSelectedTicket={setSelectedTicket}
@@ -27,7 +31,11 @@ const SupportTickets = () => {
             >
               Support Tickets
             </h1>
-            <Button className="uppercase" size="xs">
+            <Button
+              className="uppercase"
+              size="xs"
+              onClick={() => setShowForm(true)}
+            >
               Create Ticket
               <i className="las la-plus ml-2"></i>
             </Button>
