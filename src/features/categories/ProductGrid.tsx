@@ -4,16 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import Container from '@/components/Container';
 import CategoryFilterToggle from '@/components/Filters/CategoryFilterToggle';
 import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
-import { products } from '@/store/slices/categories/fakeProducts';
 import Button from '@/components/Button';
 import CategoryFilterDrawer from './CategoryFilterDrawer';
 import PreviewModal from '../elements/PreviewModal';
-import { togglePreviewModal } from '@/store/slices/products/productsSlice';
+import { selectProducts, togglePreviewModal } from '@/store/slices/products/productsSlice';
 import GalleryModal from '../elements/GalleryModal';
 import { Product } from '@/types/product';
 
 const ProductGrid = () => {
   const dispatch = useDispatch();
+  const { products } = useSelector(selectProducts);
   return (
     <>
       <Container className="mt-5">

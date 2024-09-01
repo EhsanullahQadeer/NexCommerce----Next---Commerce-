@@ -19,6 +19,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
     username: "",
     email: "",
     password: "",
+    surname: ""
   });
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -29,8 +30,10 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const { username, email, password } = formData;
-      const response = await signUp({ name: username, email, password });
+      console.log("formData", formData);
+      
+      const { username, email, password, surname } = formData;
+      const response = await signUp({ name: username, email, password, surname });
 
       if (response?.data?.status_code != "200") {
         console.log("Error occurred during registration");
@@ -46,7 +49,7 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
   return (
     <div>
       <form className="space-y-4" onSubmit={onSubmit}>
-        <div className="relative">
+      <div className="relative">
           <Input
             name="username"
             label="Your name *"
@@ -54,6 +57,17 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
             autoComplete="name"
             required
             value={formData.username}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="relative">
+          <Input
+            name="surname"
+            label="Your surname *"
+            type="text"
+            autoComplete="surname"
+            required
+            value={formData.surname}
             onChange={handleInputChange}
           />
         </div>
