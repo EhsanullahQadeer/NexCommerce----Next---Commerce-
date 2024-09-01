@@ -37,6 +37,12 @@ export interface ProductCategory {
   products_count: number
 }
 
+export interface ProductSortKeys {
+  key: string
+  label: string
+  sort: string
+}
+
 
 export interface ColorVariant {
   id: number;

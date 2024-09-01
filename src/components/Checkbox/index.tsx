@@ -5,9 +5,10 @@ import CheckedIcon from '../Icons/CheckedIcon';
 export interface CheckboxProps extends HTMLAttributes<HTMLInputElement> {
   label?: ReactNode;
   labelClass?: string;
+  checked?: boolean;
 }
 
-const Checkbox: FC<CheckboxProps> = ({ label, labelClass, ...props }) => (
+const Checkbox: FC<CheckboxProps> = ({ label, labelClass, checked, ...props }) => (
   <div className="w-full flex items-center gap-2.5">
     <input
       className="
@@ -18,6 +19,7 @@ const Checkbox: FC<CheckboxProps> = ({ label, labelClass, ...props }) => (
       "
       type="checkbox"
       {...props}
+      checked={checked}
     />
     <CheckedIcon className="absolute w-3 h-3 ml-[2px] pointer-events-none hidden peer-checked:block" />
     {label && (

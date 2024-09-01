@@ -4,6 +4,8 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { selectSidebarToggle } from "@/store/slice";
+import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation, useFetchProductListMutation } from '@/store/api/productApi';
+import { selectProducts } from '@/store/slices/products/productsSlice';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import TopBar from "../TopBar";
@@ -16,6 +18,47 @@ interface MainLayoutProps {
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [hideLayout, setHideLayout] = useState(false);
   const isSidebarToggle = useSelector(selectSidebarToggle);
+
+  const { categoriesFilter, sortByFilter, colorFilter, priceRangeFilter, limitFilter, skip } = useSelector(selectProducts);
+
+  const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
+  const [fetchCategoriesList] = useFetchCategoriesListMutation();
+
+  const handleFetchProductsWithFilter = async () => {
+    try {
+      const filter = {
+        "filters": {
+          "categories": categoriesFilter,
+          "sort": sortByFilter,
+          "color": colorFilter,
+          "priceRange": `1-${priceRangeFilter}`
+        },
+        "pagination": {
+          "skip": skip,
+          "limit": limitFilter
+        }
+      }
+      await fetchFilteredProducts(filter).unwrap();
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const handleFetchCategories = async () => {
+    try {
+      await fetchCategoriesList({}).unwrap();
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleFetchCategories()
+  }, [])
+
+  useEffect(() => {
+    handleFetchProductsWithFilter()
+  }, [categoriesFilter, sortByFilter, colorFilter, priceRangeFilter])
 
   useEffect(() => {
     if (window && window.location.pathname === "/coming-soon") {

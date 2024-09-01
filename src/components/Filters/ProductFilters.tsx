@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import FilterCollapse from '../../features/elements/FilterCollase';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  clearFilter,
   handleFilterKeyChange,
   selectProducts,
 } from '@/store/slices/products/productsSlice';
@@ -42,6 +43,7 @@ const ProductFilters = () => {
             '!invisible !opacity-0',
             isOpen ? '!visible !opacity-100' : 'hidden'
           )}
+          onClick={() => dispatch(clearFilter())}
         />
       </div>
       <FilterCollapse isOpen={isOpen} />
