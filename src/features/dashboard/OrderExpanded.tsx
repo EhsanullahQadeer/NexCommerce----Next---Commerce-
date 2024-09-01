@@ -1,20 +1,10 @@
 import Button from "@/components/Button";
 import Image from "next/image";
 import React, { useState } from "react";
-
-interface Order {
-  id: number;
-  imageUrl: string;
-  orderNumber: string;
-  status: string;
-  statusIcon: string;
-  date: string;
-  price: string;
-  details: string;
-}
+import { ORDERS } from "./data";
 
 interface OrderExpandedProps {
-  order: Order;
+  order: ORDERS;
 }
 
 const OrderExpanded = ({ order }: OrderExpandedProps) => {

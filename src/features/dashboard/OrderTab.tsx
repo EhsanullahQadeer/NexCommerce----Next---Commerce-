@@ -4,77 +4,7 @@ import Button from "@/components/Button";
 import Input from "@/components/Input";
 import NotificationIcon from "@/components/Navbar/elements/NotificationIcon";
 import OrderExpanded from "./OrderExpanded";
-
-const orders = [
-  {
-    id: 1,
-    imageUrl: "/images/order1.jpg",
-    orderNumber: "123456789",
-    status: "Ongoing",
-    statusIcon: "las la-sync",
-    date: "2023-08-30",
-    price: "$99.99",
-    details: "More information about this order...",
-  },
-  {
-    id: 2,
-    imageUrl: "/images/order2.jpg",
-    orderNumber: "987654321",
-    status: "Cancelled",
-    statusIcon: "las la-times-circle",
-    date: "2023-08-25",
-    price: "$149.99",
-    details: "This order was cancelled due to payment issues.",
-  },
-  {
-    id: 3,
-    imageUrl: "/images/order3.jpg",
-    orderNumber: "1122334455",
-    status: "Refunded",
-    statusIcon: "las la-undo",
-    date: "2023-08-20",
-    price: "$89.99",
-    details: "This order has been refunded to your account.",
-  },
-  {
-    id: 4,
-    imageUrl: "/images/order4.jpg",
-    orderNumber: "5566778899",
-    status: "Undeliverable",
-    statusIcon: "las la-exclamation-circle",
-    date: "2023-08-15",
-    price: "$49.99",
-    details: "This order could not be delivered due to incorrect address.",
-  },
-  {
-    id: 5,
-    imageUrl: "/images/order5.jpg",
-    orderNumber: "9988776655",
-    status: "Ongoing",
-    statusIcon: "las la-sync",
-    date: "2023-08-10",
-    price: "$129.99",
-    details: "Your order is on its way.",
-  },
-  {
-    id: 6,
-    imageUrl: "/images/order6.jpg",
-    orderNumber: "2233445566",
-    status: "Delivered",
-    statusIcon: "las la-check-circle",
-    date: "2023-08-05",
-    price: "$199.99",
-    details: "Your order has been delivered.",
-  },
-];
-
-const orderStatuses = [
-  { id: 1, status: "All" },
-  { id: 2, status: "Ongoing" },
-  { id: 3, status: "Cancelled" },
-  { id: 4, status: "Refunded" },
-  { id: 5, status: "Undeliverable" },
-];
+import { orders, orderStatuses } from "./data";
 
 const OrderTab = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);

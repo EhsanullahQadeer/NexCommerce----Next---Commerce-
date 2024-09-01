@@ -5,9 +5,10 @@ import Button from "../Button";
 
 interface ModalProps {
   toggleModal: () => void;
+  title: string;
 }
 
-const AddressModal = ({ toggleModal }: ModalProps) => {
+const AddressModal = ({ toggleModal, title }: ModalProps) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-300 bg-opacity-50 backdrop-blur-sm">
       <div className="bg-white w-[90%] max-w-md rounded p-6 relative">
@@ -21,7 +22,7 @@ const AddressModal = ({ toggleModal }: ModalProps) => {
           className={`text-[22px] sm:text-[22px] text-black-75
          tracking-[-1px] leading-[44px]`}
         >
-          Add Address
+          {title}
         </h1>
         <div className="space-y-4">
           <div>

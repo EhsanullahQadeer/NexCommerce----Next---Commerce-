@@ -11,6 +11,7 @@ const textStyles =
 
 const AddressTab = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("Add Address");
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
@@ -26,7 +27,7 @@ const AddressTab = () => {
 
   return (
     <div className="mt-1.5">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-end md:items-center flex-col md:flex-row my-2">
         <div>
           <h1
             className={`text-[22px] sm:text-[22px] text-black-75
@@ -39,7 +40,14 @@ const AddressTab = () => {
             default.
           </p>
         </div>
-        <Button className="uppercase" size="xs" onClick={toggleModal}>
+        <Button
+          className="uppercase"
+          size="xs"
+          onClick={() => {
+            setModalTitle("Add Address");
+            toggleModal();
+          }}
+        >
           Add Address
           <i className="las la-plus ml-2"></i>
         </Button>
@@ -55,7 +63,10 @@ const AddressTab = () => {
           <div>
             <Button
               className="!p-0 !bg-transparent !border-0 hover:!text-primary !font-extralight"
-              onClick={toggleModal}
+              onClick={() => {
+                setModalTitle("Edit Address");
+                toggleModal();
+              }}
             >
               Edit <i className="lar la-edit ml-1"></i>
             </Button>
@@ -69,7 +80,10 @@ const AddressTab = () => {
           <div>
             <Button
               className="!p-0 !bg-transparent !border-0 hover:!text-primary !font-extralight"
-              onClick={toggleModal}
+              onClick={() => {
+                setModalTitle("Edit Address");
+                toggleModal();
+              }}
             >
               Edit <i className="lar la-edit ml-1"></i>
             </Button>
@@ -78,7 +92,9 @@ const AddressTab = () => {
       </div>
 
       {/* Modal */}
-      {isModalOpen && <AddressModal toggleModal={toggleModal} />}
+      {isModalOpen && (
+        <AddressModal toggleModal={toggleModal} title={modalTitle} />
+      )}
     </div>
   );
 };

@@ -1,16 +1,16 @@
-import { cn } from '@/lib/utils';
-import { useState } from 'react';
-import DashboardTab from './DashboardTab';
-import OrderTab from './OrderTab';
-import DownloadsTab from './DownloadsTab';
-import AddressTab from './AddressTab';
-import AccountDetailsTab from './AccountDetailsTab';
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+import DashboardTab from "./DashboardTab";
+import OrderTab from "./OrderTab";
+import DownloadsTab from "./DownloadsTab";
+import AddressTab from "./AddressTab";
+import AccountDetailsTab from "./AccountDetailsTab";
 import Notifications from "./NotificationsTab";
-import { useRouter } from 'next/navigation';
-import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
+import SupportTickets from "./SupportTickets";
 
-const DashboardComponent = () => { 
-
+const DashboardComponent = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<number>(1);
   const tabs = [
@@ -24,7 +24,8 @@ const DashboardComponent = () => {
     { id: 4, label: "Downloads", content: <DownloadsTab /> },
     { id: 5, label: "Addresses", content: <AddressTab /> },
     { id: 6, label: "Account Details", content: <AccountDetailsTab /> },
-    { id: 7, label: "Signout", content: <div>Login Content</div> },
+    { id: 7, label: "Support Tickets", content: <SupportTickets /> },
+    { id: 8, label: "Signout", content: <div>Login Content</div> },
   ];
 
   return (
