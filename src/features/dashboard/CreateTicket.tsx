@@ -1,8 +1,12 @@
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
+import dynamic from "next/dynamic";
 import { useState } from "react";
-import ReactQuill from "react-quill";
+
+// Dynamically import ReactQuill with SSR disabled
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
 import "react-quill/dist/quill.snow.css";
 
 interface CreateTicketFormProps {
