@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { productSortCategories } from '@/store/slices/products/fakeProducts';
 import PriceRangeInput from '@/components/PriceRangeInput';
 import Collapse from '@/components/Collapse';
+import SortFilters from './SortFilters';
 
 interface FilterCollapseProps {
   isOpen?: boolean;
@@ -27,7 +28,7 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
           <CategoryFilter categories={productCategories} />
         </FilterColumn>
         <FilterColumn title="Sort by: ">
-          <CategoryFilter categories={productSortCategories} />
+          <SortFilters productSortCategories={productSortCategories} />
         </FilterColumn>
         <FilterColumn title="Colour: ">
           <ColourFilters />

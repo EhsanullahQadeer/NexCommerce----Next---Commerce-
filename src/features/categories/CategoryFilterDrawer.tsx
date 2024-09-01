@@ -10,15 +10,16 @@ import CategoryFilter from '../elements/CategoryFilters';
 import PriceRangeInput from '@/components/PriceRangeInput';
 import {
   brandResults,
-  categoryFiltersResults,
   sizeFiltersResults,
 } from '@/store/slices/categories/fakeProducts';
 import ColourFilters from '../elements/ColourFilters';
 import { lazy } from 'react';
+import { clearFilter, selectProducts } from '@/store/slices/products/productsSlice';
 
 const Drawer = lazy(() => import('@/components/Drawer'));
 
 const CategoryFilterDrawer = () => {
+  const { productCategories } = useSelector(selectProducts);
   const { isToggleFilters } = useSelector(selectProductCategories);
   const dispatch = useDispatch();
 
@@ -36,10 +37,10 @@ const CategoryFilterDrawer = () => {
             isToggle={isToggleFilters}
             handleToggle={() => dispatch(toggleFilters(false))}
           />
-          <CleanAllButton />
+          <CleanAllButton onClick={() => dispatch(clearFilter())} />
         </div>
         <Collapse title="Category" isOpen>
-          <CategoryFilter categories={categoryFiltersResults} />
+          <CategoryFilter categories={productCategories} />
         </Collapse>
         <Collapse title="Size" isOpen>
           <CategoryFilter categories={sizeFiltersResults} />

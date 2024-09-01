@@ -26,6 +26,27 @@ export const productsApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    fetchFilteredProducts: builder.mutation({
+      query: ({ filters, pagination }) => ({
+        url: 'filtered-product-list',
+        method: 'POST',
+        body: {
+          filters,
+          pagination,
+        },
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          if (result.data.data.length) {
+            dispatch(handleProduct(result.data.data));
+          }
+        } catch (error) {
+          console.error('Fetch Filtered Products Error:', error);
+        }
+      },
+    }),
     fetchCategoriesList: builder.mutation({
       query: () => ({
         url: 'categories-list',
@@ -49,4 +70,4 @@ export const productsApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useFetchProductListMutation, useFetchCategoriesListMutation } = productsApi;
+export const { useFetchProductListMutation, useFetchFilteredProductsMutation, useFetchCategoriesListMutation } = productsApi;

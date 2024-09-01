@@ -32,14 +32,16 @@ const ProductCategoriesList: FC<ProductCategoriesListProps> = ({
           All
         </div>
       {productCategories.map((item) => (
+        item.products_count > 0 && 
         <div
-          key={`category-${item.id}`}
-          className={cn(
-            'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
-            filterKey === `cat-${item.id}` && 'text-primary border-b border-primary'
-          )}
-          onClick={() => onCategorySelect(`cat-${item.id}`)}
+        key={`category-${item.id}`}
+        className={cn(
+          'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
+          filterKey === `cat-${item.id}` && 'text-primary border-b border-primary'
+        )}
+        onClick={() => onCategorySelect(`cat-${item.id}`)}
         >
+          {/* {console.log("item", item)} */}
           {item.name}
         </div>
       ))}
