@@ -1,22 +1,22 @@
 import { FC } from 'react';
 import NumberInput from '@/components/NumberInput/NumberInput';
 import Description from '@/components/ProductDetails/Description';
-import Select from '@/components/Select';
 import { Label } from './Items';
 import CategoryWithIcons from './CategoryWithIcons';
-import { sizes } from './data';
 import Actions from './Actions';
 import { ColorVariant, ProductVariant, SizeVariant } from '@/types/product';
 import ColorVariants from '@/components/ColorVariants';
-import { useSelector } from 'react-redux';
-import { selectProducts } from '@/store/slices/products/productsSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeCurrentVarient, selectProducts } from '@/store/slices/products/productsSlice';
+import SizeVariants from '@/components/SizeVariants';
 
 interface ProductDetailsColumnProps {
   isModal?: boolean;
 }
 
 const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
-  const { quickViewProduct } = useSelector(selectProducts);
+  const dispatch = useDispatch()
+  const { quickViewProduct, currentVarient } = useSelector(selectProducts);
   const { product_variants } = quickViewProduct || {}
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
@@ -49,6 +49,97 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
     return sizeVarients
   }
 
+  const checkCurrentColor = () => {
+    let checkColor = ""
+    currentVarient?.attribute_values?.forEach((el) => {
+      if (el.variant_attribute?.attribute_name == "Color") {
+        checkColor = el.value
+      }
+    })
+    return checkColor
+  }
+
+  const checkCurrentSize = () => {
+    let checkSize = ""
+    currentVarient?.attribute_values?.forEach((el) => {
+      if (el.variant_attribute?.attribute_name == "Size") {
+        checkSize = el.value
+      }
+    })
+    return checkSize
+  }
+
+  const onChangeColorVarient = (color: string) => {
+    let filterBothStyle = product_variants?.find(item => {
+      let checkItemColor = false
+      let checkItemSize = false
+      item.attribute_values?.forEach((el) => {
+        if (el.variant_attribute?.attribute_name == "Color" && color == el.value.toLocaleLowerCase()) {
+          checkItemColor = true
+        }
+      })
+      item.attribute_values?.forEach((el) => {
+        if (el.variant_attribute?.attribute_name == "Size" && checkCurrentSize() == el.value) {
+          checkItemSize = true
+        }
+      })
+      return checkItemColor && checkItemSize
+    })
+
+    if (filterBothStyle) {
+      dispatch(changeCurrentVarient(filterBothStyle))
+    } else {
+      let filterColorOnly = product_variants?.find(item => {
+        let checkItemColor = false
+        item.attribute_values?.forEach((el) => {
+          if (el.variant_attribute?.attribute_name == "Color" && color == el.value.toLocaleLowerCase()) {
+            checkItemColor = true
+          }
+        })
+        return checkItemColor
+      })
+      if (filterColorOnly) {
+        dispatch(changeCurrentVarient(filterColorOnly))
+      }
+    }
+  }
+
+  const onChangeSizeVarient = (size: string) => {
+    let filterBothStyle = product_variants?.find(item => {
+      let checkItemColor = false
+      let checkItemSize = false
+      item.attribute_values?.forEach((el) => {
+        if (el.variant_attribute?.attribute_name == "Color" && checkCurrentColor() == el.value.toLocaleLowerCase()) {
+          checkItemColor = true
+        }
+      })
+      item.attribute_values?.forEach((el) => {
+        if (el.variant_attribute?.attribute_name == "Size" && size == el.value) {
+          checkItemSize = true
+        }
+      })
+      return checkItemColor && checkItemSize
+    })
+
+    if (filterBothStyle) {
+      dispatch(changeCurrentVarient(filterBothStyle))
+    } else {
+      let filterSizeOnly = product_variants?.find(item => {
+        let checkItemSize = false
+        item.attribute_values?.forEach((el) => {
+          if (el.variant_attribute?.attribute_name == "Size" && size == el.value.toLocaleLowerCase()) {
+            checkItemSize = true
+          }
+        })
+        return checkItemSize
+      })
+      if (filterSizeOnly) {
+        dispatch(changeCurrentVarient(filterSizeOnly))
+      }
+    }
+  }
+
+
   return (
     <div>
       <Description className='!mb-2.5' />
@@ -59,14 +150,14 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
             !!colorVarientFilter(product_variants)?.length &&
             <div className="flex items-center mb-5">
               <Label text="Color" />
-              <ColorVariants variants={colorVarientFilter(product_variants)} />
+              <ColorVariants variants={colorVarientFilter(product_variants)} currenValue={checkCurrentColor()?.toLowerCase()} onChangeColorVarient={onChangeColorVarient} />
             </div>
           }
           {
             !!sizeVarientFilter(product_variants)?.length &&
             <div className="flex items-center mb-5">
               <Label text="Size" />
-              <Select options={sizeVarientFilter(product_variants)} label="Select a size" />
+              <SizeVariants options={sizeVarientFilter(product_variants)} label="Select a size" currenValue={checkCurrentSize()?.toLowerCase()} onChangeSizeVarient={onChangeSizeVarient} />
             </div>
           }
         </>

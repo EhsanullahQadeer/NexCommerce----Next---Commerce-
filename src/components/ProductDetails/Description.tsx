@@ -9,7 +9,7 @@ interface DescriptionProps {
 }
 
 const Description: FC<DescriptionProps> = ({ className }) => {
-  const { quickViewProduct } = useSelector(selectProducts);
+  const { quickViewProduct, currentVarient } = useSelector(selectProducts);
   const {name, price, description} = quickViewProduct || {}
   return (
     <div className={cn('mb-10', className)}>
@@ -18,7 +18,7 @@ const Description: FC<DescriptionProps> = ({ className }) => {
       </h2>
       <Stars count={5} reviewCount={2} className="mb-2.5" />
       <h3 className="text-2xl text-primary font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
-        ${price}
+        ${currentVarient?.price}
       </h3>
       <p className="mt-[17px] font-extralight text-sm text-black-100 leading-[26.04px]">
        {description}

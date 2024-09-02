@@ -1,6 +1,6 @@
 'use client';
 import Table from '@/components/Table';
-// import { data, tableHeader } from './data';
+import { data, tableHeader } from './data';
 import Button from '@/components/Button';
 import CartSummary from './CartSummary';
 import Input from '@/components/Input';
@@ -10,7 +10,7 @@ const CartComponent = () => {
   return (
     <div className="flex flex-col lg:flex-row pt-10 pb-[50px] gap-5">
       <div className="flex-1">
-        {/* <Table headers={tableHeader} /> */}
+        <Table headers={tableHeader} />
         <div className="flex flex-col items-start gap-y-2.5 sm:items-center sm:justify-between my-[30px] sm:flex-row">
           <div className="flex items-center gap-2.5">
             <Input placeholder="coupon code" />

@@ -12,10 +12,9 @@ import ProductDetailsColumn from '../product-details/ProductDetailsColumn';
 const Modal = lazy(() => import('@/components/Modal'));
 
 const PreviewModal: FC = () => {
-
+  const dispatch = useDispatch();
   const { isPreviewModalOpen, quickViewProduct, isGalleryFullView } = useSelector(selectProducts);
   const { images, image } = quickViewProduct || {}
-  const dispatch = useDispatch();
 
   const handleOnClosePreviewModal = () => {
     if (!isGalleryFullView) {

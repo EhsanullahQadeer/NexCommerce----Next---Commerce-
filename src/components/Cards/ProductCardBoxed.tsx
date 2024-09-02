@@ -4,8 +4,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { productVerticalActionStyles } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
-import ColorVariants from '../ColorVariants';
-import TagLabel from './elements/TagLabel';
+import ReadOnlyColorVariants from '../ColorVariants/ReadOnly';
 import CardPrice from './elements/CardPrice';
 import Stars from '../Stars';
 import CardActions from './elements/Actions';
@@ -62,7 +61,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
 
   const addToCartHandler = async () => {
     try {
-      const addToCartDetails = { "user_id": user.id, "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }
+      const addToCartDetails = { "user_id": user.id, products: [{"product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1"}] }
 
       await addToCart(addToCartDetails).unwrap();
       handleFetchCart()
@@ -112,7 +111,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
         <div className="mb-[17px] mt-[13px]">
           <Stars count={5} reviewCount={2} />
         </div>
-        <ColorVariants variants={colorVarientFilter(product_variants)} />
+        <ReadOnlyColorVariants variants={colorVarientFilter(product_variants)} />
       </div>
     </div>
   );

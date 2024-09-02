@@ -4,7 +4,7 @@ import {
   products,
   productCategories,
 } from './fakeProducts';
-import { Product, ProductCategory } from '@/types/product';
+import { Product, ProductCategory, ProductVariant } from '@/types/product';
 
 export interface categoryPayload {
   id: number;
@@ -24,6 +24,7 @@ export interface OtherSortPayload {
 // Define a type for the slice state
 export interface ProductsState {
   filterKey: string;
+  totalProducts: number;
   products: Product[];
   productCategories: ProductCategory[];
   isPreviewModalOpen: boolean;
@@ -38,12 +39,14 @@ export interface ProductsState {
   searchFilter: string;
   sizeFilter: string;
   quickViewProduct: Product | null;
+  currentVarient: ProductVariant | null
 }
 
 
 // Define the initial state using that type
 const initialState: ProductsState = {
   products,
+  totalProducts: 0,
   filterKey: '*',
   productCategories,
   isPreviewModalOpen: false,
@@ -60,7 +63,8 @@ const initialState: ProductsState = {
   currentPage: 1,
   searchFilter: "",
   sizeFilter: "",
-  quickViewProduct: null
+  quickViewProduct: null,
+  currentVarient: null
 };
 
 export const productsSlice = createSlice({
@@ -75,6 +79,9 @@ export const productsSlice = createSlice({
         }
       })
       state.products = cloneProducts
+    },
+    handleTotalProduct: (state, action: PayloadAction<number>) => {
+      state.totalProducts = action.payload
     },
     handleProductCategories: (state, action: PayloadAction<ProductCategory[]>) => {
       state.productCategories = action.payload;
@@ -130,16 +137,18 @@ export const productsSlice = createSlice({
       state.searchFilter = ""
     },
     addQuickViewProduct: (state, action: PayloadAction<Product | null>) => {
-      console.log("QuickViewProduct::", action.payload);
-      
+      state.currentVarient = action.payload?.product_variants?.[0] || null
       state.quickViewProduct = action.payload
+    },
+    changeCurrentVarient: (state, action: PayloadAction<ProductVariant>) => {
+      state.currentVarient = action.payload
     },
   },
 });
 
-export const { handleProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
+export const { handleProduct, handleTotalProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
-  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct } =
+  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient } =
   productsSlice.actions;
 
 // selectors can use the imported `RootState`

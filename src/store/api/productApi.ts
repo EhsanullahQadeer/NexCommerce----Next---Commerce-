@@ -1,6 +1,6 @@
 // src/slices/productsApi.ts
 import { apiSlice } from "../slices/api/apiSlice";
-import { handleProduct, handleProductCategories } from "../slices/products/productsSlice";
+import { handleProduct, handleProductCategories, handleTotalProduct } from "../slices/products/productsSlice";
 
 export const productsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -15,11 +15,13 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
-          const result = await queryFulfilled;
+          const {data} = await queryFulfilled;
 
-          if (result.data.data.length) {
-            dispatch(handleProduct(result.data.data));
+          if (data.data.data.length) {
+            dispatch(handleProduct(data.data.data));
           }
+          
+          dispatch(handleTotalProduct(data?.data?.total || 0))
         } catch (error) {
           console.error('Fetch Filtered Products Error:', error);
         }
