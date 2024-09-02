@@ -12,30 +12,32 @@ import ColorVariants from '../ColorVariants';
 // import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
 import { ColorVariant, Product, ProductVariant } from '@/types/product';
+import TagLabel from './elements/TagLabel';
 
 export interface ProductCardProps extends Product {
   className?: string;
   onPreview?: () => void;
 }
 
-const ProductCard: FC<ProductCardProps> = ({
-  id,
-  name,
-  image,
-  price,
-  product_variants,
-  className,
-  onPreview,
-}) => {
+const ProductCard: FC<ProductCardProps> = (productDetails) => {
+  const {
+    id,
+    name,
+    image,
+    price,
+    product_variants,
+    className,
+    onPreview,
+  } = productDetails
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
     let colorsvarients: ColorVariant[] = []
 
     varients.map((el) => {
       el?.attribute_values?.map((item) => {
-        if(item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour"){
+        if (item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour") {
           const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
-          !checkColor && colorsvarients.push({id: item.id, color: item.value.toLowerCase()})
+          !checkColor && colorsvarients.push({ id: item.id, color: item.value.toLowerCase() })
         }
       })
     })
@@ -57,12 +59,12 @@ const ProductCard: FC<ProductCardProps> = ({
         </Link>
         {/* {name && <TagLabel label={name}/>} */}
 
-        <Link href="#" className={productVerticalActionStyles}>
+        <button className={productVerticalActionStyles} onClick={() => console.log(productDetails)}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
             text="Add to cart"
           />
-        </Link>
+        </button>
 
         <div className={previewBtnStyles}>
           <Button
