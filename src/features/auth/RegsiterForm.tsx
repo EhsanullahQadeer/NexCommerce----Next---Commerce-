@@ -30,8 +30,6 @@ const RegisterForm: FC<RegisterFormProps> = ({ setIsOpen }) => {
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      console.log("formData", formData);
-      
       const { username, email, password, surname } = formData;
       const response = await signUp({ name: username, email, password, surname });
 

@@ -7,7 +7,7 @@ import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
 import Button from '@/components/Button';
 import CategoryFilterDrawer from './CategoryFilterDrawer';
 import PreviewModal from '../elements/PreviewModal';
-import { handleMoreProduct, selectProducts, togglePreviewModal } from '@/store/slices/products/productsSlice';
+import { addQuickViewProduct, handleMoreProduct, selectProducts, togglePreviewModal } from '@/store/slices/products/productsSlice';
 import GalleryModal from '../elements/GalleryModal';
 import { Product } from '@/types/product';
 import { useFetchFilteredProductsMutation } from '@/store/api/productApi';
@@ -54,7 +54,7 @@ const ProductGrid = () => {
             <ProductCardBoxed
               key={item.id}
               {...item}
-              onPreview={() => dispatch(togglePreviewModal(true))}
+              onPreview={() => { dispatch(togglePreviewModal(true)); dispatch(addQuickViewProduct(item)) }}
             />
           ))}
         </div>
@@ -65,8 +65,8 @@ const ProductGrid = () => {
             </Button>
           }
         </div>
-        <PreviewModal />
         <GalleryModal />
+        <PreviewModal />
       </Container>
       <CategoryFilterDrawer />
     </>
