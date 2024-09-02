@@ -22,8 +22,8 @@ const Footer = () => {
             </p>
             <SocialIcons variant="dark" size="lg" className="!justify-start" />
           </div>
-          {footerlinks.map((cat) => (
-            <div className="mb-10" key={cat.category}>
+          {footerlinks.map((cat, index) => (
+            <div className="mb-10" key={cat.category + index}>
               <h4 className="text-base text-black-75 font-semibold mb-4 tracking-[-0.16px]">
                 {cat.category}
               </h4>

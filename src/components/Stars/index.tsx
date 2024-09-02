@@ -12,8 +12,8 @@ const Stars: FC<StartsProps> = ({ count, reviewCount, className }) => {
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <div className="flex items-center">
-        {ratings.map((item) => (
-          <span key={item} className="flex items-center">
+        {ratings.map((item, index) => (
+          <span key={index} className="flex items-center">
             <i
               className={cn(
                 'las la-star text-sm',

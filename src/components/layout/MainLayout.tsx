@@ -4,20 +4,21 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { selectSidebarToggle } from "@/store/slice";
-import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation} from '@/store/api/productApi';
+import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation } from '@/store/api/productApi';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import TopBar from "../TopBar";
 import Notification from "../Notification";
 import { RootState } from "@/store";
+import { useCartDetailsGetMutation } from "@/store/api/cartApi";
 
 interface MainLayoutProps {
   children: ReactNode;
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [hideLayout, setHideLayout] = useState(false);
   const isSidebarToggle = useSelector(selectSidebarToggle);
 
@@ -25,6 +26,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
   const [fetchCategoriesList] = useFetchCategoriesListMutation();
+  const [cartDetailsGet] = useCartDetailsGetMutation()
 
   const handleFetchProductsWithFilter = async () => {
     try {
@@ -54,9 +56,25 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
   useEffect(() => {
     handleFetchCategories()
   }, [])
+
+  useEffect(() => {
+    handleFetchCart()
+  }, [isAuthenticated])
+
 
   useEffect(() => {
     handleFetchProductsWithFilter()

@@ -37,9 +37,9 @@ const SocialMobileIcons: FC<SocialMobileIconsProps> = ({
         className
       )}
     >
-      {icons.map((item) => (
+      {icons.map((item, index) => (
         <Link
-          key={item.url}
+          key={item.url + index}
           href={item.url}
           target="_blank"
           className={cn(

@@ -18,9 +18,9 @@ const ColorVariants: FC<ColorVariantProps> = ({ variants }) => {
 
   return (
     <div className="flex items-center gap-[5px]">
-      {variants.map((variant) => (
+      {variants.map((variant,index) => (
         <div
-          key={variant.id}
+          key={variant.id + index}
           className={cn(
             'h-[17px] w-[17px] cursor-pointer rounded-full mt-[5px] border-2 border-white transition-shadow duration-[0.35s] ease hover:shadow-variant',
             isActive === variant.color && 'shadow-variant'

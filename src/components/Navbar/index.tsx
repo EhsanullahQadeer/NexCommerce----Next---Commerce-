@@ -76,12 +76,12 @@ const Navbar = () => {
           </div>
 
           <nav className="hidden lg:flex items-center gap-2">
-            {routes.map((item) => {
+            {routes.map((item, index) => {
               if (!isAuthenticated && item.url == "/dashboard") {
                 return ""
               }
               return <NavLink
-                key={item.url}
+                key={item.url + index}
                 {...item}
                 isActive={isActiveLink(item.url)}
               />

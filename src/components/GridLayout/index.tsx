@@ -6,7 +6,6 @@ import ProductCard from '../Cards/ProductCard';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addQuickViewProduct,
-  handleMoreProduct,
   selectProducts,
   togglePreviewModal,
 } from '@/store/slices/products/productsSlice';
@@ -15,7 +14,6 @@ import { useImagesLoaded } from '@/hooks/useImagesLoaded';
 import Button from '../Button';
 import { Product } from '@/types/product';
 import ProductCardSkeleton from '../Cards/ProductCardSkeleton';
-import { useFetchFilteredProductsMutation } from '@/store/api/productApi';
 import { useRouter } from 'next/navigation';
 
 const createCatFilter = (item: any) => {
@@ -31,9 +29,8 @@ const GridLayout: React.FC = () => {
   const isotope = useRef<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const imagesLoaded = useImagesLoaded(gridRef);
-  const { filterKey, products, productCategories, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter } = useSelector(selectProducts);
+  const { filterKey, products, productCategories, currentPage, limitFilter } = useSelector(selectProducts);
 
-  const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -68,33 +65,6 @@ const GridLayout: React.FC = () => {
     }
   }, [products, filterKey, productCategories]);
 
-  const fetchMoreProducts = async () => {
-    try {
-      if (products.length == currentPage * limitFilter) {
-
-        let skipData = currentPage * limitFilter
-
-        const filter = {
-          "filters": {
-            "categories": categoriesFilter,
-            "sort": sortByFilter,
-            "color": colorFilter,
-            "priceRange": `1-${priceRangeFilter}`
-          },
-          "pagination": {
-            "skip": skipData,
-            "limit": limitFilter
-          }
-        }
-        await fetchFilteredProducts(filter).unwrap();
-        dispatch(handleMoreProduct())
-      }
-
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    }
-  };
-
   if (!imagesLoaded) {
     return <ProductCardSkeleton />
   }
@@ -102,9 +72,9 @@ const GridLayout: React.FC = () => {
   return (
     <div className="bg-white">
       <div ref={gridRef} className="!relative mt-5">
-        {products.map((item: Product) => (
+        {products.map((item: Product, index) => (
           <div
-            key={item.id}
+            key={item.id + index}
             className={cn(
               'product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]',
               createCatFilter(item.product_categories)
@@ -118,13 +88,7 @@ const GridLayout: React.FC = () => {
         ))}
       </div>
 
-      <div className="mt-10 mb-10">
-        {/* {
-          products.length == currentPage * limitFilter && <Button className="mx-auto" onClick={fetchMoreProducts}>
-            More Products <i className="las la-sync ml-2"></i>
-          </Button>
-        } */}
-        
+      <div className="mt-10 mb-10">        
         {
           products.length == currentPage * limitFilter && <Button className="mx-auto" onClick={() => router.push("/products")}>
             More Products <i className="las la-sync ml-2"></i>

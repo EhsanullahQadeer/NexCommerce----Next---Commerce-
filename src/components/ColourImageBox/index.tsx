@@ -10,7 +10,7 @@ const ColourImageBox = () => {
     <div className="flex items-center gap-1">
       {images.map((item, index) => (
         <SmallImageCard
-          key={item}
+          key={item+index}
           src={item}
           onClick={() => setSelectedImage(index)}
           isActive={selectedImage === index}

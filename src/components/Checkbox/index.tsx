@@ -22,6 +22,7 @@ const Checkbox: FC<CheckboxProps> = ({ label, labelClass, checked, required, ...
       {...props}
       checked={checked}
       required={required}
+      readOnly
     />
     <CheckedIcon className="absolute w-3 h-3 ml-[2px] pointer-events-none hidden peer-checked:block" />
     {label && (

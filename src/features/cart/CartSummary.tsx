@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import Shipping from './Shipping';
 import Button from '@/components/Button';
+import { useSelector } from 'react-redux';
+import { selectCart } from '@/store/slices/cart/cartSlice';
 
 const CartSummary = () => {
+  const { totalAmount } = useSelector(selectCart)
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-medium pb-[17px]">
@@ -11,7 +14,7 @@ const CartSummary = () => {
 
       <div className="flex justify-between items-center min-h-[70px] border-b border-black-300">
         <h4 className="text-black-100 text-base text-black-75">Subtotal:</h4>
-        <span className="text-black-100 text-base">$160.00</span>
+        <span className="text-black-100 text-base">${totalAmount.toFixed(2) || 0}</span>
       </div>
 
       <h4 className="text-black-75 leading-[56px]">Shipping:</h4>

@@ -99,16 +99,16 @@ const Contact: FC = () => {
               <div>
                 <h2 className="text-lg font-light">The Office</h2>
                 <div className="flex flex-col gap-y-4 mt-4">
-                  {ContactInfo.map((item) => (
-                    <ListItem key={item.text} {...item} />
+                  {ContactInfo.map((item, index) => (
+                    <ListItem key={item.text + index} {...item} />
                   ))}
                 </div>
               </div>
               <div>
                 <h2 className="text-lg font-light">The Office</h2>
                 <div className="flex flex-col gap-y-4 mt-4">
-                  {TimeInfo.map((item) => (
-                    <ListItem key={item.text} {...item} />
+                  {TimeInfo.map((item,index) => (
+                    <ListItem key={item.text+index} {...item} />
                   ))}
                 </div>
               </div>

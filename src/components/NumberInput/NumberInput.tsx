@@ -14,7 +14,7 @@ const NumberInput: FC<NumberInputProps> = ({
   value,
   inputClass,
 }) => {
-  const [inputValue, setValue] = useState(1);
+  const [inputValue, setValue] = useState(0);
 
   useEffect(() => {
     value && setValue(value);

@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 const FooterSocialIcons = () => {
   return (
     <div className="flex items-center justify-center gap-5">
-      {icons.map((item) => (
+      {icons.map((item, index) => (
         <Link
-          key={item.url}
+          key={item.url + index}
           href={item.url}
           target="_blank"
           className="flex items-center"

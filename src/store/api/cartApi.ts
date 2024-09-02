@@ -1,5 +1,7 @@
 // src/slices/cartApi.ts
+import { toast } from "react-toastify";
 import { apiSlice } from "../slices/api/apiSlice";
+import { setCartDetails, setShippingAmount } from "../slices/cart/cartSlice";
 
 export const cartApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,8 +22,33 @@ export const cartApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
 
-          if (result.data && result.data.cart) {
-            console.log('Product added to cart:', result.data.cart);
+          console.log("result", result);
+
+          if (result?.data?.message) {
+            const message = result.data.message
+            toast.success(message)
+          }
+        } catch (error) {
+          console.error('Add to Cart Error:', error);
+        }
+      },
+    }),
+    cartDetailsGet: builder.mutation({
+      query: ({ user_id }) => ({
+        url: 'cart-details',
+        method: 'POST',
+        body: {
+          user_id
+        },
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          if (result.data && result.data.data) {
+            console.log('cart:', result.data.data);
+            dispatch(setCartDetails(result.data.data?.cart_details))
+            dispatch(setShippingAmount(result.data.data?.shipping_amount))
           }
         } catch (error) {
           console.error('Add to Cart Error:', error);
@@ -31,4 +58,4 @@ export const cartApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useAddToCartMutation } = cartApi;
+export const { useAddToCartMutation, useCartDetailsGetMutation } = cartApi;

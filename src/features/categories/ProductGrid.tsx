@@ -14,7 +14,7 @@ import { useFetchFilteredProductsMutation } from '@/store/api/productApi';
 
 const ProductGrid = () => {
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
-  const { filterKey, products, sizeFilter, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter } = useSelector(selectProducts);
+  const { products, sizeFilter, currentPage, limitFilter, categoriesFilter, sortByFilter, colorFilter, priceRangeFilter } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
   const fetchMoreProducts = async () => {

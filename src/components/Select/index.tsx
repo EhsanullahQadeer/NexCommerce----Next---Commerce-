@@ -30,9 +30,9 @@ const Select: FC<SelectProps> = ({ options, value, label, size = 'lg' }) => {
         aria-label={label}
       >
         {label && <option>{label}</option>}
-        {options.map((item) => (
+        {options.map((item, index) => (
           <option
-            key={item.value}
+            key={index}
             value={item.value}
             className="!cursor-pointer"
           >

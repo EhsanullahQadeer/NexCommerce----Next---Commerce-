@@ -27,9 +27,9 @@ const SocialIcons: FC<SocialIcons> = ({
         size === 'lg' ? 'gap-2.5' : 'gap-[18px]'
       )}
     >
-      {icons.map((item) => (
+      {icons.map((item, index) => (
         <Link
-          key={item.url}
+          key={index}
           href={item.url}
           target="_blank"
           className={cn(
