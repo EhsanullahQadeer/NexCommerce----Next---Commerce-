@@ -68,7 +68,6 @@ export const authApi = apiSlice.injectEndpoints({
             const message = error?.error?.data?.message
             toast.error(message)
           }
-          console.log("Registration Error:", error);
         }
       },
     }),

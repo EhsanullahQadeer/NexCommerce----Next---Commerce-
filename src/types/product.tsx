@@ -82,6 +82,19 @@ export interface Category {
   sub_category_id: number
   created_at: any
   updated_at: any
+  category?: CategoryDetails
+
+}
+
+export interface CategoryDetails {
+  id: number
+  name: string
+  image: string
+  description: string
+  is_active: number
+  is_deleted: number
+  created_at: string
+  updated_at: string
 }
 
 export interface ProductVariant {

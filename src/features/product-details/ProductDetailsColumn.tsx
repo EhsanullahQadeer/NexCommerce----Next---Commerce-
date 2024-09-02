@@ -57,18 +57,22 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
       {
         product_variants &&
         <>
-          <div className="flex items-center mb-5">
-            <Label text="Color" />
-            <ColorVariants variants={colorVarientFilter(product_variants)} />
-          </div>
-          <div className="flex items-center mb-5">
-            <Label text="Size" />
-            <Select options={sizeVarientFilter(product_variants)} label="Select a size" />
-          </div>
+          {
+            !!colorVarientFilter(product_variants)?.length &&
+            <div className="flex items-center mb-5">
+              <Label text="Color" />
+              <ColorVariants variants={colorVarientFilter(product_variants)} />
+            </div>
+          }
+          {
+            !!sizeVarientFilter(product_variants)?.length &&
+            <div className="flex items-center mb-5">
+              <Label text="Size" />
+              <Select options={sizeVarientFilter(product_variants)} label="Select a size" />
+            </div>
+          }
         </>
       }
-
-
 
       <div className="flex items-center">
         <Label text="Qty" />
