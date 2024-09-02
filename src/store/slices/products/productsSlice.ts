@@ -130,6 +130,8 @@ export const productsSlice = createSlice({
       state.searchFilter = ""
     },
     addQuickViewProduct: (state, action: PayloadAction<Product | null>) => {
+      console.log("QuickViewProduct::", action.payload);
+      
       state.quickViewProduct = action.payload
     },
   },

@@ -12,6 +12,7 @@ import AuthComponent from '@/features/auth';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoggedIn } from '@/store/slices/auth/authSlice';
 import { RootState } from '@/store';
+import { clearCart } from '@/store/slices/cart/cartSlice';
 
 const TopBar: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -34,6 +35,7 @@ const TopBar: React.FC = () => {
     localStorage.removeItem('user');
     localStorage.removeItem('access_token');
     dispatch(userLoggedIn({ user: undefined, isAuthenticated: false }));
+    dispatch(clearCart());
     setDropdownOpen(false)
     return router.push("/")
   };
