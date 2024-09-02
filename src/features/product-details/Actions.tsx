@@ -14,7 +14,7 @@ interface ActionsProps {
 
 const Actions: FC<ActionsProps> = ({ isModal }) => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { quickViewProduct } = useSelector(selectProducts);
+  const { quickViewProduct, currentVarient } = useSelector(selectProducts);
   const { product_variants } = quickViewProduct || {}
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
@@ -31,7 +31,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
 
   const addToCartHandler = async () => {
     try {
-      const addToCartDetails = { "user_id": user.id, "product_id": quickViewProduct?.id, "variant_id": product_variants?.[0]?.id, "price": product_variants?.[0]?.price, "quantity": "1" }
+      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": "1" }] }
 
       await addToCart(addToCartDetails).unwrap();
       handleFetchCart()
@@ -44,7 +44,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
     <div
       className={cn(
         !isModal &&
-          'flex justify-between items-start lg:items-center flex-col-reverse lg:flex-row-reverse mt-5 mb-5 gap-5'
+        'flex justify-between items-start lg:items-center flex-col-reverse lg:flex-row-reverse mt-5 mb-5 gap-5'
       )}
     >
       <div

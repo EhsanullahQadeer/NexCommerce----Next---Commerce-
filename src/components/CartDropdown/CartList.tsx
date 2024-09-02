@@ -7,7 +7,7 @@ export interface cartItemProps {
 }
 
 const CartList = ({ data }: cartItemProps) => {
-  const { product } = data
+  const { product, variant } = data
   return (
     <div className="flex items-center border-b border-[#ebebeb] py-4 justify-between">
       <div>
@@ -18,7 +18,7 @@ const CartList = ({ data }: cartItemProps) => {
             </h4>
             <span className='font-light text-[13px] text-black-200'>
               <span>{data.quantity}</span>
-              <span> x ${product.price}</span>
+              <span> x ${variant.price}</span>
             </span>
           </div>
         </Link>

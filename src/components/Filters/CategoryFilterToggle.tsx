@@ -1,13 +1,14 @@
 'use client';
 
-import { productSortCategories } from '@/store/slices/products/fakeProducts';
 import ToggleFilters from './ToggleFilters';
 import Select from '../Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProductCategories, toggleFilters } from '@/store/slices/categories/categoriesSlice';
+import { selectProducts } from '@/store/slices/products/productsSlice';
 
 const CategoryFilterToggle = () => {
   const { isToggleFilters } = useSelector(selectProductCategories);
+  const { products, totalProducts } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
   return (
@@ -20,7 +21,7 @@ const CategoryFilterToggle = () => {
 
       <div className="flex items-center text-black-600 text-sm font-light leading-[21px]">
         <span>Showing </span>
-        <span className='text-black-75 mx-1'>8 of 56 </span>
+        <span className='text-black-75 mx-1'>{products.length} of {totalProducts} </span>
         <span>Products</span>
       </div>
 

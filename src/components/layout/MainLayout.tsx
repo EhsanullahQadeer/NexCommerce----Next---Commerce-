@@ -59,11 +59,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
-
         await cartDetailsGet({ user_id: user?.id }).unwrap();
       }
     } catch (error) {
-      console.error("Failed to fetch products:", error);
+      // console.error("Failed to fetch products:", error);
     }
   };
 

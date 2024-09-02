@@ -6,23 +6,17 @@ import { setCartDetails, setShippingAmount } from "../slices/cart/cartSlice";
 export const cartApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addToCart: builder.mutation({
-      query: ({ user_id, product_id, variant_id, price, quantity }) => ({
+      query: ({ user_id, products }) => ({
         url: 'add-to-cart',
         method: 'POST',
         body: {
           user_id,
-          product_id,
-          variant_id,
-          price,
-          quantity,
-
+          products
         },
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-
-          console.log("result", result);
 
           if (result?.data?.message) {
             const message = result.data.message
@@ -46,12 +40,11 @@ export const cartApi = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
 
           if (result.data && result.data.data) {
-            console.log('cart:', result.data.data);
             dispatch(setCartDetails(result.data.data?.cart_details))
             dispatch(setShippingAmount(result.data.data?.shipping_amount))
           }
         } catch (error) {
-          console.error('Add to Cart Error:', error);
+          // console.error('Add to Cart Error:', error);
         }
       },
     }),

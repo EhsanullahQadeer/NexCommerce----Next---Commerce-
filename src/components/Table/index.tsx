@@ -24,9 +24,6 @@ interface TableProps {
 const Table: FC<TableProps> = ({ headers, className }) => {
   const {cartDetails} = useSelector(selectCart)
 
-  console.log("cartDetails", cartDetails);
-  
-
   return (
     <table
       className={cn(

@@ -8,7 +8,7 @@ import {
   previewBtnStyles,
 } from './elements/styles';
 import IconWithText from '../Icons/IconWithTextOverlay';
-import ColorVariants from '../ColorVariants';
+import ReadOnlyColorVariants from '../ColorVariants/ReadOnly';
 // import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
 import { ColorVariant, Product, ProductVariant } from '@/types/product';
@@ -64,7 +64,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
 
   const addToCartHandler = async () => {
     try {
-      const addToCartDetails = { "user_id": user.id, "product_id": productDetails.id, "variant_id": productDetails.product_variants[0]?.id, "price": productDetails.product_variants[0]?.price, "quantity": "1" }
+      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": productDetails.id, "variant_id": productDetails.product_variants[0]?.id, "price": productDetails.product_variants[0]?.price, "quantity": "1" }] }
 
       await addToCart(addToCartDetails).unwrap();
       handleFetchCart()
@@ -87,10 +87,10 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         </Link>
         {/* {name && <TagLabel label={name}/>} */}
 
-        <button className={productVerticalActionStyles} onClick={addToCartHandler}>
+        <button className={productVerticalActionStyles} onClick={() => console.log("Add to wishlist")}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
-            text="Add to cart"
+            text="Add Wishlist"
           />
         </button>
 
@@ -112,7 +112,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         </h3>
         <CardPrice price={price} oldPrice={0} />
 
-        <ColorVariants variants={colorVarientFilter(product_variants)} />
+        <ReadOnlyColorVariants variants={colorVarientFilter(product_variants)} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <button
