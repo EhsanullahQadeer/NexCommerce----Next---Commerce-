@@ -72,8 +72,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    handleFetchCart()
-  }, [isAuthenticated])
+    setTimeout(() => {
+      handleFetchCart()
+    }, 0)
+  }, [user, isAuthenticated])
 
 
   useEffect(() => {
