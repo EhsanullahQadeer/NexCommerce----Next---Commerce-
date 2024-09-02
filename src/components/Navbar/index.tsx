@@ -98,12 +98,6 @@ const Navbar = () => {
                 iconClass="text-black-75"
               />
             </div>
-            <Link href="" className="!hidden lg:!flex">
-              <NotificationIcon
-                icon="las la-user-circle"
-                iconClass="!text-[28px]"
-              />
-            </Link>
             <Link href="/whishlist" className="!hidden lg:!flex">
               <NotificationIcon
                 icon="lar la-heart"

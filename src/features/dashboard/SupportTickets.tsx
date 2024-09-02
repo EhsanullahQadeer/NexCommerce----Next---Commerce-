@@ -50,7 +50,7 @@ const SupportTickets = () => {
               >
                 {/* Critical Status */}
                 <Button
-                  className={`!px-3 !py-1 !text-xs !font-bold !rounded uppercase ${
+                  className={`!px-3 !py-1 !text-xs !rounded uppercase ${
                     statusColors[item.criticalStatus]
                   }`}
                 >

@@ -37,16 +37,11 @@ export const langauges = [
 
 export const topBarLinks: LinkType[] = [
   {
-    url: 'tel:#',
-    name: 'Call: +0123 456 789',
-    icon: 'las la-phone',
-  },
-  {
-    url: '#',
+    url: '/about-us',
     name: 'About Us',
   },
   {
-    url: '#',
+    url: '/contact',
     name: 'Contact Us',
   },
   {

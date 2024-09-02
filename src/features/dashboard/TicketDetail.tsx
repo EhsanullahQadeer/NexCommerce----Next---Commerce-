@@ -31,14 +31,14 @@ const TicketsDetails = ({ data, setSelectedTicket }: TicketDetailsProps) => {
           <div className="mb-3 flex justify-between">
             <Button
               size="xs"
-              className="!bg-white !border-black-300 !text-black-500 !font-semibold !rounded-lg !p-0 !px-2 !py-1"
+              className="!bg-white !border-black-300 !text-black-500 !rounded-lg !p-0 !px-2 !py-1"
               onClick={() => setSelectedTicket(null)}
             >
               <i className="las la-arrow-left text-lg mr-2"></i>
               Go Back
             </Button>
             <Button
-              className="!bg-red-500 !py-2 !px-3 !text-white !rounded-lg !border-red-600 !font-semibold !text-sm"
+              className="!bg-red-500 !py-2 !px-3 !text-white !rounded-lg !border-red-600 !text-sm"
               size="xs"
             >
               Close Support Ticket
@@ -46,7 +46,7 @@ const TicketsDetails = ({ data, setSelectedTicket }: TicketDetailsProps) => {
           </div>
           {/* Critical Status */}
           <Button
-            className={`!px-3 !py-1 !text-xs !font-bold !rounded uppercase ${
+            className={`!px-3 !py-1 !text-xs !rounded uppercase ${
               statusColors[data.criticalStatus]
             }`}
           >
