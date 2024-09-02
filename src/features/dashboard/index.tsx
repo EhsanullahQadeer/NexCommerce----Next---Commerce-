@@ -22,7 +22,7 @@ const DashboardComponent = () => {
     { id: 3, label: "Notifications", content: <Notifications /> },
     { id: 4, label: "Addresses", content: <AddressTab /> },
     { id: 5, label: "Account Details", content: <AccountDetailsTab /> },
-    { id: 6, label: "Support Tickets", content: <SupportTickets /> },
+    { id: 8, label: "Support Tickets", content: <SupportTickets /> },
     { id: 7, label: "Signout", content: <div>Login Content</div> },
   ];
 
