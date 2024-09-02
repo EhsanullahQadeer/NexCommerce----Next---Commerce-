@@ -11,15 +11,6 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
   const [expanded, setExpanded] = useState<number | null>(null);
   return (
     <div className="my-4">
-      <div className="flex justify-end my-2">
-        <Button
-          size="xs"
-          className="!bg-white !border-black-300 !text-black-500 !font-semibold !rounded-lg !p-0 !px-2 !py-1"
-        >
-          Hide Order
-          <i className="las la-eye-slash text-lg ml-2"></i>
-        </Button>
-      </div>
       <div className="border border-black-600 rounded-lg">
         <div className="border-b px-4 py-3 flex justify-between flex-col md:flex-row">
           <div className="flex gap-2">
@@ -29,18 +20,9 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
             <Button
               size="xs"
               variant="primary"
-              className="!rounded-lg !text-xs !p-0 !px-3 !font-semibold hover:!bg-primary"
+              className="!rounded-lg !text-xs !p-0 !px-3 hover:!bg-primary"
             >
               Track
-            </Button>
-          </div>
-          <div className="flex md:justify-end">
-            <Button
-              size="xs"
-              variant="primary"
-              className="!rounded-lg !p-0 !px-3 !py-1 !font-semibold hover:!bg-black-300 !bg-black-300 !border-black-300 !text-black-500"
-            >
-              Ask the seller
             </Button>
           </div>
         </div>
@@ -71,7 +53,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                 <Button
                   size="xs"
                   variant="primary"
-                  className="!rounded-lg !p-0 !px-3 !py-1 !font-semibold hover:!bg-primary !text-xs"
+                  className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
                 >
                   Rate the product
                 </Button>
@@ -174,21 +156,9 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
           </div>
         </div>
 
-        <div className="w-full md:w-1/2 pl-2 mt-4 md:mt-0">
+        <div className="w-full md:w-1/2 pl-2 mt-0 md:mt-0">
           <h3 className="text-black-75 text-lg mb-2">Payment Information</h3>
-
-          <div className="rounded-lg p-4 bg-[#fdeae4] flex items-center">
-            <div className="w-[80%]">
-              <p className="text-pink-600 font-bold mb-1">PREMIUM</p>
-              <p className="text-black-500 text-sm flex items-center">
-                Switch to Premium and earn Hepsipara on your next purchases!
-              </p>
-            </div>
-            <p className="text-right flex-1 font-bold text-[#f8ceaf] text-2xl">
-              <i className="las la-angle-right"></i>
-            </p>
-          </div>
-          <div className="border border-black-600 rounded-lg p-4 mt-4">
+          <div className="border border-black-600 rounded-lg p-4 mt-0">
             <div className="flex gap-4 mb-4">
               <div className="w-[30%]">
                 <Image
@@ -226,6 +196,14 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                   {order.price}
                 </p>
               </div>
+              <div className="flex justify-between my-2">
+                <p className="text-black-500 text-sm flex items-center">
+                  Vat
+                </p>
+                <p className="text-black-75 text-sm flex items-center font-semibold">
+                  %18
+                </p>
+              </div>
               <div className="flex justify-between my-2 border-t pt-2">
                 <p className="text-black-500 text-sm flex items-center">
                   Grand Total
@@ -239,7 +217,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
         </div>
       </div>
 
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <h3 className="text-black-75 text-lg mb-2">Other</h3>
         <div className="flex gap-2">
           <p className="text-black-500 text-xs flex items-center cursor-pointer hover:text-black-75">
@@ -249,7 +227,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
             Return Conditions
           </p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
