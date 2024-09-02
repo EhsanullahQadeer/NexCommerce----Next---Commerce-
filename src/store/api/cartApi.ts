@@ -55,7 +55,25 @@ export const cartApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    cartDetailsUpdate: builder.mutation({
+      query: ({ user_id, product_id, quantity }) => ({
+        url: 'quantity',
+        method: 'POST',
+        body: {
+          user_id,
+          product_id,
+          quantity
+        },
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error('Update Cart Error:', error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useAddToCartMutation, useCartDetailsGetMutation } = cartApi;
+export const { useAddToCartMutation, useCartDetailsGetMutation, useCartDetailsUpdateMutation } = cartApi;

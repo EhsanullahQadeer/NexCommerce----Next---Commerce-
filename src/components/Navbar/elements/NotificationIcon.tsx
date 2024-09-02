@@ -25,7 +25,7 @@ const NotificationIcon: FC<NotificationIconProps> = ({
   return (
     <div className={cn(baseStyles, className)}>
       <i className={cn(icon, baseIconStyles, iconClass)}></i>
-      {count && (
+      {!!count && (
         <span className={cn(baseCountStyles, iconCountClass)}>{count}</span>
       )}
     </div>
