@@ -82,9 +82,9 @@ const Dropdown = ({
       {isOpen && (
         <div aria-label="Dropdown menu" className={dropdownClass}>
           <ul role="menu" aria-labelledby={id} aria-orientation="vertical">
-            {items?.map((item) => (
+            {items?.map((item, index) => (
               <DropdownList
-                key={item.id}
+                key={item.id + index}
                 onClick={() => handleChange(item)}
                 isActive={selectedItem?.id === item.id}
               >

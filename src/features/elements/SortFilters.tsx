@@ -14,8 +14,8 @@ const SortFilters: FC<SortProps> = ({ productSortCategories }) => {
 
   return (
     <div className="">
-      {productSortCategories.map((item) => (
-        <div key={item.key} className="flex justify-between pr-3 my-1">
+      {productSortCategories.map((item, index) => (
+        <div key={index} className="flex justify-between pr-3 my-1">
           <Radio checked={sortByFilter.sort_by === item.key && sortByFilter.order == item.sort} value={item.key} label={item.label} name='sortByFilter' onClick={() => dispatch(handleSortFilter({sort_by: item.key, order: item.sort}))} />
         </div>
       ))}

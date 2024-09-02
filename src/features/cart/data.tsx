@@ -13,13 +13,14 @@ export interface Cart {
 
 export const tableHeader: ColumnHeaders[] = [
   {
-    key: 'url',
+    key: 'product',
     title: 'Product',
     renderCell: (cell) =>
-      cell.url && (
+      cell?.product?.image
+     && (
         <div className="flex items-center justify-center lg:justify-start">
           <Image
-            src={cell?.url as string}
+            src={cell?.product?.image}
             alt="Product image"
             height={60}
             width={60}
@@ -28,7 +29,7 @@ export const tableHeader: ColumnHeaders[] = [
             href="/products"
             className="ml-7 text-black-75 text-base font-light hover:text-primary"
           >
-            {cell?.title}
+            {cell?.product?.name}
           </Link>
         </div>
       ),
@@ -37,7 +38,7 @@ export const tableHeader: ColumnHeaders[] = [
     key: 'price',
     title: 'Price',
     renderCell: (cell: any) => (
-      <div className="w-full text-black-75 pt-2 lg:pt-0">${cell?.price?.toFixed(2)}</div>
+      <div className="w-full text-black-75 pt-2 lg:pt-0">${cell?.product?.price?.toFixed(2)}</div>
     ),
     class: 'w-[120px]'
   },
@@ -60,7 +61,7 @@ export const tableHeader: ColumnHeaders[] = [
     title: 'Total',
     renderCell: (cell: any) => (
       <div className="w-full lg:w-[80px] text-primary text-base pt-2 lg:pt-0">
-        ${cell?.price?.toFixed(2)}
+        ${cell?.product?.price?.toFixed(2) * cell?.quantity}
       </div>
     ),
   },

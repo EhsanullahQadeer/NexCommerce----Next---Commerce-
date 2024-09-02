@@ -86,9 +86,9 @@ const RelatedPosts = () => {
             },
           }}
         >
-          {blogs.map((item: Blog) => (
+          {blogs.map((item: Blog, index) => (
             <SwiperSlide
-              key={item.id}
+              key={index}
               className="max-w-[297px] px-2.5 mb-[50px]"
             >
               <BlogCard

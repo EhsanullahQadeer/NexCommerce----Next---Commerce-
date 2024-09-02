@@ -55,8 +55,8 @@ const AddressTab = () => {
       <div className="flex flex-col lg:flex-row gap-5 items-start">
         <div className={cardStyles}>
           <h3 className={titleStyles}>Billing Address</h3>
-          {addresses.map((address) => (
-            <p key={address} className={textStyles}>
+          {addresses.map((address, index) => (
+            <p key={index} className={textStyles}>
               {address}
             </p>
           ))}

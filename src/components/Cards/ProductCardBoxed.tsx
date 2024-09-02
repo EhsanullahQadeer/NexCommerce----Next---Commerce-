@@ -10,6 +10,9 @@ import CardPrice from './elements/CardPrice';
 import Stars from '../Stars';
 import CardActions from './elements/Actions';
 import { ColorVariant, Product, ProductVariant } from '@/types/product';
+import { useSelector } from 'react-redux';
+import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { RootState } from '@/store';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -26,6 +29,9 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   onPreview,
   // heading,
 }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [addToCart] = useAddToCartMutation()
+  const [cartDetailsGet] = useCartDetailsGetMutation()
   const productUrl = `/products/${id}`;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
@@ -42,6 +48,29 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
 
     return colorsvarients
   }
+
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToCartHandler = async () => {
+    try {
+      const addToCartDetails = { "user_id": user.id, "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }
+
+      await addToCart(addToCartDetails).unwrap();
+      handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
 
   return (
     <div
@@ -68,7 +97,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
           />
         </Link>
 
-        <CardActions onPreview={onPreview} />
+        <CardActions onPreview={onPreview} onAddToCart={addToCartHandler} />
       </div>
       <div className="py-4 px-5">
         <div className="text-gray-500 text-[13px] font-light tracking-[-0.13px] leading-[15.6px] mb-[3px]">

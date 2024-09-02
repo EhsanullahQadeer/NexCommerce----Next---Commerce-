@@ -1,5 +1,8 @@
+'use client';
 import { cn } from '@/lib/utils';
+import { selectCart } from '@/store/slices/cart/cartSlice';
 import { FC, ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 
 export type ColumnHeaders = {
   key: string;
@@ -10,16 +13,20 @@ export type ColumnHeaders = {
 };
 
 type TableData = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | any;
 };
 
 interface TableProps {
   headers: ColumnHeaders[];
-  data: TableData[];
   className?: string;
 }
 
-const Table: FC<TableProps> = ({ headers, data, className }) => {
+const Table: FC<TableProps> = ({ headers, className }) => {
+  const {cartDetails} = useSelector(selectCart)
+
+  console.log("cartDetails", cartDetails);
+  
+
   return (
     <table
       className={cn(
@@ -46,19 +53,19 @@ const Table: FC<TableProps> = ({ headers, data, className }) => {
         </tr>
       </thead>
       <tbody>
-        {data?.map((item, index) => (
+        {cartDetails?.map((item, index) => (
           <tr
             key={index}
             className="relative block lg:table-row border-b border-black-300 py-[42px] lg:py-0"
           >
-            {headers?.map((header) => (
+            {headers?.map((header, index) => (
               <td
-                key={header.key}
+                key={index}
                 className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell"
               >
                 {header.renderCell
                   ? header?.renderCell(item, header)
-                  : item?.[header.key]}
+                  : ""}
               </td>
             ))}
           </tr>

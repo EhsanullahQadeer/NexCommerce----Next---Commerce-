@@ -1,13 +1,45 @@
+'use client';
 import Button from '@/components/Button';
 import LinkButton from './LinkButton';
 import { FC } from 'react';
 import { cn } from '@/lib/utils';
+import { useSelector } from 'react-redux';
+import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { selectProducts } from '@/store/slices/products/productsSlice';
+import { RootState } from '@/store';
 
 interface ActionsProps {
   isModal?: boolean;
 }
 
 const Actions: FC<ActionsProps> = ({ isModal }) => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { quickViewProduct } = useSelector(selectProducts);
+  const { product_variants } = quickViewProduct || {}
+  const [addToCart] = useAddToCartMutation()
+  const [cartDetailsGet] = useCartDetailsGetMutation()
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToCartHandler = async () => {
+    try {
+      const addToCartDetails = { "user_id": user.id, "product_id": quickViewProduct?.id, "variant_id": product_variants?.[0]?.id, "price": product_variants?.[0]?.price, "quantity": "1" }
+
+      await addToCart(addToCartDetails).unwrap();
+      handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
   return (
     <div
       className={cn(
@@ -39,6 +71,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
             isModal ? 'h-[44px] !tracking-[1.4px]' : '!max-w-[198px]'
           )}
           variant="outlined"
+          onClick={addToCartHandler}
         >
           <i className="las la-cart-plus mr-1 text-lg"></i>Add to cart
         </Button>

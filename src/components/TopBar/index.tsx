@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { redirect, usePathname, useRouter } from 'next/navigation';
@@ -54,7 +55,7 @@ const TopBar: React.FC = () => {
           <div className="hidden sm:flex items-center space-x-6">
             {filteredLinks.map((item, index) => {
               if (item.name === 'login') {
-                return user?.name ? <div className="relative">
+                return user?.name ? <div className="relative" key={index}>
                   <button
                     onClick={() => setDropdownOpen((prev) => !prev)}
                     className="flex items-center text-[13px] tracking-[-0.13px] font-extralight uppercase hover:text-primary"

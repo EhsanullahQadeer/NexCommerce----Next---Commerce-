@@ -14,7 +14,7 @@ interface Variant {
   currency_id: number;
 }
 
-interface CartItem {
+export interface CartItem {
   id: number;
   cart_id: number;
   product_id: number;
@@ -32,6 +32,7 @@ interface CartState {
   cartDetails: CartItem[];
   totalAmount: number;
   totalItems: number;
+  shipping_amount: number;
 }
 
 // Define the initial state using that type
@@ -39,6 +40,7 @@ const initialState: CartState = {
   cartDetails: [],
   totalAmount: 0,
   totalItems: 0,
+  shipping_amount: 0,
 };
 
 export const cartSlice = createSlice({
@@ -111,6 +113,9 @@ export const cartSlice = createSlice({
         0
       );
     },
+    setShippingAmount: (state, action: PayloadAction<number>) => {
+      state.shipping_amount = action.payload;
+    },
   },
 });
 
@@ -120,6 +125,7 @@ export const {
   updateCartItem,
   clearCart,
   setCartDetails,
+  setShippingAmount
 } = cartSlice.actions;
 
 // Selectors

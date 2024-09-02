@@ -18,7 +18,7 @@ const Radio: FC<RadioProps> = ({ label, className, name, ...props }) => {
         className
       )}
     >
-      <input type="radio" className="mr-2.5" name={name} {...props} />
+      <input type="radio" className="mr-2.5" name={name} {...props} readOnly />
       {label}
     </label>
   );

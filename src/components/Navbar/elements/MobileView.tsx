@@ -90,8 +90,8 @@ const NavMobileView: FC<NavMobileViewProps> = ({
 
         <nav>
           <ul className="flex flex-col mt-[15px]">
-            {routes.map((item) => (
-              <li key={item.url}>
+            {routes.map((item, index) => (
+              <li key={item.url + index}>
                 <Link
                   href={item.url}
                   className={cn(

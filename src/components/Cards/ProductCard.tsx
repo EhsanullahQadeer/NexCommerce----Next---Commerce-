@@ -12,7 +12,9 @@ import ColorVariants from '../ColorVariants';
 // import TagLabel from './elements/TagLabel';
 import CardPrice from './elements/CardPrice';
 import { ColorVariant, Product, ProductVariant } from '@/types/product';
-import TagLabel from './elements/TagLabel';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
+import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -20,6 +22,10 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const [addToCart] = useAddToCartMutation()
+  const [cartDetailsGet] = useCartDetailsGetMutation()
+
   const {
     id,
     name,
@@ -45,6 +51,28 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     return colorsvarients
   }
 
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToCartHandler = async () => {
+    try {
+      const addToCartDetails = { "user_id": user.id, "product_id": productDetails.id, "variant_id": productDetails.product_variants[0]?.id, "price": productDetails.product_variants[0]?.price, "quantity": "1" }
+
+      await addToCart(addToCartDetails).unwrap();
+      handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
@@ -59,7 +87,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         </Link>
         {/* {name && <TagLabel label={name}/>} */}
 
-        <button className={productVerticalActionStyles} onClick={() => console.log(productDetails)}>
+        <button className={productVerticalActionStyles} onClick={addToCartHandler}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
             text="Add to cart"
@@ -87,12 +115,12 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         <ColorVariants variants={colorVarientFilter(product_variants)} />
 
         <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
-          <Link
-            href="#"
+          <button
+            onClick={addToCartHandler}
             className="text-sm font-extralight text-primary hover:shadow-[0_0.1rem_0_0_#cc9966] leading-[18px]"
           >
             Add to cart<i className="las la-long-arrow-alt-right ml-2.5"></i>
-          </Link>
+          </button>
         </div>
       </div>
     </div>
