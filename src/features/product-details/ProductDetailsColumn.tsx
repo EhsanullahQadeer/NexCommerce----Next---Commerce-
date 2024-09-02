@@ -52,8 +52,6 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   return (
     <div>
       <Description className='!mb-2.5' />
-
-
       {
         product_variants &&
         <>
