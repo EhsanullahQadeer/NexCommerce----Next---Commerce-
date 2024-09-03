@@ -13,6 +13,7 @@ import Notification from "../Notification";
 import { RootState } from "@/store";
 import { useCartDetailsGetMutation } from "@/store/api/cartApi";
 import { useFetchSiteSettingsMutation } from "@/store/api/siteSettingApi";
+import { useWishlistDetailsGetMutation } from "@/store/api/wishlistApi";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -29,6 +30,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [fetchSiteSettings] = useFetchSiteSettingsMutation()
   const [fetchCategoriesList] = useFetchCategoriesListMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation()
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
 
   const handleFetchProductsWithFilter = async () => {
     try {
@@ -68,6 +70,16 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
+  const handleFetchWishlist = async () => {
+    try {
+      if (user?.id) {
+        await wishlistDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      // console.error("Failed to fetch products:", error);
+    }
+  };
+
   const handleFetchSiteSetting = async () => {
     try {
       await fetchSiteSettings({}).unwrap();
@@ -85,6 +97,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   useEffect(() => {
     setTimeout(() => {
       handleFetchCart()
+      handleFetchWishlist()
     }, 0)
   }, [user, isAuthenticated])
 

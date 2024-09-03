@@ -73,6 +73,19 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
       console.error("Failed to fetch products:", error);
     }
   };
+
+  const addToWishListHandler = async () => {
+    try {
+      // const addToCartDetails = { "user_id": user.id, products: [{ "product_id": productDetails.id, "variant_id": productDetails.product_variants[0]?.id, "price": productDetails.product_variants[0]?.price, "quantity": "1" }] }
+
+      // await addToCart(addToCartDetails).unwrap();
+      // handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
