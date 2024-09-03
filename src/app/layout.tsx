@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 
 import { StoreProvider } from '@/store/StoreProvider';
@@ -24,47 +23,23 @@ const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
-async function fetchSiteSettings() {
-  try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    
-    const response = await fetch(`${baseUrl}site-setting`);
-    const { data } = await response.json();
-    return data;
-  } catch (error) {
-    return {}
-  }
-}
-
-export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const data = await fetchSiteSettings();
-
-  const metadataBase = data.site_url ? new URL(data.site_url) : undefined;
-
-  return {
-    applicationName: data.brand_name,
-    title: `Home | ${data.brand_name}`,
-    description: data.description,
-    metadataBase,
-    openGraph: {
-      title: `Home | ${data.brand_name}`,
-      description: data.description,
-      url: data.site_url,
-      siteName: data.brand_name,
-      locale: 'en_US',
-    },
-  };
-  } catch (error) {
-    return {}
-  }
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  async function fetchSiteSettings() {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+      
+      const response = await fetch(`${baseUrl}site-setting`);
+      const { data } = await response.json();
+      return data;
+    } catch (error) {
+      return {}
+    }
+  }
 
   const { site_status, logo_url } = await fetchSiteSettings();
 
