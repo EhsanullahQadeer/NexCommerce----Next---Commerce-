@@ -27,12 +27,9 @@ const poppins = Poppins({
 async function fetchSiteSettings() {
   try {
     const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-    console.log("check prod test baseUrl", baseUrl);
     
-    const response = await fetch(`${baseUrl}/site-setting`);
-    console.log("check prod test response", response);
+    const response = await fetch(`${baseUrl}site-setting`);
     const { data } = await response.json();
-    console.log("check prod test data", data);
     return data;
   } catch (error) {
     return {}
