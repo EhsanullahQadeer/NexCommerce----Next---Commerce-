@@ -6,7 +6,7 @@ export interface SlidersState {
   id: number
   sub_title: string
   title: string
-  titleColor: string
+  title_color: string
   link: string
   button_text: string
   image: string
@@ -21,7 +21,7 @@ const initialState: SlidersState = {
   id: 0,
   sub_title: "",
   title: "",
-  titleColor: "",
+  title_color: "",
   link: "",
   button_text: "",
   image: "",

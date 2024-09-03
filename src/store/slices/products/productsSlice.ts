@@ -25,6 +25,7 @@ export interface OtherSortPayload {
 export interface ProductsState {
   filterKey: string;
   totalProducts: number;
+  max_price: number;
   products: Product[];
   productCategories: ProductCategory[];
   isPreviewModalOpen: boolean;
@@ -47,6 +48,7 @@ export interface ProductsState {
 const initialState: ProductsState = {
   products,
   totalProducts: 0,
+  max_price: 10000,
   filterKey: '*',
   productCategories,
   isPreviewModalOpen: false,
@@ -82,6 +84,10 @@ export const productsSlice = createSlice({
     },
     handleTotalProduct: (state, action: PayloadAction<number>) => {
       state.totalProducts = action.payload
+    },
+    handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
+      state.max_price = action.payload
+      state.priceRangeFilter = action.payload.toString()
     },
     handleProductCategories: (state, action: PayloadAction<ProductCategory[]>) => {
       state.productCategories = action.payload;
@@ -131,7 +137,7 @@ export const productsSlice = createSlice({
         order: "DESC"
       }
       state.colorFilter = ""
-      state.priceRangeFilter = '100'
+      state.priceRangeFilter = '5000'
       state.skip = 0
       state.currentPage = 1
       state.searchFilter = ""
@@ -146,7 +152,7 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { handleProduct, handleTotalProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
+export const { handleProduct, handleTotalProduct, handleMaxPriceProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
   togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient } =
   productsSlice.actions;

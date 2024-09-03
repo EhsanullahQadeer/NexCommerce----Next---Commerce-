@@ -3,13 +3,19 @@ import { Poppins } from 'next/font/google';
 
 import { StoreProvider } from '@/store/StoreProvider';
 import MainLayout from '@/components/layout/MainLayout';
-import { siteConfig } from '@/data/siteConfig';
 
 import '@/styles/globals.css';
 import { cn } from '@/lib/utils';
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+export interface SiteSettings {
+  site_status: number;
+  brand_name: string;
+  description: string;
+  site_url: string;
+}
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -18,25 +24,41 @@ const poppins = Poppins({
   weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
 });
 
-export const metadata: Metadata = {
-  applicationName: siteConfig.title,
-  title: `Home | ${siteConfig.title}`,
-  description: siteConfig.description,
-  metadataBase: siteConfig.url,
-  openGraph: {
-    title: siteConfig.title,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.title,
-    locale: 'en_US',
-  }
-};
+async function fetchSiteSettings() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+  const response = await fetch(`${baseUrl}/site-setting`);
+  const { data } = await response.json();
+  return data;
+}
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await fetchSiteSettings();
+
+  const metadataBase = data.site_url ? new URL(data.site_url) : undefined;
+
+  return {
+    applicationName: data.brand_name,
+    title: `Home | ${data.brand_name}`,
+    description: data.description,
+    metadataBase,
+    openGraph: {
+      title: `Home | ${data.brand_name}`,
+      description: data.description,
+      url: data.site_url,
+      siteName: data.brand_name,
+      locale: 'en_US',
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const { site_status, logo_url } = await fetchSiteSettings();
+
   return (
     <StoreProvider>
       <html lang="en">
@@ -48,7 +70,39 @@ export default function RootLayout({
           />
         </head>
         <body className={cn(poppins.className, 'overflow-x-hidden')}>
-          <MainLayout>
+          {site_status === 0 ? (
+            <div className="flex items-center justify-center min-h-screen bg-gray-100">
+              <div className="text-center">
+                <div className="mb-6">
+                  <img src={logo_url} alt="Coming Soon" className="mx-auto w-1/2 md:w-1/3" />
+                </div>
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                  We're Coming Soon
+                </h1>
+                <p className="text-lg text-gray-600 mb-8">
+                  Our website is currently under construction. We’re working hard to get it ready. Stay tuned for updates!
+                </p>
+              </div>
+            </div>
+          ) : (
+            <MainLayout>
+              {children}
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                limit={1}
+              />
+            </MainLayout>
+          )}
+          {/* <MainLayout>
             {children}
             <ToastContainer
               position="top-right"
@@ -63,7 +117,7 @@ export default function RootLayout({
               theme="light"
               limit={1}
             />
-          </MainLayout>
+          </MainLayout> */}
           <div id="sidebar-wrapper"></div>
         </body>
       </html>

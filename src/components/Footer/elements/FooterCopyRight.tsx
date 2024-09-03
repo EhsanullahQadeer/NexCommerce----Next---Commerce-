@@ -1,18 +1,22 @@
+"use client";
 import { FC, Fragment } from 'react';
 import Link from 'next/link';
 import { footerCopyrightLinks } from './data';
 import FooterSocialIcons from './SocialIcons';
+import { useSelector } from 'react-redux';
+import { selectSiteSetting } from '@/store/slices/siteSetting/siteSettingSlice';
 
 interface FooterCopyRightProps {
   hideSocialIcons?: boolean;
 }
 
 const FooterCopyRight: FC<FooterCopyRightProps> = ({ hideSocialIcons }) => {
+  const {brand_name} = useSelector(selectSiteSetting)
   return (
     <div className="font-extralight text-sm text-gray-500 flex items-center flex-col-reverse md:flex-row justify-between py-[22px] border-t border-black-300 gap-3">
       <div className="flex items-center flex-col-reverse md:flex-row gap-2">
         <p className="text-center leading-[26.04px]">
-          Copyright © 2019 Molla Store. All Rights Reserved.
+          Copyright © 2019 {brand_name} Store. All Rights Reserved.
         </p>
         <FooterLinks />
       </div>

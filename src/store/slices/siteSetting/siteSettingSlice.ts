@@ -67,6 +67,6 @@ export const {
 } = siteSettingSlice.actions;
 
 // Selectors
-export const selectCart = (state: RootState) => state.siteSettingSlice;
+export const selectSiteSetting = (state: RootState) => state.siteSettingSlice;
 
 export default siteSettingSlice.reducer;

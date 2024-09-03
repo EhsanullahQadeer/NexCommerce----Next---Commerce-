@@ -1,6 +1,7 @@
 // src/slices/siteSettingApi.ts
 import { apiSlice } from "../slices/api/apiSlice";
 import { handleProduct, handleTotalProduct } from "../slices/products/productsSlice";
+import { updateSiteSettings } from "../slices/siteSetting/siteSettingSlice";
 
 export const siteSettingApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -14,6 +15,7 @@ export const siteSettingApi = apiSlice.injectEndpoints({
           const {data} = await queryFulfilled;
 
           console.log("data", data);
+          dispatch(updateSiteSettings(data.data))
           
         } catch (error) {
           console.error('Fetch Filtered Products Error:', error);

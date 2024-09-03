@@ -30,7 +30,7 @@ const Slider: React.FC = () => {
     <BaseSlider className='h-[460px] lg:h-[480px] xl:h-[560px]'>
       {
         sliders.map((el: SlidersState, index) => {
-          return <SwiperSlide key={index} style={{ backgroundImage: `url('https://alertifyhub.com/${el.image}')` }} className={`bg-cover bg-center`}>
+          return <SwiperSlide key={index} style={{ backgroundImage: `url('${el.image}')` }} className={`bg-cover bg-center`}>
             <SlideContent
               title={el.sub_title}
               heading={
@@ -38,40 +38,13 @@ const Slider: React.FC = () => {
                   {el.title}
                 </>
               }
-              headingClass={`!text-${el.titleColor}`}
+              headingClass={`!text-${el.title_color}`}
               btnText={el.button_text}
               btnLink={el.link}
             />
           </SwiperSlide>
         })
       }
-      {/* <SwiperSlide className="bg-[url('/slide/slide-1.jpg')] bg-cover bg-center">
-        <SlideContent
-          title="SEASONAL PICKS"
-          heading={
-            <>
-              Get All
-              <br />
-              The Good Stuff
-            </>
-          }
-          btnText="Discover more"
-        />
-      </SwiperSlide>
-      <SwiperSlide className="bg-[url('/slide/slide-2.jpg')] bg-cover bg-center">
-        <SlideContent
-          title="all at 50% off"
-          heading={
-            <>
-              The Most Beautiful
-              <br />
-              Novelties In Our Shop
-            </>
-          }
-          headingClass="!text-white"
-          btnText="Shop now"
-        />
-      </SwiperSlide> */}
     </BaseSlider>
   );
 };
