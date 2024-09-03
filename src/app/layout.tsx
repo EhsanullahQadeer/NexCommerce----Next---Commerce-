@@ -25,14 +25,23 @@ const poppins = Poppins({
 });
 
 async function fetchSiteSettings() {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
-  const response = await fetch(`${baseUrl}/site-setting`);
-  const { data } = await response.json();
-  return data;
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
+    console.log("check prod test baseUrl", baseUrl);
+    
+    const response = await fetch(`${baseUrl}/site-setting`);
+    console.log("check prod test response", response);
+    const { data } = await response.json();
+    console.log("check prod test data", data);
+    return data;
+  } catch (error) {
+    return {}
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await fetchSiteSettings();
+  try {
+    const data = await fetchSiteSettings();
 
   const metadataBase = data.site_url ? new URL(data.site_url) : undefined;
 
@@ -49,6 +58,9 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: 'en_US',
     },
   };
+  } catch (error) {
+    return {}
+  }
 }
 
 export default async function RootLayout({
@@ -102,22 +114,6 @@ export default async function RootLayout({
               />
             </MainLayout>
           )}
-          {/* <MainLayout>
-            {children}
-            <ToastContainer
-              position="top-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              limit={1}
-            />
-          </MainLayout> */}
           <div id="sidebar-wrapper"></div>
         </body>
       </html>
