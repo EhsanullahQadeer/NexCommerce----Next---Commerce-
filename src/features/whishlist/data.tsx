@@ -85,6 +85,66 @@ export const tableHeader: ColumnHeaders[] = [
   },
 ];
 
+export const wishlistTableHeader: ColumnHeaders[] = [
+  {
+    key: 'product',
+    title: 'Product',
+    renderCell: (cell) =>
+      cell.product && (
+        <div className="flex items-center justify-center lg:justify-start">
+          <Image
+            src={cell?.product?.image as string}
+            alt="Product image"
+            height={60}
+            width={60}
+          />
+          <Link
+            href="/products"
+            className="ml-7 text-black-75 text-base font-light hover:text-primary"
+          >
+            {cell?.product?.name}
+          </Link>
+        </div>
+      ),
+  },
+  {
+    key: 'price',
+    title: 'Price',
+    renderCell: (cell: any) => (
+      <div className="w-full text-black-75 pt-2 lg:pt-0">
+        ${cell?.product.price?.toFixed(2)}
+      </div>
+    ),
+    class: 'w-[120px]',
+  },
+  {
+    key: 'actions',
+    title: '',
+    renderCell: (cell: any) => {
+      const isDisabled = cell?.status === 'Out of stock';
+      return (
+      <Button
+        variant={isDisabled ? 'disabled' : 'outlined'}
+        className="!w-full !max-w-[220px] justify-center mx-auto"
+      >
+        {!isDisabled && <i className="las la-cart-plus mr-2.5"></i>}
+        {isDisabled ? 'Out of stock' : 'Add to cart'}
+      </Button>
+    )},
+    class: 'w-[200px]'
+  },
+  {
+    key: 'actions',
+    title: '',
+    renderCell: () => (
+      <div className="w-[30px] h-[30px] absolute top-4 right-4 lg:right-[unset] lg:top-[unset] text-right ml-auto lg:relative">
+        <i className="las la-times text-[17px] text-black-600 hover:text-black-75 cursor-pointer"></i>
+      </div>
+    ),
+    class: 'w-[38px]'
+  },
+];
+
 export const data = [
   {
     url: '/products/product-1.jpg',

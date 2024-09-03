@@ -4,8 +4,6 @@ import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
-import Input from "@/components/Input";
-import TextArea from "@/components/Input/Textarea";
 import { FC, useState } from "react";
 
 const links = [

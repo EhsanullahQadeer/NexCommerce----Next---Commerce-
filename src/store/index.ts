@@ -5,6 +5,7 @@ import blogs from "./slices/blogs/blogsSlice";
 import products from "./slices/products/productsSlice";
 import productCategories from "./slices/categories/categoriesSlice";
 import siteSettingSlice from "./slices/siteSetting/siteSettingSlice";
+import wishlist from "./slices/wishlist/wishlistSlice";
 import slidersSlice from "./slices/sliders/slidersSlice"
 import cart from "./slices/cart/cartSlice";
 import auth from "./slices/auth/authSlice";
@@ -19,6 +20,7 @@ const store = configureStore({
     products,
     cart,
     slidersSlice,
+    wishlist,
     productCategories,
     siteSettingSlice
   },

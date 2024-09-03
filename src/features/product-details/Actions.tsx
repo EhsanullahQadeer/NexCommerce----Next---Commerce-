@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { RootState } from '@/store';
+import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 
 interface ActionsProps {
   isModal?: boolean;
@@ -17,6 +18,8 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
   const { quickViewProduct, currentVarient } = useSelector(selectProducts);
   const { product_variants } = quickViewProduct || {}
   const [addToCart] = useAddToCartMutation()
+  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const handleFetchCart = async () => {
     try {
@@ -40,6 +43,29 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
       console.error("Failed to fetch products:", error);
     }
   };
+
+  const handleFetchWishlist = async () => {
+    try {
+      if (user?.id) {
+        await wishlistDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      // console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToWishListHandler = async (id: number) => {
+    try {
+      const addToWishList = { "user_id": user.id, product_id: id }
+
+      await addRemoveToWishlist(addToWishList).unwrap();
+      handleFetchWishlist()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -53,7 +79,9 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
           isModal ? 'mt-[50px] mb-10' : 'gap-4'
         )}
       >
-        <LinkButton url="#" label="Add to Whishlist" icon="lar la-heart" />
+        {
+          !!quickViewProduct?.id && <button className='m-auto' onClick={() => addToWishListHandler(quickViewProduct?.id)}><LinkButton url="#" label="Add to Whishlist" icon="lar la-heart" /></button>
+        }
         {/* <LinkButton
           url="#"
           label="Add to Compare"

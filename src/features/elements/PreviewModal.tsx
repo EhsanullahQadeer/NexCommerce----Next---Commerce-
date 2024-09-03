@@ -16,6 +16,8 @@ const PreviewModal: FC = () => {
   const { isPreviewModalOpen, quickViewProduct, isGalleryFullView } = useSelector(selectProducts);
   const { images, image } = quickViewProduct || {}
 
+  const imagesLinks = images?.map((el) => el.image_path) || []
+
   const handleOnClosePreviewModal = () => {
     if (!isGalleryFullView) {
       dispatch(addQuickViewProduct(null));
@@ -34,7 +36,7 @@ const PreviewModal: FC = () => {
       >
         <div>
           <GallerySlider
-            images={images ? [image || "", ...images] : [image || ""]}
+            images={imagesLinks?.length ? [image || "", ...imagesLinks] : [image || ""]}
             onFullScreen={() => dispatch(toggleGalleryModal(true))}
           />
         </div>

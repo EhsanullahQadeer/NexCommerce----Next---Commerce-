@@ -15,6 +15,7 @@ import { ColorVariant, Product, ProductVariant } from '@/types/product';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -24,6 +25,8 @@ export interface ProductCardProps extends Product {
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [addToCart] = useAddToCartMutation()
+  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
 
   const {
@@ -73,6 +76,29 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
       console.error("Failed to fetch products:", error);
     }
   };
+
+  const handleFetchWishlist = async () => {
+    try {
+      if (user?.id) {
+        await wishlistDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      // console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToWishListHandler = async (id: number) => {
+    try {
+      const addToWishList = { "user_id": user.id, product_id: id }
+
+      await addRemoveToWishlist(addToWishList).unwrap();
+      handleFetchWishlist()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
@@ -87,7 +113,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         </Link>
         {/* {name && <TagLabel label={name}/>} */}
 
-        <button className={productVerticalActionStyles} onClick={() => console.log("Add to wishlist")}>
+        <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
             text="Add Wishlist"

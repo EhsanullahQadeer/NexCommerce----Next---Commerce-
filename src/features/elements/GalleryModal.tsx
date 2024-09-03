@@ -19,6 +19,7 @@ const GalleryModal: FC = () => {
   const { isGalleryFullView, quickViewProduct } = useSelector(selectProducts);
   const {images, image} = quickViewProduct || {}
   const dispatch = useDispatch();
+  const imagesLinks = images?.map((el) => el.image_path) || []
   return (
     <Modal
       isOpen={isGalleryFullView}
@@ -27,7 +28,7 @@ const GalleryModal: FC = () => {
       id="gallery-full-view"
     >
       <div className="max-w-[654px] mx-auto px-5 mb-10">
-        <GallerySlider direction="horizontal" showTotalSlides images={images ? [image || "", ...images] : [image || ""]} />
+        <GallerySlider direction="horizontal" showTotalSlides images={imagesLinks?.length ? [image || "", ...imagesLinks] : [image || ""]} />
       </div>
     </Modal>
   );
