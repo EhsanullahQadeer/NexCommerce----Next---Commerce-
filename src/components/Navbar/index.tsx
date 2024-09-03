@@ -15,11 +15,13 @@ import SearchBar from '../SearchBar';
 import CartDropdown from '../CartDropdown/CartDropdown';
 import { RootState } from '@/store';
 import { selectSiteSetting } from '@/store/slices/siteSetting/siteSettingSlice';
+import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 
 const NavMobileView = lazy(() => import('./elements/MobileView'));
 
 const Navbar = () => {
   const { brand_name, logo_url } = useSelector(selectSiteSetting)
+  const { wishListData } = useSelector(selectWishlist)
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [isAffix, setIsAffix] = useState(false);
   const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
@@ -113,7 +115,7 @@ const Navbar = () => {
               <NotificationIcon
                 icon="lar la-heart"
                 iconClass="!text-[28px]"
-                count={3}
+                count={wishListData?.length || 0}
               />
             </Link>
             <CartDropdown />

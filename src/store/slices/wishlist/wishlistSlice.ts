@@ -38,6 +38,6 @@ export const {
   wishlistItemsSet
 } = wishlistSlice.actions;
 
-export const selectWishlist = (state: RootState) => state.cart;
+export const selectWishlist = (state: RootState) => state.wishlist;
 
 export default wishlistSlice.reducer;

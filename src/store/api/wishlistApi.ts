@@ -34,11 +34,8 @@ export const wishlistApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
 
-          console.log("result.data", result.data);
-          
-
-          if (result.data) {
-            dispatch(wishlistItemsSet(result.data))
+          if (result?.data?.data) {
+            dispatch(wishlistItemsSet(result.data.data))
           }
         } catch (error) {
           // console.error('Add to Cart Error:', error);

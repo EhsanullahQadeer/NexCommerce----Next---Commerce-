@@ -15,6 +15,7 @@ import { ColorVariant, Product, ProductVariant } from '@/types/product';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -24,6 +25,8 @@ export interface ProductCardProps extends Product {
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [addToCart] = useAddToCartMutation()
+  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
 
   const {
@@ -74,12 +77,22 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     }
   };
 
-  const addToWishListHandler = async () => {
+  const handleFetchWishlist = async () => {
     try {
-      // const addToCartDetails = { "user_id": user.id, products: [{ "product_id": productDetails.id, "variant_id": productDetails.product_variants[0]?.id, "price": productDetails.product_variants[0]?.price, "quantity": "1" }] }
+      if (user?.id) {
+        await wishlistDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      // console.error("Failed to fetch products:", error);
+    }
+  };
 
-      // await addToCart(addToCartDetails).unwrap();
-      // handleFetchCart()
+  const addToWishListHandler = async (id: number) => {
+    try {
+      const addToWishList = { "user_id": user.id, product_id: id }
+
+      await addRemoveToWishlist(addToWishList).unwrap();
+      handleFetchWishlist()
 
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -100,7 +113,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         </Link>
         {/* {name && <TagLabel label={name}/>} */}
 
-        <button className={productVerticalActionStyles} onClick={() => console.log("Add to wishlist")}>
+        <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
             text="Add Wishlist"

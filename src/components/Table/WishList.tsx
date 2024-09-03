@@ -1,6 +1,7 @@
 'use client';
 import { cn } from '@/lib/utils';
 import { selectCart } from '@/store/slices/cart/cartSlice';
+import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 import { FC, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -21,8 +22,11 @@ interface TableProps {
   className?: string;
 }
 
-const Table: FC<TableProps> = ({ headers, className }) => {
-  const {cartDetails} = useSelector(selectCart)
+const WishList: FC<TableProps> = ({ headers, className }) => {
+  const {wishListData} = useSelector(selectWishlist)
+
+  console.log("wishListData::", wishListData);
+  
 
   return (
     <table
@@ -50,7 +54,7 @@ const Table: FC<TableProps> = ({ headers, className }) => {
         </tr>
       </thead>
       <tbody>
-        {cartDetails?.map((item, index) => (
+        {wishListData?.map((item, index) => (
           <tr
             key={index}
             className="relative block lg:table-row border-b border-black-300 py-[42px] lg:py-0"
@@ -72,4 +76,4 @@ const Table: FC<TableProps> = ({ headers, className }) => {
   );
 };
 
-export default Table;
+export default WishList;
