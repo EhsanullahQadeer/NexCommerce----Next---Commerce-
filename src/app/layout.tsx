@@ -77,10 +77,10 @@ export default async function RootLayout({
                   <img src={logo_url} alt="Coming Soon" className="mx-auto w-1/2 md:w-1/3" />
                 </div>
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                  We're Coming Soon
+                  We&apos;re Coming Soon
                 </h1>
                 <p className="text-lg text-gray-600 mb-8">
-                  Our website is currently under construction. We’re working hard to get it ready. Stay tuned for updates!
+                  Our website is currently under construction. We&apos;re working hard to get it ready. Stay tuned for updates!
                 </p>
               </div>
             </div>
