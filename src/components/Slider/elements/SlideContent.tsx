@@ -1,12 +1,14 @@
 import { FC, ReactNode } from 'react';
 import Button from '../../Button';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 interface SlideContentProps {
   title: string;
   heading: ReactNode;
   headingClass?: string;
   btnText: string;
+  btnLink: string;
 }
 
 const SlideContent: FC<SlideContentProps> = ({
@@ -14,6 +16,7 @@ const SlideContent: FC<SlideContentProps> = ({
   heading,
   headingClass,
   btnText,
+  btnLink
 }) => {
   return (
     <div className="flex items-center h-full max-w-container mx-auto px-2.5">
@@ -29,9 +32,11 @@ const SlideContent: FC<SlideContentProps> = ({
         >
           {heading}
         </h1>
-        <Button className="uppercase leading-[1.5] !py-[11.5px]">
-          {btnText} <i className="las la-arrow-right ml-2.5"></i>
-        </Button>
+        <Link href={btnLink}>
+          <Button className="uppercase leading-[1.5] !py-[11.5px]">
+            {btnText} <i className="las la-arrow-right ml-2.5"></i>
+          </Button>
+        </Link>
       </div>
     </div>
   );

@@ -14,10 +14,12 @@ import { routes } from './routes';
 import SearchBar from '../SearchBar';
 import CartDropdown from '../CartDropdown/CartDropdown';
 import { RootState } from '@/store';
+import { selectSiteSetting } from '@/store/slices/siteSetting/siteSettingSlice';
 
 const NavMobileView = lazy(() => import('./elements/MobileView'));
 
 const Navbar = () => {
+  const { brand_name, logo_url } = useSelector(selectSiteSetting)
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [isAffix, setIsAffix] = useState(false);
   const [isSearchBarOpen, setIsSearchBarOpen] = useState(false);
@@ -69,10 +71,13 @@ const Navbar = () => {
             >
               <i className="las la-bars text-[25.5px]"></i>
             </div>
-            <Link href="/" aria-label='Logo'>
-              <span className="sr-only">Molla</span>
-              <Image alt="" src="/logo.png" height={24} width={105} />
-            </Link>
+            {
+              !!logo_url &&
+              <Link href="/" aria-label='Logo'>
+                <span className="sr-only">{brand_name}</span>
+                <Image alt="" src={logo_url} height={24} width={105} />
+              </Link>
+            }
           </div>
 
           <nav className="hidden lg:flex items-center gap-2">

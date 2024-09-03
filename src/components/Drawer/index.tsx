@@ -38,7 +38,6 @@ const Drawer: FC<DrawerProps> = ({
     } else {
       setIsAnimating(false);
 
-      // Delay the close action to allow the animation to play
       const timer = setTimeout(() => setIsVisible(false), 600);
       return () => clearTimeout(timer);
     }

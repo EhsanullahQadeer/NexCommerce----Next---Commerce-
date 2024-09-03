@@ -4,6 +4,8 @@ import rootReducer from "./slice";
 import blogs from "./slices/blogs/blogsSlice";
 import products from "./slices/products/productsSlice";
 import productCategories from "./slices/categories/categoriesSlice";
+import siteSettingSlice from "./slices/siteSetting/siteSettingSlice";
+import slidersSlice from "./slices/sliders/slidersSlice"
 import cart from "./slices/cart/cartSlice";
 import auth from "./slices/auth/authSlice";
 import { apiSlice } from "./slices/api/apiSlice";
@@ -16,7 +18,9 @@ const store = configureStore({
     blogs,
     products,
     cart,
+    slidersSlice,
     productCategories,
+    siteSettingSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),

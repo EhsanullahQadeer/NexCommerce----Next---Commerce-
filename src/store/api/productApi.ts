@@ -1,6 +1,6 @@
 // src/slices/productsApi.ts
 import { apiSlice } from "../slices/api/apiSlice";
-import { handleProduct, handleProductCategories, handleTotalProduct } from "../slices/products/productsSlice";
+import { handleMaxPriceProduct, handleProduct, handleProductCategories, handleTotalProduct } from "../slices/products/productsSlice";
 
 export const productsApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,6 +22,7 @@ export const productsApi = apiSlice.injectEndpoints({
           }
           
           dispatch(handleTotalProduct(data?.data?.total || 0))
+          dispatch(handleMaxPriceProduct(data?.data?.max_price || 10000))
         } catch (error) {
           console.error('Fetch Filtered Products Error:', error);
         }

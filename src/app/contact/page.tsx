@@ -1,25 +1,13 @@
+"use client";
 import Breadcrumb from "@/components/Breadcrumb";
 import Button from "@/components/Button";
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
 import Input from "@/components/Input";
 import TextArea from "@/components/Input/Textarea";
+import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { FC } from "react";
-
-const ContactInfo = [
-  {
-    icon: "las la-map-marker-alt",
-    text: "70 Washington Square South New York, NY 10012, United States",
-  },
-  {
-    icon: "las la-phone",
-    text: "+92 423 567",
-  },
-  {
-    icon: "las la-envelope",
-    text: "info@Molla.com",
-  },
-];
+import { useSelector } from "react-redux";
 
 const TimeInfo = [
   {
@@ -64,6 +52,7 @@ const ListItem = ({
 };
 
 const Contact: FC = () => {
+  const {address, state, city, country, postal_code, phone_number, email} = useSelector(selectSiteSetting)
   const links = [
     {
       url: "/",
@@ -74,6 +63,22 @@ const Contact: FC = () => {
       name: "Contact",
     },
   ];
+
+  const ContactInfo = [
+    {
+      icon: "las la-map-marker-alt",
+      text: `${address}, ${state}, ${city}, ${country}, ${postal_code}`
+    },
+    {
+      icon: "las la-phone",
+      text: phone_number
+    },
+    {
+      icon: "las la-envelope",
+      text: email
+    },
+  ];
+
   return (
     <div>
       <Container className="w-full">

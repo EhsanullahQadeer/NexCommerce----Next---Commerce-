@@ -36,12 +36,10 @@ const NavMobileView: FC<NavMobileViewProps> = ({
   const dispatch = useDispatch();
   const isSidebarToggled = useSelector(selectSidebarToggle);
 
-  // Handle closing of sidebar
   const handleCloseSidebar = useCallback(() => {
     dispatch(hideSidebarOutSideClick());
   }, [dispatch]);
 
-  // Handle toggling of the sidebar with animations
   useEffect(() => {
     if (isSidebarToggled) {
       setIsVisible(true);

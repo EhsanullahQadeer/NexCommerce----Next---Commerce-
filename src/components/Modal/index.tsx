@@ -38,12 +38,11 @@ const Modal: FC<ModalProps> = ({
     document.body.style.overflow = isOpen ? 'hidden' : '';
     if (isOpen) {
       setIsVisible(true);
-      const timer = setTimeout(() => setIsAnimating(true), 100); // Small delay to trigger animation
+      const timer = setTimeout(() => setIsAnimating(true), 100);
       return () => clearTimeout(timer);
     } else {
       setIsAnimating(false);
 
-      // Delay the close action to allow the animation to play
       const timer = setTimeout(() => setIsVisible(false), 600);
       return () => clearTimeout(timer);
     }
