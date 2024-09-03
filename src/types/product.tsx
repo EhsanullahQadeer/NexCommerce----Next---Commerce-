@@ -5,6 +5,14 @@ export enum ProductLabel {
   TOP = 'Top',
 }
 
+export interface ProductImage {
+  id: number
+  product_id: number
+  image_path: string
+  created_at: any
+  updated_at: any
+}
+
 export interface Product {
   id: number
   name: string
@@ -18,7 +26,7 @@ export interface Product {
   created_at: string
   updated_at: string
   currency_id: number
-  images: string[]
+  images: ProductImage[]
   product_tags: ProductTag[]
   product_categories: Category[]
   product_variants: ProductVariant[]
