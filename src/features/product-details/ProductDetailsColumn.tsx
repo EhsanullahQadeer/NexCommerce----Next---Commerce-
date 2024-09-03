@@ -9,6 +9,9 @@ import ColorVariants from '@/components/ColorVariants';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCurrentVarient, selectProducts } from '@/store/slices/products/productsSlice';
 import SizeVariants from '@/components/SizeVariants';
+import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
+import { RootState } from '@/store';
+import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 
 interface ProductDetailsColumnProps {
   isModal?: boolean;
@@ -16,8 +19,22 @@ interface ProductDetailsColumnProps {
 
 const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const dispatch = useDispatch()
+  const { user } = useSelector((state: RootState) => state.auth);
   const { quickViewProduct, currentVarient } = useSelector(selectProducts);
+  const { cartDetails } = useSelector(selectCart);
   const { product_variants } = quickViewProduct || {}
+  const [addToCart] = useAddToCartMutation()
+  const [cartDetailsGet] = useCartDetailsGetMutation()
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
     let colorsvarients: ColorVariant[] = []
@@ -139,6 +156,42 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
     }
   }
 
+  const checkVarientInCart = (): CartItem | null => {
+    if (cartDetails.length) {
+      let hasInCart = cartDetails.find(el => {
+        return el.product_id === currentVarient?.product_id && el.variant_id === currentVarient?.id
+      })
+      return hasInCart || null
+    }
+    return null
+  }
+
+  const inCartVarient = checkVarientInCart()
+
+  console.log("varientFromCart", inCartVarient);
+
+  const handleCartItemChanges = async (type: string) => {
+    try {
+      let newQuantity = 0
+      if(type == "increment"){
+        newQuantity = 1
+      }
+      if(type == "decrement"){
+        newQuantity = inCartVarient?.quantity == 1 ? 0 : -1
+      }
+      
+
+      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": newQuantity }] }
+
+      await addToCart(addToCartDetails).unwrap();
+      handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  }
+
+
 
   return (
     <div>
@@ -165,7 +218,7 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
 
       <div className="flex items-center">
         <Label text="Qty" />
-        <NumberInput />
+        <NumberInput value={inCartVarient?.quantity || 0} onChange={handleCartItemChanges} />
       </div>
       <Actions isModal={isModal} />
       <CategoryWithIcons isModal={isModal} />

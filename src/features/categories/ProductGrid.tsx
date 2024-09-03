@@ -45,6 +45,9 @@ const ProductGrid = () => {
     }
   };
 
+  console.log("products", products);
+  
+
   return (
     <>
       <Container className="mt-5">

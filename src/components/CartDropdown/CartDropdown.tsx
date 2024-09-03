@@ -45,7 +45,9 @@ const CartDropdown = () => {
         className={cn(
           dropdownBaseStyles,
           dropdownHoverStyle,
-          isActive && activeStyles
+          isActive && activeStyles,
+          "overflow-y-auto",
+          "h-[70vh]"
         )}
         style={{ transition: 'all .25s' }}
         onClick={() => setisActive(false)}

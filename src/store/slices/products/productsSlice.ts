@@ -87,7 +87,12 @@ export const productsSlice = createSlice({
     },
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
       state.max_price = action.payload
-      state.priceRangeFilter = action.payload.toString()
+      if(state.max_price !== action.payload){
+        state.priceRangeFilter = action.payload.toString()
+      }
+    },
+    handlePriceRange: (state, action: PayloadAction<string>) => {
+      state.priceRangeFilter = action.payload
     },
     handleProductCategories: (state, action: PayloadAction<ProductCategory[]>) => {
       state.productCategories = action.payload;
@@ -102,6 +107,7 @@ export const productsSlice = createSlice({
       state.currentPage = 1
     },
     selectCategoryFilter: (state, action: PayloadAction<number>) => {
+      
       state.products = []
       state.categoriesFilter = [action.payload]
       state.currentPage = 1
@@ -152,7 +158,7 @@ export const productsSlice = createSlice({
   },
 });
 
-export const { handleProduct, handleTotalProduct, handleMaxPriceProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
+export const { handleProduct, handleTotalProduct, handlePriceRange, handleMaxPriceProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
   togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient } =
   productsSlice.actions;

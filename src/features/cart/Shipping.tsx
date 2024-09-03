@@ -1,24 +1,36 @@
 'use client';
 
 import Radio from '@/components/Radio';
+import { selectCart } from '@/store/slices/cart/cartSlice';
+import { selectSiteSetting } from '@/store/slices/siteSetting/siteSettingSlice';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const Shipping = () => {
+  const { totalAmount } = useSelector(selectCart)
+  const { shipping_amount, free_shipping_threshold } = useSelector(selectSiteSetting)
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   return (
     <form>
       <div className="flex justify-between items-center py-[5px]">
         <Radio
-          label="Free Shipping"
+          label={
+            totalAmount >= parseInt(free_shipping_threshold) ? "Free Shipping" : "Shipping Charge"
+          }
           className="text-black-75 font-light text-sm"
           name="shipping"
           value="shipping"
           checked={selectedItem === 'shipping'}
           onChange={(e: any) => setSelectedItem(e.target.value)}
         />
-        <span className="text-black-75 font-light text-sm">$0.00</span>
+        <span className="text-black-75 font-light text-sm">
+          {
+            totalAmount >= parseInt(free_shipping_threshold) ? "$0.00" : `$${shipping_amount}`
+          }
+          
+        </span>
       </div>
-      <div className="flex justify-between items-center py-[5px]">
+      {/* <div className="flex justify-between items-center py-[5px]">
         <Radio
           label="Standard:"
           className="text-black-75 font-light text-sm"
@@ -39,7 +51,7 @@ const Shipping = () => {
           onChange={(e: any) => setSelectedItem(e.target.value)}
         />
         <span className="text-black-75 font-light text-sm">$20.00</span>
-      </div>
+      </div> */}
     </form>
   );
 };
