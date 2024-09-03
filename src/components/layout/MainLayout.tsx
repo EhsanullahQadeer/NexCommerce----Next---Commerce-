@@ -12,6 +12,7 @@ import TopBar from "../TopBar";
 import Notification from "../Notification";
 import { RootState } from "@/store";
 import { useCartDetailsGetMutation } from "@/store/api/cartApi";
+import { useFetchSiteSettingsMutation } from "@/store/api/siteSettingApi";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -25,6 +26,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const { categoriesFilter, sortByFilter, colorFilter, priceRangeFilter, limitFilter, skip } = useSelector(selectProducts);
 
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
+  const [fetchSiteSettings] = useFetchSiteSettingsMutation()
   const [fetchCategoriesList] = useFetchCategoriesListMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation()
 
@@ -66,8 +68,18 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
+  const handleFetchSiteSetting = async () => {
+    try {
+      await fetchSiteSettings({}).unwrap();
+    } catch (error) {
+    }
+  };
+
   useEffect(() => {
     handleFetchCategories()
+    setTimeout(() => {
+      handleFetchSiteSetting()
+    }, 0)
   }, [])
 
   useEffect(() => {
