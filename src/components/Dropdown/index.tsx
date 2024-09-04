@@ -75,7 +75,7 @@ const Dropdown = ({
           style
         )}
       >
-        <span>{selectedItem?.value || title}</span>
+        <span>{selectedItem?.name || title}</span>
         <i className="las la-angle-down -mt-[2px]"></i>
       </button>
       {/* Open */}

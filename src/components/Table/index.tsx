@@ -46,8 +46,6 @@ const Table: FC<TableProps> = ({ headers, className }) => {
 
   const handleCartItemChanges = async (type: string, item: CartItem) => {
     try {
-      console.log("item", item);
-
       let newQuantity = 0
 
       if (type == "decrement") {

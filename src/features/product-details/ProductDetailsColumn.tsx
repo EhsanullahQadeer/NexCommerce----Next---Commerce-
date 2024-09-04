@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import NumberInput from '@/components/NumberInput/NumberInput';
 import Description from '@/components/ProductDetails/Description';
 import { Label } from './Items';
@@ -7,7 +7,7 @@ import Actions from './Actions';
 import { ColorVariant, ProductVariant, SizeVariant } from '@/types/product';
 import ColorVariants from '@/components/ColorVariants';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeCurrentVarient, selectProducts } from '@/store/slices/products/productsSlice';
+import { changeCurrentVarient, changeCurrentVarientQuantity, selectProducts } from '@/store/slices/products/productsSlice';
 import SizeVariants from '@/components/SizeVariants';
 import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
 import { RootState } from '@/store';
@@ -20,12 +20,20 @@ interface ProductDetailsColumnProps {
 const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const dispatch = useDispatch()
   const { user } = useSelector((state: RootState) => state.auth);
-  const { quickViewProduct, currentVarient } = useSelector(selectProducts);
+  const { quickViewProduct, currentVarient, currentVarientQuantity } = useSelector(selectProducts);
   const { cartDetails } = useSelector(selectCart);
   const { product_variants } = quickViewProduct || {}
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [deletefromCart] = useDeletefromCartMutation()
+
+  useEffect(() => {
+    const inCartVarientData = checkVarientInCart()
+    if(inCartVarientData?.quantity){
+      dispatch(changeCurrentVarientQuantity(inCartVarientData?.quantity))
+    }
+  }, [currentVarient])
+
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
@@ -169,33 +177,27 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
 
   const inCartVarient = checkVarientInCart()
 
-  console.log("varientFromCart", inCartVarient);
-
   const handleCartItemChanges = async (type: string) => {
     try {
-      let newQuantity = 0
-      if (type == "decrement" && inCartVarient?.quantity == 0) {
-        return 
-      }
-      if (type == "decrement") {
-        newQuantity = inCartVarient?.quantity == 1 ? 0 : -1
+      if (type == "decrement" && currentVarientQuantity !== 0) {
+        dispatch(changeCurrentVarientQuantity(currentVarientQuantity - 1))
       }
       if (type == "increment") {
-        newQuantity = 1
+        dispatch(changeCurrentVarientQuantity(currentVarientQuantity + 1))
       }
       
 
-      if (newQuantity == 0) {
-        await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
-      } else {
-        const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": newQuantity }] }
+      // if (newQuantity == 0) {
+      //   await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
+      // } else {
+      //   const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": newQuantity }] }
 
-        await addToCart(addToCartDetails).unwrap();
-      }
+      //   await addToCart(addToCartDetails).unwrap();
+      // }
 
 
 
-      handleFetchCart()
+      // handleFetchCart()
 
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -229,7 +231,7 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
 
       <div className="flex items-center">
         <Label text="Qty" />
-        <NumberInput value={inCartVarient?.quantity || 0} onChange={handleCartItemChanges} />
+        <NumberInput value={currentVarientQuantity || 0} onChange={handleCartItemChanges} />
       </div>
       <Actions isModal={isModal} />
       <CategoryWithIcons isModal={isModal} />

@@ -21,8 +21,26 @@ export const siteSettingApi = apiSlice.injectEndpoints({
           console.error('Fetch Filtered Products Error:', error);
         }
       },
+    }),
+    fetchupdateSiteSettings: builder.mutation({
+      query: ({ key, value }) => ({
+        url: 'update-site-setting',
+        method: 'POST',
+        body: {
+          key, value
+        },
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const {data} = await queryFulfilled;
+
+        } catch (error) {
+          console.error('Fetch Update Products Error:', error);
+        }
+      },
     })
   }),
+  
 });
 
-export const { useFetchSiteSettingsMutation } = siteSettingApi;
+export const { useFetchSiteSettingsMutation,useFetchupdateSiteSettingsMutation } = siteSettingApi;

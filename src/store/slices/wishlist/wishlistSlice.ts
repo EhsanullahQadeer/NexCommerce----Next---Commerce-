@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
-import { Product } from '@/types/product';
+import { Product, ProductVariant } from '@/types/product';
 
 export interface WishlistItem {
   id: number
   user_id: number
   product_id: number
   product_variant_id: number
+  product_variant: ProductVariant
   created_at: string
   updated_at: string
   product: Product | null
