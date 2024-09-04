@@ -36,8 +36,6 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
 
-  console.log("wishListData::", wishListData);
-
   const handleFetchWishlist = async () => {
     try {
       if (user?.id) {
@@ -167,11 +165,12 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
             <td className='px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell'>
               <div className='flex justify-center w-full lg:justify-start pt-2 lg:pt-0'>
                 <Button
-                  variant={'outlined'}
+                  variant={item.product_variant.stock == 0 ? 'disabled' : 'outlined'}
                   className="!w-full !max-w-[220px] justify-center mx-auto"
                   onClick={() => addToCartHandler(item)}
                 >
-                  Add to cart
+                  {item.product_variant.stock == 0 && <i className="las la-cart-plus mr-2.5"></i>}
+                  {item.product_variant.stock == 0 ? 'Out of stock' :  "Add to cart"}
                 </Button>
               </div>
             </td>

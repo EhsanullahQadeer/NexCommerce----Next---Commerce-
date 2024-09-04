@@ -41,6 +41,7 @@ export interface ProductsState {
   sizeFilter: string;
   quickViewProduct: Product | null;
   currentVarient: ProductVariant | null
+  currentVarientQuantity: number
 }
 
 
@@ -66,7 +67,8 @@ const initialState: ProductsState = {
   searchFilter: "",
   sizeFilter: "",
   quickViewProduct: null,
-  currentVarient: null
+  currentVarient: null,
+  currentVarientQuantity: 0
 };
 
 export const productsSlice = createSlice({
@@ -87,7 +89,7 @@ export const productsSlice = createSlice({
     },
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
       state.max_price = action.payload
-      if(state.max_price !== action.payload){
+      if (state.max_price !== action.payload) {
         state.priceRangeFilter = action.payload.toString()
       }
     },
@@ -107,7 +109,7 @@ export const productsSlice = createSlice({
       state.currentPage = 1
     },
     selectCategoryFilter: (state, action: PayloadAction<number>) => {
-      
+
       state.products = []
       state.categoriesFilter = [action.payload]
       state.currentPage = 1
@@ -154,12 +156,15 @@ export const productsSlice = createSlice({
     changeCurrentVarient: (state, action: PayloadAction<ProductVariant>) => {
       state.currentVarient = action.payload
     },
+    changeCurrentVarientQuantity: (state, action: PayloadAction<number>) => {
+      state.currentVarientQuantity = action.payload
+    },
   },
 });
 
 export const { handleProduct, handleTotalProduct, handlePriceRange, handleMaxPriceProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
   handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
-  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient } =
+  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient, changeCurrentVarientQuantity } =
   productsSlice.actions;
 
 // selectors can use the imported `RootState`

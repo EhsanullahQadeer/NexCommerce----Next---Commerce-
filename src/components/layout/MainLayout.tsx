@@ -14,6 +14,9 @@ import { RootState } from "@/store";
 import { useCartDetailsGetMutation } from "@/store/api/cartApi";
 import { useFetchSiteSettingsMutation } from "@/store/api/siteSettingApi";
 import { useWishlistDetailsGetMutation } from "@/store/api/wishlistApi";
+import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
+import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
+
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -31,6 +34,9 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [fetchCategoriesList] = useFetchCategoriesListMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
+  const [currencyListGet] = useFetchCurrencyListMutation()
+  const [languageListGet] = useFetchLanguageListMutation()
+
 
   const handleFetchProductsWithFilter = async () => {
     try {
@@ -60,6 +66,21 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
+  const handleFetchCurrencyList = async () => {
+    try {
+      await currencyListGet({}).unwrap();
+    } catch (error) {
+      console.error("Failed to Currency List:", error);
+    }
+  };
+
+  const handleFetchLanguageList = async () => {
+    try {
+      await languageListGet({}).unwrap();
+    } catch (error) {
+      console.error("Failed to Language List:", error);
+    }
+  };
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
@@ -92,6 +113,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     setTimeout(() => {
       handleFetchSiteSetting()
     }, 0)
+
+    handleFetchCurrencyList()
+    handleFetchLanguageList()
+
   }, [])
 
   useEffect(() => {

@@ -12,9 +12,6 @@ const CategoryFilterToggle = () => {
   const { products, totalProducts, sortByFilter } = useSelector(selectProducts);
   const dispatch = useDispatch();
 
-  // console.log("productSortCategories", productSortCategories);
-  
-
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
       <ToggleFilters

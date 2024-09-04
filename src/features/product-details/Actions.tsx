@@ -4,11 +4,12 @@ import LinkButton from './LinkButton';
 import { FC } from 'react';
 import { cn } from '@/lib/utils';
 import { useSelector } from 'react-redux';
-import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { useAddToCartMutation, useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
+import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
 
 interface ActionsProps {
   isModal?: boolean;
@@ -16,13 +17,15 @@ interface ActionsProps {
 
 const Actions: FC<ActionsProps> = ({ isModal }) => {
   const { user } = useSelector((state: RootState) => state.auth);
-  const { quickViewProduct, currentVarient } = useSelector(selectProducts);
+  const { quickViewProduct, currentVarient, currentVarientQuantity } = useSelector(selectProducts);
   const { product_variants } = quickViewProduct || {}
+  const { cartDetails } = useSelector(selectCart);
   const { wishListData } = useSelector(selectWishlist)
   const [addToCart] = useAddToCartMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
+  const [deletefromCart] = useDeletefromCartMutation()
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
@@ -34,13 +37,32 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
     }
   };
 
+  const checkVarientInCart = (): CartItem | null => {
+    if (cartDetails.length) {
+      let hasInCart = cartDetails.find(el => {
+        return el.product_id === currentVarient?.product_id && el.variant_id === currentVarient?.id
+      })
+      return hasInCart || null
+    }
+    return null
+  }
+
   const addToCartHandler = async () => {
     try {
-      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": "1" }] }
+      if (currentVarientQuantity == 0) {
+        await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
+        handleFetchCart()
+      } else {
+        const inCartVarientData = checkVarientInCart()
 
-      await addToCart(addToCartDetails).unwrap();
-      handleFetchCart()
-
+        if(inCartVarientData?.quantity){
+          let addQuantity = currentVarientQuantity - inCartVarientData?.quantity
+          const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": addQuantity.toString() }] }
+  
+          await addToCart(addToCartDetails).unwrap();
+          handleFetchCart()
+        }
+      }
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }

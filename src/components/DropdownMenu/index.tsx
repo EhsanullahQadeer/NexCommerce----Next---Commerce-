@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import useOutsideClick from '@/hooks/useOutSideClick';
 import Link from 'next/link';
+import { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 interface DropdownMenuItem {
   name: string;
@@ -27,6 +29,7 @@ const DropdownMenu = ({
   style,
 }: DropdownMenuProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   useOutsideClick(dropdownRef, () => {
@@ -59,12 +62,17 @@ const DropdownMenu = ({
         <span>{label}</span>
         <i className="las la-angle-down -mt-1"></i>
       </button>
+
       {/* Open */}
       {isOpen && (
         <div aria-label="Dropdown menu" className={dropdownClass}>
           <ul role="menu" aria-orientation="vertical">
-            {items?.map((item, index) => (
-              <li
+            {items?.map((item, index) => {
+              
+              if (item.url == "/auth" && user?.name) {
+                return
+              }
+              return <li
                 key={index}
                 className={cn(
                   'flex items-center cursor-pointer px-4 py-[3px] text-[13px] leading-[25px] font-light hover:text-primary'
@@ -77,7 +85,7 @@ const DropdownMenu = ({
                   {item.name}
                 </Link>
               </li>
-            ))}
+            })}
           </ul>
         </div>
       )}

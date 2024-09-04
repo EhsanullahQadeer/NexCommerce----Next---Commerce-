@@ -7,8 +7,7 @@ export const wishlistApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addRemoveToWishlist: builder.mutation({
       query: ({ user_id, product_id, variant_id }) => ({
-        // url: 'add-remove-favourite-product',
-        url: 'add-remove-favourite-product',
+        url: 'add-favourite-product',
         method: 'POST',
         body: {
           user_id,

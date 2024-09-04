@@ -15,7 +15,7 @@ const Slider: React.FC = () => {
   const getSlidersHandler = async () => {
     try {
       let { data } = await fetchSliders({}).unwrap();
-      console.log("sliders", data);
+
       setSliders(data)
 
     } catch (error) {
