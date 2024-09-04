@@ -14,7 +14,7 @@ const PriceRangeInput: FC = () => {
     <>
       <div>
         <label className="block text-sm text-gray-700 font-extralight mb-[18px]">
-          Price Range: <span>$0 - ${priceRangeFilter}</span>
+          Price Range: <span>$0 - ${max_price}</span>
         </label>
         <input
           type="range"
@@ -28,7 +28,7 @@ const PriceRangeInput: FC = () => {
       </div>
       <div className="flex justify-between text-sm text-black-75">
         <span id="minPrice">$0</span>
-        <span id="maxPrice">${max_price}</span>
+        <span id="maxPrice">${priceRangeFilter}</span>
       </div>
     </>
   );

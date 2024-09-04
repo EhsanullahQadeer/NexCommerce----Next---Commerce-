@@ -6,6 +6,7 @@ export interface WishlistItem {
   id: number
   user_id: number
   product_id: number
+  product_variant_id: number
   created_at: string
   updated_at: string
   product: Product | null
@@ -13,11 +14,6 @@ export interface WishlistItem {
 
 export interface WishlistState {
   wishListData: WishlistItem[]
-}
-
-export interface WishlistUpdate {
-  product_id: number
-  user_id: number
 }
 
 const initialState: WishlistState = {

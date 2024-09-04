@@ -12,6 +12,7 @@ import { ColorVariant, Product, ProductVariant } from '@/types/product';
 import { useSelector } from 'react-redux';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { RootState } from '@/store';
+import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -31,6 +32,8 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
   const { user } = useSelector((state: RootState) => state.auth);
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
+  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const productUrl = `/products/${id}`;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
@@ -38,9 +41,9 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
 
     varients.map((el) => {
       el?.attribute_values?.map((item) => {
-        if(item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour"){
+        if (item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour") {
           const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
-          !checkColor && colorsvarients.push({id: item.id, color: item.value.toLowerCase()})
+          !checkColor && colorsvarients.push({ id: item.id, color: item.value.toLowerCase() })
         }
       })
     })
@@ -61,10 +64,33 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
 
   const addToCartHandler = async () => {
     try {
-      const addToCartDetails = { "user_id": user.id, products: [{"product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1"}] }
+      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }] }
 
       await addToCart(addToCartDetails).unwrap();
       handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+
+  const handleFetchWishlist = async () => {
+    try {
+      if (user?.id) {
+        await wishlistDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      // console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const addToWishListHandler = async (id: number) => {
+    try {
+      const addToWishList = { "user_id": user.id, product_id: id, variant_id: product_variants[0]?.id }
+
+      await addRemoveToWishlist(addToWishList).unwrap();
+      handleFetchWishlist()
 
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -89,12 +115,12 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
         </Link>
         {/* {label && <TagLabel label={label} />} */}
 
-        <Link href="#" className={productVerticalActionStyles}>
+        <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
           <IconWithText
             icon={<i className="lar la-heart"></i>}
             text="Add to whishlist"
           />
-        </Link>
+        </button>
 
         <CardActions onPreview={onPreview} onAddToCart={addToCartHandler} />
       </div>

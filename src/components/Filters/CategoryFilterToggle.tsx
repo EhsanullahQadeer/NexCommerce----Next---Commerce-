@@ -5,11 +5,15 @@ import Select from '../Select';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProductCategories, toggleFilters } from '@/store/slices/categories/categoriesSlice';
 import { selectProducts } from '@/store/slices/products/productsSlice';
+import { productSortCategories } from '@/store/slices/products/fakeProducts';
 
 const CategoryFilterToggle = () => {
   const { isToggleFilters } = useSelector(selectProductCategories);
-  const { products, totalProducts } = useSelector(selectProducts);
+  const { products, totalProducts, sortByFilter } = useSelector(selectProducts);
   const dispatch = useDispatch();
+
+  // console.log("productSortCategories", productSortCategories);
+  
 
   return (
     <div className="relative flex flex-col sm:flex-row sm:items-center justify-between mb-5 gap-3">
@@ -27,7 +31,7 @@ const CategoryFilterToggle = () => {
 
       <div className="flex items-center">
         <label className='text-xs text-black-75 font-light mr-4'>Sort by:</label>
-        <Select
+        {/* <Select
           size='md'
           options={[
             { label: 'Most Popular', value: 'most-popular' },
@@ -35,7 +39,7 @@ const CategoryFilterToggle = () => {
             { label: 'Date', value: 'date' },
           ]}
           value="most-popular"
-        />
+        /> */}
       </div>
     </div>
   );
