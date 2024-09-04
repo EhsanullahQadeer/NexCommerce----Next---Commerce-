@@ -13,23 +13,26 @@ import { useSelector } from 'react-redux';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
+import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
   onPreview?: () => void;
 }
 
-const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
-  id,
-  name,
-  image,
-  price,
-  product_variants,
-  className,
-  onPreview,
-  // heading,
-}) => {
+const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
+  const {
+    id,
+    name,
+    image,
+    price,
+    product_variants,
+    className,
+    onPreview,
+    // heading,
+  } = productDetails
   const { user } = useSelector((state: RootState) => state.auth);
+  const { wishListData } = useSelector(selectWishlist)
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
@@ -97,6 +100,13 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
     }
   };
 
+  const checkInWishlist = (): boolean => {
+
+    return !!wishListData.find(el => {
+      return el.product_id === productDetails.id && el.product_variant_id === productDetails.product_variants[0].id
+    })
+  }
+
   return (
     <div
       className={cn(
@@ -116,10 +126,15 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = ({
         {/* {label && <TagLabel label={label} />} */}
 
         <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
-          <IconWithText
-            icon={<i className="lar la-heart"></i>}
-            text="Add to whishlist"
-          />
+          {
+            !checkInWishlist() ? <IconWithText
+              icon={<i className="lar la-heart"></i>}
+              text="Add Wishlist"
+            /> : <IconWithText
+              icon={<i className="las la-heart"></i>}
+              text="Remove Wishlist"
+            />
+          }
         </button>
 
         <CardActions onPreview={onPreview} onAddToCart={addToCartHandler} />

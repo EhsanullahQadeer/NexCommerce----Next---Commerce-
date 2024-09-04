@@ -8,6 +8,7 @@ import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/car
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
+import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 
 interface ActionsProps {
   isModal?: boolean;
@@ -17,6 +18,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
   const { user } = useSelector((state: RootState) => state.auth);
   const { quickViewProduct, currentVarient } = useSelector(selectProducts);
   const { product_variants } = quickViewProduct || {}
+  const { wishListData } = useSelector(selectWishlist)
   const [addToCart] = useAddToCartMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
@@ -67,6 +69,13 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
     }
   };
 
+  const checkInWishlist = (): boolean => {
+
+    return !!wishListData.find(el => {
+      return el.product_id === quickViewProduct?.id && el.product_variant_id === currentVarient?.id
+    })
+  }
+
   return (
     <div
       className={cn(
@@ -81,7 +90,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
         )}
       >
         {
-          !!quickViewProduct?.id && <button className='m-auto' onClick={() => addToWishListHandler(quickViewProduct?.id)}><LinkButton url="#" label="Add to Whishlist" icon="lar la-heart" /></button>
+          !!quickViewProduct?.id && <button className='m-auto' onClick={() => addToWishListHandler(quickViewProduct?.id)}><LinkButton url="#" label={!checkInWishlist() ? "Add Wishlist" : "Remove Wishlist"} icon={!checkInWishlist() ? "lar la-heart" : "las la-heart"} /></button>
         }
         {/* <LinkButton
           url="#"

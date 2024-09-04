@@ -16,7 +16,10 @@ const Notification = () => {
         <Container className="relative py-[13px]">
           { }
           <h3 className="text-[13px] font-normal tracking-[0.65px] leading-[14.3px] text-white md:text-center">
-            FREE SHIPPING FOR ALL ORDERS OVER ${free_shipping_threshold}
+            {
+              parseInt(free_shipping_threshold) == 0 ? `FREE SHIPPING FOR ALL YOUR PURCHASES` : `FREE SHIPPING FOR ALL ORDERS OVER $${free_shipping_threshold}` 
+            }
+            
           </h3>
           <div className="absolute flex items-center right-2.5 top-0 bottom-0 my-auto">
             <i
