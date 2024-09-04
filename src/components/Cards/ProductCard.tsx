@@ -120,7 +120,6 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
             blurDataURL='/default_image.jpg'
           />
         </Link>
-        {/* {name && <TagLabel label={name}/>} */}
 
         <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
           {
