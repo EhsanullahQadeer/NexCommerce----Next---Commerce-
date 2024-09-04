@@ -11,7 +11,7 @@ import { changeCurrentVarient, selectProducts } from '@/store/slices/products/pr
 import SizeVariants from '@/components/SizeVariants';
 import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
 import { RootState } from '@/store';
-import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
+import { useAddToCartMutation, useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 
 interface ProductDetailsColumnProps {
   isModal?: boolean;
@@ -25,6 +25,7 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const { product_variants } = quickViewProduct || {}
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
+  const [deletefromCart] = useDeletefromCartMutation()
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
@@ -173,17 +174,27 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const handleCartItemChanges = async (type: string) => {
     try {
       let newQuantity = 0
-      if(type == "increment"){
-        newQuantity = 1
+      if (type == "decrement" && inCartVarient?.quantity == 0) {
+        return 
       }
-      if(type == "decrement"){
+      if (type == "decrement") {
         newQuantity = inCartVarient?.quantity == 1 ? 0 : -1
+      }
+      if (type == "increment") {
+        newQuantity = 1
       }
       
 
-      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": newQuantity }] }
+      if (newQuantity == 0) {
+        await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
+      } else {
+        const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": newQuantity }] }
 
-      await addToCart(addToCartDetails).unwrap();
+        await addToCart(addToCartDetails).unwrap();
+      }
+
+
+
       handleFetchCart()
 
     } catch (error) {

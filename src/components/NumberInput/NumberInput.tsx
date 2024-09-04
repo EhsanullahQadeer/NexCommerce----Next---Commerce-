@@ -24,7 +24,6 @@ const NumberInput: FC<NumberInputProps> = ({
         className
       )}
     >
-      
       <button
         className="absolute flex w-[26px] items-center justify-center left-0 top-0 bottom-0 [z-1] cursor-pointer"
         onClick={() => onChange && onChange("decrement")}
