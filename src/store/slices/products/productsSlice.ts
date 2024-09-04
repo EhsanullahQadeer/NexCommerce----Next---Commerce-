@@ -143,7 +143,6 @@ export const productsSlice = createSlice({
         order: "DESC"
       }
       state.colorFilter = ""
-      state.priceRangeFilter = '5000'
       state.skip = 0
       state.currentPage = 1
       state.searchFilter = ""

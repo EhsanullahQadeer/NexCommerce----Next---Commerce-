@@ -15,12 +15,15 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
-          const {data} = await queryFulfilled;
+          const { data } = await queryFulfilled;
 
-          if (data.data.data.length) {
+          console.log("data?.data?.max_price", data);
+          if (data?.data?.data?.length) {
             dispatch(handleProduct(data.data.data));
           }
-          
+
+
+
           dispatch(handleTotalProduct(data?.data?.total || 0))
           dispatch(handleMaxPriceProduct(data?.data?.max_price || 10000))
         } catch (error) {
@@ -38,7 +41,7 @@ export const productsApi = apiSlice.injectEndpoints({
           const result = await queryFulfilled;
 
           if (result.data.data && result.data.data.length) {
-            
+
             dispatch(handleProductCategories(result.data.data));
           }
 
