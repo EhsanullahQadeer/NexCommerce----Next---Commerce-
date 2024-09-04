@@ -56,7 +56,8 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
 
   const addToWishListHandler = async (id: number) => {
     try {
-      const addToWishList = { "user_id": user.id, product_id: id }
+      // const addToWishList = { "user_id": user.id, product_id: id }
+      const addToWishList = { "user_id": user.id, product_id: id, variant_id: currentVarient?.id }
 
       await addRemoveToWishlist(addToWishList).unwrap();
       handleFetchWishlist()

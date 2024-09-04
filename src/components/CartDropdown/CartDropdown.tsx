@@ -47,7 +47,7 @@ const CartDropdown = () => {
           dropdownHoverStyle,
           isActive && activeStyles,
           "overflow-y-auto",
-          "h-[70vh]"
+          "max-h-[70vh]"
         )}
         style={{ transition: 'all .25s' }}
         onClick={() => setisActive(false)}

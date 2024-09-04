@@ -1,7 +1,6 @@
-'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import Container from '../Container';
 import Dropdown from '../Dropdown';
@@ -18,9 +17,10 @@ const TopBar: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null); // Reference for the dropdown container
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const router = useRouter()
+  const router = useRouter();
 
   const filteredLinks: LinkType[] = topBarLinks.filter(
     (link) => link.url !== pathname
@@ -36,13 +36,26 @@ const TopBar: React.FC = () => {
     localStorage.removeItem('access_token');
     dispatch(userLoggedIn({ user: undefined, isAuthenticated: false }));
     dispatch(clearCart());
-    setDropdownOpen(false)
-    return router.push("/")
+    setDropdownOpen(false);
+    return router.push("/");
   };
 
   useEffect(() => {
     const userData = localStorage.getItem('user');
     dispatch(userLoggedIn({ user: JSON.parse(userData || '{}'), isAuthenticated: userData ? true : false }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   return (
@@ -57,51 +70,57 @@ const TopBar: React.FC = () => {
           <div className="hidden sm:flex items-center space-x-6">
             {filteredLinks.map((item, index) => {
               if (item.name === 'login') {
-                return user?.name ? <div className="relative" key={index}>
-                  <button
-                    onClick={() => setDropdownOpen((prev) => !prev)}
+                return user?.name ? (
+                  <div className="relative" key={index} ref={dropdownRef}>
+                    <button
+                      onClick={() => setDropdownOpen((prev) => !prev)}
+                      className="flex items-center text-[13px] tracking-[-0.13px] font-extralight uppercase hover:text-primary"
+                    >
+                      {item?.icon && <i className={cn(item.icon, 'text-[15px] mr-2')}></i>}
+                      {user.name}
+                    </button>
+                    {dropdownOpen && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white shadow-md border rounded-lg">
+                        <Link href="/dashboard" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                          Dashboard
+                        </Link>
+                        <Link href="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+                          Settings
+                        </Link>
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
+                        >
+                          Logout
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    key={index}
+                    href={"#"}
                     className="flex items-center text-[13px] tracking-[-0.13px] font-extralight uppercase hover:text-primary"
+                    onClick={handleToggleLoginModal}
                   >
-                    {item?.icon && <i className={cn(item.icon, 'text-[15px] mr-2')}></i>}
-                    {user.name}
-                  </button>
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white shadow-md border rounded-lg">
-                      <Link href="/dashboard" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                        Dashboard
-                      </Link>
-                      <Link href="/settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-                        Settings
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-                      >
-                        Logout
-                      </button>
-                    </div>
-                  )}
-                </div> : <Link
+                    {item?.icon && (
+                      <i className={cn(item.icon, 'text-[15px] mr-2')}></i>
+                    )}{' '}
+                    {item.name}
+                  </Link>
+                );
+              }
+              return (
+                <Link
                   key={index}
-                  href={"#"}
+                  href={item.name === 'login' ? "#" : item.url}
                   className="flex items-center text-[13px] tracking-[-0.13px] font-extralight uppercase hover:text-primary"
-                  onClick={handleToggleLoginModal}
+                  onClick={item.name === 'login' && !user?.name ? handleToggleLoginModal : undefined}
                 >
-                  {item?.icon && (
-                    <i className={cn(item.icon, 'text-[15px] mr-2')}></i>
-                  )}{' '}
+                  {item?.icon && <i className={cn(item.icon, 'text-[15px] mr-2')}></i>}
                   {item.name}
                 </Link>
-              }
-              return <Link
-                key={index}
-                href={item.name === 'login' ? "#" : item.url}
-                className="flex items-center text-[13px] tracking-[-0.13px] font-extralight uppercase hover:text-primary"
-                onClick={item.name === 'login' && !user?.name ? handleToggleLoginModal : undefined}
-              >
-                {item?.icon && <i className={cn(item.icon, 'text-[15px] mr-2')}></i>}
-                {item.name}
-              </Link>
+              );
             })}
           </div>
           <div className="flex items-center sm:hidden">

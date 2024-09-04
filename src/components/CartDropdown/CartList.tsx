@@ -1,6 +1,9 @@
+import { RootState } from '@/store';
+import { useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 import { CartItem } from '@/store/slices/cart/cartSlice';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
 export interface cartItemProps {
   data: CartItem;
@@ -8,6 +11,33 @@ export interface cartItemProps {
 
 const CartList = ({ data }: cartItemProps) => {
   const { product, variant } = data
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  const [cartDetailsGet] = useCartDetailsGetMutation()
+  const [deletefromCart] = useDeletefromCartMutation()
+
+  const handleFetchCart = async () => {
+    try {
+      if (user?.id) {
+
+        await cartDetailsGet({ user_id: user?.id }).unwrap();
+      }
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
+  const handleCartItemDelete = async (item: CartItem) => {
+    try {
+      await deletefromCart({ user_id: user.id, product_id: item?.product_id, variant_id: item.variant_id }).unwrap();
+
+      handleFetchCart()
+
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  }
+
   return (
     <div className="flex items-center border-b border-[#ebebeb] py-4 justify-between">
       <div>
@@ -33,7 +63,7 @@ const CartList = ({ data }: cartItemProps) => {
             alt="Product image"
           />
         </Link>
-        <button onClick={() => console.log("delete item::", data.id)}>
+        <button onClick={() => handleCartItemDelete(data)}>
           <span className='flex h-6 w-6 items-center justify-end'>
             <i className="las la-times cursor-pointer text-[13px] text-[#cccccc]"></i>
           </span>

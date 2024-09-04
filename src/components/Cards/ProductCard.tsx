@@ -89,7 +89,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
 
   const addToWishListHandler = async (id: number) => {
     try {
-      const addToWishList = { "user_id": user.id, product_id: id }
+      const addToWishList = { "user_id": user.id, product_id: id, variant_id: product_variants[0]?.id }
 
       await addRemoveToWishlist(addToWishList).unwrap();
       handleFetchWishlist()
