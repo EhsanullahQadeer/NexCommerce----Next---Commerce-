@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
+import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -24,6 +25,7 @@ export interface ProductCardProps extends Product {
 
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const { user } = useSelector((state: RootState) => state.auth);
+  const { wishListData } = useSelector(selectWishlist)
   const [addToCart] = useAddToCartMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
@@ -99,6 +101,13 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     }
   };
 
+  const checkInWishlist = (): boolean => {
+
+    return !!wishListData.find(el => {
+      return el.product_id === productDetails.id && el.product_variant_id === productDetails.product_variants[0].id
+    })
+  }
+
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
@@ -114,10 +123,15 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
         {/* {name && <TagLabel label={name}/>} */}
 
         <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
-          <IconWithText
-            icon={<i className="lar la-heart"></i>}
-            text="Add Wishlist"
-          />
+          {
+            !checkInWishlist() ? <IconWithText
+              icon={<i className="lar la-heart"></i>}
+              text="Add Wishlist"
+            /> : <IconWithText
+              icon={<i className="las la-heart"></i>}
+              text="Remove Wishlist"
+            />
+          }
         </button>
 
         <div className={previewBtnStyles}>
