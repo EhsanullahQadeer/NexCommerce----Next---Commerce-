@@ -18,6 +18,7 @@ const CardComponent: FC<ProductCategory> = ({
   image,
   name,
   products_count,
+  slug,
   id
 }) => {
   const route = useRouter()
@@ -25,8 +26,11 @@ const CardComponent: FC<ProductCategory> = ({
   const filterCategoryhandler = () => {
     dispatch(clearFilter())
     dispatch(selectCategoryFilter(id))
-    route.push("/products")
+    route.push(`/products?id=${slug}`)
   }
+
+  console.log("slug", slug);
+  
 
   return (
     <div className={cn('group relative', "")}>

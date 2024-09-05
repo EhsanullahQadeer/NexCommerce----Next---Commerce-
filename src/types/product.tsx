@@ -17,6 +17,7 @@ export interface Product {
   id: number
   name: string
   image: string
+  slug: string
   small_image: string
   medium_image: string
   description: string
@@ -43,6 +44,7 @@ export interface ProductCategory {
   created_at: string
   updated_at: string
   products_count: number
+  slug: string
 }
 
 export interface ProductSortKeys {

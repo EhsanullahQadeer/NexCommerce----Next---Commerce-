@@ -4,6 +4,7 @@ import { FC } from "react";
 interface HeroProps {
   title: string;
   subTitle: string;
+  subTitle2?: string;
   className?: string;
   customBg?: string;
   textColor?: string;
@@ -16,6 +17,7 @@ const heroBaseStyles =
 const Hero: FC<HeroProps> = ({
   title,
   subTitle,
+  subTitle2,
   className,
   customBg,
   textColor,
@@ -28,24 +30,24 @@ const Hero: FC<HeroProps> = ({
         backgroundImage: customBg
           ? `url(${customBg})`
           : !bgColor
-          ? "url('/products/category-bg.jpg')"
-          : undefined,
+            ? "url('/products/category-bg.jpg')"
+            : undefined,
       }}
     >
       <h1
-        className={`text-[32px] sm:text-[40px] ${
-          textColor ? textColor : "text-black-75"
-        } tracking-[-1px] leading-[44px]`}
+        className={`text-[32px] sm:text-[40px] ${textColor ? textColor : "text-black-75"
+          } tracking-[-1px] leading-[44px]`}
       >
         {title}
       </h1>
+      
       <h3
-        className={`text-base sm:text-xl font-light ${
-          textColor ? textColor : "text-primary"
-        } tracking-[-1px] mt-[5px]`}
+        className={`text-base sm:text-xl font-light ${textColor ? textColor : "text-primary"
+          } tracking-[-1px] mt-[5px]`}
       >
-        {subTitle}
+        {subTitle} {!!subTitle2 && subTitle2}
       </h3>
+
     </div>
   );
 };

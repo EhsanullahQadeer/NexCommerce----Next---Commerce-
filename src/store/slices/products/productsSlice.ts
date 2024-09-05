@@ -159,6 +159,7 @@ export const productsSlice = createSlice({
     changeCurrentVarientQuantity: (state, action: PayloadAction<number>) => {
       state.currentVarientQuantity = action.payload
     },
+    
   },
 });
 

@@ -38,6 +38,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     price,
     product_variants,
     className,
+    slug,
     onPreview,
   } = productDetails
 
@@ -111,7 +112,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   return (
     <div className={cn('group relative mb-2.5', className)}>
       <div className="relative overflow-hidden">
-        <Link href={`/products/${id}`} className="relative">
+        <Link href={`/products/${slug}`} className="relative">
           <Image
             fill
             src={image}

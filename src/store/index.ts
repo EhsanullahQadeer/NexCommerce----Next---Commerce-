@@ -7,6 +7,8 @@ import productCategories from "./slices/categories/categoriesSlice";
 import siteSettingSlice from "./slices/siteSetting/siteSettingSlice";
 import siteCurrency from "./slices/currenctlist/currencySlice";
 import siteLanguage from "./slices/languagelist/languageSlice";
+import siteCoupenCodeSlice from "./slices/coupencode/coupenCodeSlice";
+
 import wishlist from "./slices/wishlist/wishlistSlice";
 import slidersSlice from "./slices/sliders/slidersSlice"
 import cart from "./slices/cart/cartSlice";
@@ -27,6 +29,7 @@ const store = configureStore({
     siteSettingSlice,
     siteCurrency,
     siteLanguage,
+    siteCoupenCodeSlice
     
   },
   middleware: (getDefaultMiddleware) =>

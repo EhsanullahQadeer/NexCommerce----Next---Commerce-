@@ -28,6 +28,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
     price,
     product_variants,
     className,
+    slug,
     onPreview,
     // heading,
   } = productDetails
@@ -37,7 +38,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
-  const productUrl = `/products/${id}`;
+  const productUrl = `/products/${slug}`;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
     let colorsvarients: ColorVariant[] = []

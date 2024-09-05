@@ -8,6 +8,9 @@ import Tabs from '@/components/Tabs';
 import TabDescription from './DescriptionTab';
 import { additionalInformation, description, images, shipping } from './data';
 import ReviewsTab from './ReviewsTab';
+import { Product } from '@/types/product';
+
+
 
 const tabs = [
   {
@@ -28,20 +31,27 @@ const tabs = [
   },
 ];
 
-const ProductDetails = () => {
+interface ProductDetailsProps {
+  productData: Product 
+}
+
+const ProductDetails = ({ productData }: ProductDetailsProps ) => {
+  const { images, image } = productData || {}
+  const imagesLinks = images?.map((el:any) => el.images) || []
+
   const dispatch = useDispatch();
   return (
     <>
       <Container>
         <div className="grid grid-cols md:grid-cols-2 gap-5 pb-10">
           <div className="[&_.swiper]:max-h-[470px]">
-            <GallerySlider
-              images={images}
-              onFullScreen={() => dispatch(toggleGalleryModal(true))}
-            />
+          <GallerySlider
+            images={imagesLinks?.length ? [images || "", ...imagesLinks] : [productData.image || ""]}
+            onFullScreen={() => dispatch(toggleGalleryModal(true))}
+          />
           </div>
           <div>
-            <ProductDetailsColumn />
+            <ProductDetailsColumn  productData={productData}/>
           </div>
         </div>
         <div className="my-[50px]">

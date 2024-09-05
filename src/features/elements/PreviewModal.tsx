@@ -41,7 +41,7 @@ const PreviewModal: FC = () => {
           />
         </div>
         <div className='px-5 mt-[30px]'>
-          <ProductDetailsColumn isModal />
+          <ProductDetailsColumn isModal productData/>
         </div>
       </div>
     </Modal>
