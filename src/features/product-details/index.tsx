@@ -15,7 +15,7 @@ import { Product } from '@/types/product';
 const tabs = [
   {
     label: 'Description',
-    content: <TabDescription details={description} />,
+    content: <TabDescription label='Description' details={description} />,
   },
   {
     label: 'Additional Information',

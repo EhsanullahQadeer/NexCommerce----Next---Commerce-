@@ -37,17 +37,7 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal, productD
       }
     }
   }, [currentVarient]);
-
-  const handleFetchCart = async () => {
-    try {
-      if (user?.id) {
-        await cartDetailsGet({ user_id: user?.id }).unwrap();
-      }
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    }
-  };
-
+  
   const colorVarientFilter = (varients: ProductVariant[]) => {
     let colorsvarients: ColorVariant[] = [];
     varients.forEach((el) => {

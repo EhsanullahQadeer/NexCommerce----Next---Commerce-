@@ -1,30 +1,21 @@
 import { FC } from 'react';
 import Stars from '@/components/Stars';
 import Link from 'next/link';
+import { selectProducts } from '@/store/slices/products/productsSlice';
+import { useSelector } from 'react-redux';
 
 const ReviewsTab: FC = () => {
-  const reviews = [
-    {
-      name: 'Samanta J.',
-      date: '6 days aga',
-      heading: 'Good, perfect size',
-      review:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!',
-    },
-    {
-      name: 'Samanta J.',
-      date: '6 days aga',
-      heading: 'Good, perfect size',
-      review:
-        'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!',
-    },
-  ];
+  const { quickViewProduct } = useSelector(selectProducts)
+  const { reviews } = quickViewProduct || {}
+
+console.log("reviews-->  ",reviews);
+
   return (
     <div>
       <h3 className="text-black-75 text-base font-medium leading-[17.6px] tracking-[-0.16px] mb-[23px]">
         Reviews (2)
       </h3>
-      {reviews.map((review, index) => (
+      {reviews?.map((review, index) => (
         <div key={index} className="flex flex-col sm:flex-row sm:gap-5 pb-[13px] mb-5 border-b border-black-300">
           <div className="min-w-[100px]">
             <Link
