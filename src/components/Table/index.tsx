@@ -58,7 +58,7 @@ const Table: FC<TableProps> = ({ headers, className }) => {
       if (newQuantity == 0) {
         await deletefromCart({ user_id: user.id, product_id: item?.product_id, variant_id: item.variant_id }).unwrap();
       } else {
-        const addToCartDetails = { "user_id": user.id, products: [{ "product_id": item?.product_id, "variant_id": item.variant_id, "price": item.price_at_purchase, "quantity": newQuantity }] }
+        const addToCartDetails = { "user_id": user.id, products: [{ "product_id": item?.product_id, "variant_id": item.variant_id, "price": item.variant.price, "quantity": newQuantity }] }
 
         await addToCart(addToCartDetails).unwrap();
       }

@@ -13,7 +13,7 @@ export const curruncyListApi = apiSlice.injectEndpoints({
         try {
           const {data} = await queryFulfilled;
 
-          console.log("CurrencyList-->  ", data.data);
+      
           dispatch(updateCurrency(data.data))
           
         } catch (error) {

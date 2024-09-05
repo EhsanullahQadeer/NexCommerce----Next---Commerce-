@@ -49,19 +49,19 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
 
   const addToCartHandler = async () => {
     try {
+      console.log("currentVarientQuantity", currentVarientQuantity);
+      
       if (currentVarientQuantity == 0) {
         await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
         handleFetchCart()
       } else {
         const inCartVarientData = checkVarientInCart()
 
-        if(inCartVarientData?.quantity){
-          let addQuantity = currentVarientQuantity - inCartVarientData?.quantity
+        let addQuantity = currentVarientQuantity - (inCartVarientData?.quantity || 0)
           const addToCartDetails = { "user_id": user.id, products: [{ "product_id": quickViewProduct?.id, "variant_id": currentVarient?.id, "price": currentVarient?.price, "quantity": addQuantity.toString() }] }
   
           await addToCart(addToCartDetails).unwrap();
           handleFetchCart()
-        }
       }
     } catch (error) {
       console.error("Failed to fetch products:", error);

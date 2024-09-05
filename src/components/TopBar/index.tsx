@@ -87,7 +87,7 @@ const TopBar: React.FC = () => {
   }, []);
 
   const currencyOptions = currencyData.map(el => ({ id: el.id.toString(), name: el.currency_code, value: el.id.toString() }))
-  const languageOptions = languageData.map(el => ({ id: el.id.toString(), name: el.language_code, value: el.id.toString() }))
+  const languageOptions = languageData.map(el => ({ id: el.id.toString(), name: el?.language_code?.toUpperCase(), value: el?.id?.toString() }))
 
   return (
     <div className="relative bg-white text-black-500 text-xs z-[91]">

@@ -6,6 +6,7 @@ import { selectCart } from '@/store/slices/cart/cartSlice';
 
 const CartSummary = () => {
   const { totalAmount } = useSelector(selectCart)
+  
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-medium pb-[17px]">
@@ -17,9 +18,10 @@ const CartSummary = () => {
         <span className="text-black-100 text-base">${totalAmount.toFixed(2) || 0}</span>
       </div>
 
-      <h4 className="text-black-75 leading-[56px]">Shipping:</h4>
+     
 
       <Shipping />
+
 
       <div className="border-b border-black-300 py-[14px] pb-[23px]">
         <h4 className="text-black-75 leading-[22.88px]">

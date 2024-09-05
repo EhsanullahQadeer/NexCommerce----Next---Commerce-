@@ -82,7 +82,9 @@ const GridLayout: React.FC = () => {
           >
             <ProductCard
               {...item}
-              onPreview={() => { dispatch(togglePreviewModal(true)); dispatch(addQuickViewProduct(item)) }}
+              onPreview={() => { dispatch(togglePreviewModal(true));
+                
+                dispatch(addQuickViewProduct(item)) }}
             />
           </div>
         ))}

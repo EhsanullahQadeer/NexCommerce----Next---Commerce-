@@ -5,11 +5,34 @@ import Button from '@/components/Button';
 import CartSummary from './CartSummary';
 import Input from '@/components/Input';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCart } from '@/store/slices/cart/cartSlice';
+import { useState } from 'react';
+import { useFetchCoupenCodeMutation } from '@/store/api/coupenCodeApi';
+import { updateCoupenCode } from '@/store/slices/coupencode/coupenCodeSlice';
+
+
 
 const CartComponent = () => {
+
   const { cartDetails } = useSelector(selectCart)
+  const [couponCode, setCouponCode] = useState('');
+  const [fetchCoupenCode] = useFetchCoupenCodeMutation();
+  const dispatch = useDispatch();
+
+
+  const handleApplyCoupon = async () => {
+    try {
+      const response = await fetchCoupenCode(couponCode).unwrap();
+    
+        console.log('Coupon applied successfully:', response);
+      
+      dispatch(updateCoupenCode({ coupon_code: couponCode }));
+    } catch (error) {
+      console.error('Failed to apply coupon:', error);
+    }
+  };
+
   return (
     <div className="flex flex-col lg:flex-row pt-10 pb-[50px] gap-5">
       {cartDetails.length > 0 ? (
@@ -18,10 +41,14 @@ const CartComponent = () => {
             <Table headers={tableHeader} />
             <div className="flex flex-col items-start gap-y-2.5 sm:items-center sm:justify-between my-[30px] sm:flex-row">
               <div className="flex items-center gap-2.5">
-                <Input placeholder="coupon code" />
+                <Input placeholder="coupon code"  value={couponCode} 
+                  onChange={(e) => setCouponCode(e.target.value)}   />
+               
+               
                 <Button
                   variant="outlined"
                   className="justify-center !p-0 h-10 w-10"
+                  onClick={handleApplyCoupon}
                 >
                   <i className="las la-long-arrow-alt-right"></i>
                 </Button>

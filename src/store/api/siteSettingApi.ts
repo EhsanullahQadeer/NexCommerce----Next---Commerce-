@@ -1,6 +1,5 @@
 // src/slices/siteSettingApi.ts
 import { apiSlice } from "../slices/api/apiSlice";
-import { handleProduct, handleTotalProduct } from "../slices/products/productsSlice";
 import { updateSiteSettings } from "../slices/siteSetting/siteSettingSlice";
 
 export const siteSettingApi = apiSlice.injectEndpoints({

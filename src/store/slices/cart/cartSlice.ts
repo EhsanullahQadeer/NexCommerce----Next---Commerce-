@@ -47,24 +47,6 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addCartItem: (state, action: PayloadAction<CartItem>) => {
-      const existingItemIndex = state.cartDetails.findIndex(
-        (item) => item.id === action.payload.id
-      );
-
-      if (existingItemIndex >= 0) {
-        // If the item already exists, update its quantity and price
-        state.cartDetails[existingItemIndex].quantity += action.payload.quantity;
-        state.cartDetails[existingItemIndex].price_at_purchase += action.payload.price_at_purchase;
-      } else {
-        // Add the new item to the cart
-        state.cartDetails.push(action.payload);
-      }
-
-      // Update total amount and items
-      state.totalAmount += action.payload.price_at_purchase;
-      state.totalItems += action.payload.quantity;
-    },
     removeCartItem: (state, action: PayloadAction<number>) => {
       const existingItemIndex = state.cartDetails.findIndex(
         (item) => item.id === action.payload
@@ -78,23 +60,6 @@ export const cartSlice = createSlice({
 
         // Remove the item from the cart
         state.cartDetails.splice(existingItemIndex, 1);
-      }
-    },
-    updateCartItem: (state, action: PayloadAction<{ id: number; quantity: number }>) => {
-      const existingItemIndex = state.cartDetails.findIndex(
-        (item) => item.id === action.payload.id
-      );
-
-      if (existingItemIndex >= 0) {
-        const item = state.cartDetails[existingItemIndex];
-
-        // Update total amount based on the difference in quantity
-        const quantityDifference = action.payload.quantity - item.quantity;
-        state.totalAmount += quantityDifference * item.product.price;
-        state.totalItems += quantityDifference;
-
-        // Update the item's quantity
-        item.quantity = action.payload.quantity;
       }
     },
     clearCart: (state) => {
@@ -120,9 +85,7 @@ export const cartSlice = createSlice({
 });
 
 export const {
-  addCartItem,
   removeCartItem,
-  updateCartItem,
   clearCart,
   setCartDetails,
   setShippingAmount

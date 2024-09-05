@@ -50,8 +50,9 @@ export const productsApi = apiSlice.injectEndpoints({
         }
       },
     }),
-
+    
+   
   }),
 });
 
-export const { useFetchFilteredProductsMutation, useFetchCategoriesListMutation } = productsApi;
+export const { useFetchFilteredProductsMutation, useFetchCategoriesListMutation  } = productsApi;

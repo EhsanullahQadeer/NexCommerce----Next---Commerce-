@@ -18,6 +18,7 @@ import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
 import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
 
 
+
 interface MainLayoutProps {
   children: ReactNode;
 }
@@ -36,7 +37,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [currencyListGet] = useFetchCurrencyListMutation()
   const [languageListGet] = useFetchLanguageListMutation()
-
+  
 
   const handleFetchProductsWithFilter = async () => {
     try {
