@@ -15,6 +15,7 @@ import cart from "./slices/cart/cartSlice";
 import auth from "./slices/auth/authSlice";
 import { apiSlice } from "./slices/api/apiSlice";
 
+
 const store = configureStore({
   reducer: {
     root: rootReducer,
@@ -30,6 +31,7 @@ const store = configureStore({
     siteCurrency,
     siteLanguage,
     siteCoupenCodeSlice
+    
     
   },
   middleware: (getDefaultMiddleware) =>

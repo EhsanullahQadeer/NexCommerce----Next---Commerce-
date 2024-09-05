@@ -16,9 +16,30 @@ import { useFetchSiteSettingsMutation } from "@/store/api/siteSettingApi";
 import { useWishlistDetailsGetMutation } from "@/store/api/wishlistApi";
 import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
 import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
+import { useAddVisitorMutation } from "@/store/api/visitorApi";
 
 
 
+
+
+function detectBrowser() {
+  var userAgent = navigator.userAgent;
+  if (userAgent.indexOf("Edg") > -1) {
+    return "Microsoft Edge";
+  } else if (userAgent.indexOf("Chrome") > -1) {
+    return "Chrome";
+  } else if (userAgent.indexOf("Firefox") > -1) {
+    return "Firefox";
+  } else if (userAgent.indexOf("Safari") > -1) {
+    return "Safari";
+  } else if (userAgent.indexOf("Opera") > -1) {
+    return "Opera";
+  } else if (userAgent.indexOf("Trident") > -1 || userAgent.indexOf("MSIE") > -1) {
+    return "Internet Explorer";
+  }
+
+  return "Unknown";
+}
 interface MainLayoutProps {
   children: ReactNode;
 }
@@ -37,7 +58,9 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [currencyListGet] = useFetchCurrencyListMutation()
   const [languageListGet] = useFetchLanguageListMutation()
-  
+  const [addVisitor] = useAddVisitorMutation()
+
+
 
   const handleFetchProductsWithFilter = async () => {
     try {
@@ -109,6 +132,34 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     }
   };
 
+  function getLocation() {
+
+    try {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((res) => {
+          let browser = detectBrowser();
+          if (browser && res.coords.latitude && res.coords.longitude) {
+            console.log("browser-->", browser, res.coords.latitude, res.coords.longitude);
+            handleFetchVisitor(browser, res.coords.latitude, res.coords.longitude)
+
+          }
+        });
+
+      } else {
+        console.log('Geolocation is not supported by this device')
+      }
+
+    } catch (error) { }
+
+  }
+
+const handleFetchVisitor= async (browser: string, latitude: number, longitude: number) => {
+  try {
+    await addVisitor({browser, latitude, longitude}).unwrap();
+  } catch (error) {
+  }
+};
+
   useEffect(() => {
     handleFetchCategories()
     setTimeout(() => {
@@ -118,6 +169,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     handleFetchCurrencyList()
     handleFetchLanguageList()
 
+    let browerInfo = sessionStorage.getItem('browserinfo')
+    if (!browerInfo) {
+      getLocation();
+    }
   }, [])
 
   useEffect(() => {
@@ -136,6 +191,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
     if (window && window.location.pathname === "/coming-soon") {
       setHideLayout(true);
     }
+
+
+
+
   }, []);
 
   return (

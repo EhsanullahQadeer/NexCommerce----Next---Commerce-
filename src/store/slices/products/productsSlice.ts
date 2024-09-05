@@ -68,7 +68,7 @@ const initialState: ProductsState = {
   sizeFilter: "",
   quickViewProduct: null,
   currentVarient: null,
-  currentVarientQuantity: 0
+  currentVarientQuantity: 0,
 };
 
 export const productsSlice = createSlice({

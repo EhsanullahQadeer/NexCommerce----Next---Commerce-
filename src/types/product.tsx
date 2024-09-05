@@ -32,6 +32,9 @@ export interface Product {
   product_categories: Category[]
   product_variants: ProductVariant[]
   reviews: any[]
+  additional_description: string
+  additional_info: string
+  shipping_return: string
 }
 
 export interface ProductCategory {
