@@ -1,13 +1,13 @@
 // src/slices/cartApi.ts
 import { toast } from "react-toastify";
 import { apiSlice } from "../slices/api/apiSlice";
-import { updateShippingAddress } from "../slices/shippingaddress/shippingAddressSlice";
+import { updateBillingAddress } from "../slices/billingaddress/billingAddressSlice";
 
-export const shippingAddressApi = apiSlice.injectEndpoints({
+export const billingAddressApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    addShippingAddress: builder.mutation({
+    addBillingAddress: builder.mutation({
       query: (addressData) => ({
-        url: 'add-shipping-address',
+        url: 'add-billing-address',
         method: 'POST',
         body: {
           ...addressData
@@ -16,15 +16,16 @@ export const shippingAddressApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
+
         } catch (error) {
-          console.error('Add Shipping Address Api Error:', error);
+          console.error('Add Billing Address Api Error:', error);
         }
       },
     }),
-   
-    fetchgetShippingAddress: builder.mutation({
+
+    fetchgetBillingAddress: builder.mutation({
       query: ({ user_id }) => ({
-        url: 'get-shipping-address',
+        url: 'get-billing-address',
         method: 'POST',
         body: {
           user_id
@@ -34,15 +35,14 @@ export const shippingAddressApi = apiSlice.injectEndpoints({
         try {
           const result = await queryFulfilled;
           if(result?.data?.data){
-            dispatch(updateShippingAddress(result.data.data))
+            dispatch(updateBillingAddress(result.data.data))
           }
-          
         } catch (error) {
-          console.error('Get Shipping Address Api Error:', error);
+          console.error('Get Billing Address Api Error:', error);
         }
       },
     }),
   }),
 });
 
-export const { useAddShippingAddressMutation, useFetchgetShippingAddressMutation } = shippingAddressApi;
+export const { useAddBillingAddressMutation, useFetchgetBillingAddressMutation } = billingAddressApi;
