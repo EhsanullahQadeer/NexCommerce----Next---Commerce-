@@ -28,6 +28,7 @@ const CartComponent = () => {
         console.log('Coupon applied successfully:', response);
       
       dispatch(updateCoupenCode({ coupon_code: couponCode }));
+      
     } catch (error) {
       console.error('Failed to apply coupon:', error);
     }

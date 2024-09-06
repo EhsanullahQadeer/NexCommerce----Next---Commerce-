@@ -8,6 +8,8 @@ import siteSettingSlice from "./slices/siteSetting/siteSettingSlice";
 import siteCurrency from "./slices/currenctlist/currencySlice";
 import siteLanguage from "./slices/languagelist/languageSlice";
 import siteCoupenCodeSlice from "./slices/coupencode/coupenCodeSlice";
+import siteShippingAddressSlice from  "./slices/shippingaddress/shippingAddressSlice"
+import siteBillingAddressSlice from './slices/billingaddress/billingAddressSlice'
 
 import wishlist from "./slices/wishlist/wishlistSlice";
 import slidersSlice from "./slices/sliders/slidersSlice"
@@ -30,7 +32,9 @@ const store = configureStore({
     siteSettingSlice,
     siteCurrency,
     siteLanguage,
-    siteCoupenCodeSlice
+    siteCoupenCodeSlice,
+    siteShippingAddressSlice
+    ,siteBillingAddressSlice
     
     
   },
