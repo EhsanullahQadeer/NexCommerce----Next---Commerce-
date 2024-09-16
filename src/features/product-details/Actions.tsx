@@ -10,6 +10,9 @@ import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
+import { isUserLoggedIn } from '@/utility/helper';
+import { toast } from 'react-toastify';
+import { RESPONSE_MESSAGES } from '@/utility/constant';
 
 interface ActionsProps {
   isModal?: boolean;
@@ -50,6 +53,11 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
   const addToCartHandler = async () => {
     try {
       console.log("currentVarientQuantity", currentVarientQuantity);
+
+      if (!isUserLoggedIn()) {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        return;
+      }
       
       if (currentVarientQuantity == 0) {
         await deletefromCart({ user_id: user.id, product_id: quickViewProduct?.id, variant_id: currentVarient?.id }).unwrap();
@@ -80,6 +88,11 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
 
   const addToWishListHandler = async (id: number) => {
     try {
+      if (!isUserLoggedIn()) {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        return;
+      }
+      
       // const addToWishList = { "user_id": user.id, product_id: id }
       const addToWishList = { "user_id": user.id, product_id: id, variant_id: currentVarient?.id }
 
