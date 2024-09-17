@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
-import DropdownList from './DropdownList';
-import useOutsideClick from '@/hooks/useOutSideClick';
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import DropdownList from "./DropdownList";
+import useOutsideClick from "@/hooks/useOutSideClick";
 
 interface DropdownItem {
   id: string;
@@ -15,7 +15,7 @@ interface DropdownProps {
   id: string;
   title?: string;
   items?: DropdownItem[];
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left';
+  position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   hasImage?: boolean;
   style?: string;
   selected?: DropdownItem | null;
@@ -24,16 +24,15 @@ interface DropdownProps {
 
 const Dropdown = ({
   id,
-  title = 'Select',
+  title = "Select",
   items,
-  position = 'bottom-left',
+  position = "bottom-left",
   style,
   selected = null,
   onSelect,
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
-
   const handleChange = (item: DropdownItem) => {
     setSelectedItem(item);
     onSelect && onSelect(item.id);
@@ -52,12 +51,12 @@ const Dropdown = ({
   });
 
   const dropdownClass = cn(
-    'absolute bg-white w-max max-h-52 overflow-y-auto py-[0.6px] rounded shadow-md z-10',
+    "absolute bg-white w-max max-h-52 overflow-y-auto py-[0.6px] rounded shadow-md z-10",
     {
-      'top-full right-0 mt-1': position === 'bottom-right',
-      'top-full left-0 mt-1': position === 'bottom-left',
-      'bottom-full right-0': position === 'top-right',
-      'bottom-full left-0': position === 'top-left',
+      "top-full right-0 mt-1": position === "bottom-right",
+      "top-full left-0 mt-1": position === "bottom-left",
+      "bottom-full right-0": position === "top-right",
+      "bottom-full left-0": position === "top-left",
     }
   );
 
@@ -71,7 +70,7 @@ const Dropdown = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          'flex text-[13px] font-light justify-between items-center gap-2 rounded w-full py-2 px-4 bg-white text-black-500 uppercase',
+          "flex text-[13px] font-light justify-between items-center gap-2 rounded w-full py-2 px-4 bg-white text-black-500 uppercase",
           style
         )}
       >
