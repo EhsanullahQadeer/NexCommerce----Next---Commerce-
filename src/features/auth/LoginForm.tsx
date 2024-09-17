@@ -10,6 +10,7 @@ import ProgressIcon from "@/components/Icons/ProgressIcon";
 
 interface LoginFormProps {
   setIsOpen?: (isOpen: boolean) => void;
+  onClose?: () => void;
 }
 
 const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
