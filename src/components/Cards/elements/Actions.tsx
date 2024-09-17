@@ -26,7 +26,7 @@ const CardActions: FC<CardActionsProps> = ({
         size="xs"
       >
         <i className="las la-cart-plus text-primary text-lg"></i>
-        add to cart
+        add to cart 
       </Button>
       <Button
         className={cn(
