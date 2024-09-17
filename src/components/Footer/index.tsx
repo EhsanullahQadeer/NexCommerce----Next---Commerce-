@@ -24,7 +24,7 @@ const Footer = () => {
             }
             <p className="font-extralight text-sm text-gray-500 leading-[26.04px] mb-8 max-w-[260px]">
               Praesent dapibus, neque id cursus ucibus, tortor neque egestas
-              augue, eu vulputate magna eros eu erat.{' '}
+              augue, eu vulputate magna eros eu erat. 
             </p>
             <SocialIcons variant="dark" size="lg" className="!justify-start" />
           </div>

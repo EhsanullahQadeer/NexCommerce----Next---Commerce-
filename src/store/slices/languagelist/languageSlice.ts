@@ -13,10 +13,12 @@ export interface Language {
 
 export interface LanguageState {
   languageData: Language[]
+  reload: boolean
 }
 
 const initialState: LanguageState = {
-  languageData: []
+  languageData: [],
+  reload: false
 }
 
 export const siteLanguageSlice = createSlice({
@@ -25,15 +27,18 @@ export const siteLanguageSlice = createSlice({
   reducers: {
     updateLanguage: (state, action: PayloadAction<Language[]>) => {
       state.languageData = action.payload
-    }
+    },
+    mapLanguage: (state, action) => {
+      state.reload = action.payload.reload;
+    },
   },
 });
 
 export const {
-  updateLanguage
+  updateLanguage,
+  mapLanguage
 } = siteLanguageSlice.actions;
 
 // Selectors
 export const selectLanguage = (state: RootState) => state.siteLanguage;
-
 export default siteLanguageSlice.reducer;

@@ -4,8 +4,11 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { selectSidebarToggle } from "@/store/slice";
-import { useFetchCategoriesListMutation, useFetchFilteredProductsMutation } from '@/store/api/productApi';
-import { selectProducts } from '@/store/slices/products/productsSlice';
+import {
+  useFetchCategoriesListMutation,
+  useFetchFilteredProductsMutation,
+} from "@/store/api/productApi";
+import { selectProducts } from "@/store/slices/products/productsSlice";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import TopBar from "../TopBar";
@@ -17,10 +20,7 @@ import { useWishlistDetailsGetMutation } from "@/store/api/wishlistApi";
 import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
 import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
 import { useAddVisitorMutation } from "@/store/api/visitorApi";
-
-
-
-
+import { debug } from "console";
 
 function detectBrowser() {
   var userAgent = navigator.userAgent;
@@ -34,7 +34,10 @@ function detectBrowser() {
     return "Safari";
   } else if (userAgent.indexOf("Opera") > -1) {
     return "Opera";
-  } else if (userAgent.indexOf("Trident") > -1 || userAgent.indexOf("MSIE") > -1) {
+  } else if (
+    userAgent.indexOf("Trident") > -1 ||
+    userAgent.indexOf("MSIE") > -1
+  ) {
     return "Internet Explorer";
   }
 
@@ -45,37 +48,44 @@ interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector(
+    (state: RootState) => state.auth
+  );
   const [hideLayout, setHideLayout] = useState(false);
   const isSidebarToggle = useSelector(selectSidebarToggle);
 
-  const { categoriesFilter, sortByFilter, colorFilter, priceRangeFilter, limitFilter, skip } = useSelector(selectProducts);
+  const {
+    categoriesFilter,
+    sortByFilter,
+    colorFilter,
+    priceRangeFilter,
+    limitFilter,
+    skip,
+  } = useSelector(selectProducts);
 
-  const [fetchFilteredProducts] = useFetchFilteredProductsMutation()
-  const [fetchSiteSettings] = useFetchSiteSettingsMutation()
+  const [fetchFilteredProducts] = useFetchFilteredProductsMutation();
+  const [fetchSiteSettings] = useFetchSiteSettingsMutation();
   const [fetchCategoriesList] = useFetchCategoriesListMutation();
-  const [cartDetailsGet] = useCartDetailsGetMutation()
-  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
-  const [currencyListGet] = useFetchCurrencyListMutation()
-  const [languageListGet] = useFetchLanguageListMutation()
-  const [addVisitor] = useAddVisitorMutation()
-
-
+  const [cartDetailsGet] = useCartDetailsGetMutation();
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation();
+  const [currencyListGet] = useFetchCurrencyListMutation();
+  const [languageListGet] = useFetchLanguageListMutation();
+  const [addVisitor] = useAddVisitorMutation();
 
   const handleFetchProductsWithFilter = async () => {
     try {
       const filter = {
-        "filters": {
-          "categories": categoriesFilter,
-          "sort": sortByFilter,
-          "color": colorFilter,
-          "priceRange": `1-${priceRangeFilter}`
+        filters: {
+          categories: categoriesFilter,
+          sort: sortByFilter,
+          color: colorFilter,
+          priceRange: `1-${priceRangeFilter}`,
         },
-        "pagination": {
-          "skip": skip,
-          "limit": limitFilter
-        }
-      }
+        pagination: {
+          skip: skip,
+          limit: limitFilter,
+        },
+      };
       await fetchFilteredProducts(filter).unwrap();
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -128,73 +138,73 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const handleFetchSiteSetting = async () => {
     try {
       await fetchSiteSettings({}).unwrap();
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   function getLocation() {
-
     try {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((res) => {
           let browser = detectBrowser();
           if (browser && res.coords.latitude && res.coords.longitude) {
-            console.log("browser-->", browser, res.coords.latitude, res.coords.longitude);
-            handleFetchVisitor(browser, res.coords.latitude, res.coords.longitude)
-
+            console.log(
+              "browser-->",
+              browser,
+              res.coords.latitude,
+              res.coords.longitude
+            );
+            handleFetchVisitor(
+              browser,
+              res.coords.latitude,
+              res.coords.longitude
+            );
           }
         });
-
       } else {
-        console.log('Geolocation is not supported by this device')
+        console.log("Geolocation is not supported by this device");
       }
-
-    } catch (error) { }
-
+    } catch (error) {}
   }
 
-const handleFetchVisitor= async (browser: string, latitude: number, longitude: number) => {
-  try {
-    await addVisitor({browser, latitude, longitude}).unwrap();
-  } catch (error) {
-  }
-};
+  const handleFetchVisitor = async (
+    browser: string,
+    latitude: number,
+    longitude: number
+  ) => {
+    try {
+      await addVisitor({ browser, latitude, longitude }).unwrap();
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    handleFetchCategories()
+    handleFetchCategories();
     setTimeout(() => {
-      handleFetchSiteSetting()
-    }, 0)
+      handleFetchSiteSetting();
+    }, 0);
 
-    handleFetchCurrencyList()
-    handleFetchLanguageList()
-
-    let browerInfo = sessionStorage.getItem('browserinfo')
+    let browerInfo = sessionStorage.getItem("browserinfo");
     if (!browerInfo) {
       getLocation();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
-      handleFetchCart()
-      handleFetchWishlist()
-    }, 0)
-  }, [user, isAuthenticated])
-
+      handleFetchCart();
+      handleFetchWishlist();
+      handleFetchCurrencyList();
+      handleFetchLanguageList();
+    }, 0);
+  }, [user, isAuthenticated]);
 
   useEffect(() => {
-    handleFetchProductsWithFilter()
-  }, [categoriesFilter, sortByFilter, colorFilter, priceRangeFilter])
+    handleFetchProductsWithFilter();
+  }, [categoriesFilter, sortByFilter, colorFilter, priceRangeFilter]);
 
   useEffect(() => {
     if (window && window.location.pathname === "/coming-soon") {
       setHideLayout(true);
     }
-
-
-
-
   }, []);
 
   return (
