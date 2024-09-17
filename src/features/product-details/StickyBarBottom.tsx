@@ -54,7 +54,7 @@ const StickyBarBottom: FC = () => {
             <NumberInput value={currentVarientQuantity || 0} onChange={handleCartItemChanges} />
             <Button variant="outlined" size="xs" className='group !w-[200px] h-10 justify-center items-center'>
               <i className="las la-cart-plus text-primary text-lg group-hover:text-white mr-2"></i>
-              add to cart
+              add to cart 
             </Button>
             <Link href="#" className=''>
               <i className="lar la-heart text-lg text-primary"></i>

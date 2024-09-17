@@ -6,23 +6,21 @@ export const curruncyListApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     fetchCurrencyList: builder.mutation({
       query: () => ({
-        url: 'currency-list',
-        method: 'GET',
+        url: "currency-list",
+        method: "GET",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
-          const {data} = await queryFulfilled;
+          const { data } = await queryFulfilled;
+          console.log(data, "data");
 
-      
-          dispatch(updateCurrency(data.data))
-          
+          dispatch(updateCurrency(data.data));
         } catch (error) {
-          console.error('Fetch Currency List Error:', error);
+          console.error("Fetch Currency List Error:", error);
         }
       },
-    })
+    }),
   }),
 });
-
 
 export const { useFetchCurrencyListMutation } = curruncyListApi;

@@ -14,6 +14,9 @@ import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/car
 import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
 import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
+import { isUserLoggedIn } from '@/utility/helper';
+import { toast } from 'react-toastify';
+import { RESPONSE_MESSAGES } from '@/utility/constant';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -68,6 +71,10 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
 
   const addToCartHandler = async () => {
     try {
+      if (!isUserLoggedIn()) {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        return;
+      }
       const addToCartDetails = { "user_id": user.id, products: [{ "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }] }
 
       await addToCart(addToCartDetails).unwrap();
@@ -91,6 +98,10 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
 
   const addToWishListHandler = async (id: number) => {
     try {
+      if (!isUserLoggedIn()) {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        return;
+      }
       const addToWishList = { "user_id": user.id, product_id: id, variant_id: product_variants[0]?.id }
 
       await addRemoveToWishlist(addToWishList).unwrap();
