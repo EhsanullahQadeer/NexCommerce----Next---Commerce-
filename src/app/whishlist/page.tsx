@@ -1,11 +1,11 @@
-import Breadcrumb from '@/components/Breadcrumb';
-import Container from '@/components/Container';
-import Hero from '@/components/Hero';
-import WhistlistComponent from '@/features/whishlist';
-import { getMetadata } from '@/store/api/getMetaData';
+import Breadcrumb from "@/components/Breadcrumb";
+import Container from "@/components/Container";
+import Hero from "@/components/Hero";
+import WhistlistComponent from "@/features/whishlist";
+import { getMetadata } from "@/store/api/getMetaData";
 
 export async function generateMetadata() {
-  const { data } = await getMetadata();
+  const data = await getMetadata();
   if (!data) return {};
 
   return {
@@ -17,7 +17,7 @@ export async function generateMetadata() {
       description: data.description,
       url: data.site_url,
       siteName: data.brand_name,
-      locale: 'en_US',
+      locale: "en_US",
     },
   };
 }
@@ -25,16 +25,16 @@ export async function generateMetadata() {
 const WhishListPage = () => {
   const links = [
     {
-      url: '/',
-      name: 'Home',
+      url: "/",
+      name: "Home",
     },
     {
-      url: '#',
-      name: 'Shop',
+      url: "#",
+      name: "Shop",
     },
     {
-      url: '/whishlist',
-      name: 'Whishlist',
+      url: "/whishlist",
+      name: "Whishlist",
     },
   ];
 

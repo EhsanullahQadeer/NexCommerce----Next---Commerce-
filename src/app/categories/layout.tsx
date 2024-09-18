@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
+import { getMetadata } from "@/store/api/getMetaData";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let baseUrl = process.env.NEXT_PUBLIC_API_URL || ""
-  const response = await fetch(`${baseUrl}site-setting`);
-  const { data } = await response.json();
+  const data = await getMetadata();
+  if (!data) return {};
   const metadataBase = data.site_url ? new URL(data.site_url) : undefined;
   return {
     applicationName: data.brand_name,
