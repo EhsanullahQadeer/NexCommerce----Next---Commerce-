@@ -19,7 +19,6 @@ const Slider: React.FC = () => {
       let { data } = await fetchSliders({}).unwrap();
       setSliders(data);
     } catch (error) {
-      // handle error
     }
   };
 

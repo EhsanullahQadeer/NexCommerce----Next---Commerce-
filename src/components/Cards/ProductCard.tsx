@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -9,7 +9,6 @@ import {
 } from "./elements/styles";
 import IconWithText from "../Icons/IconWithTextOverlay";
 import ReadOnlyColorVariants from "../ColorVariants/ReadOnly";
-// import TagLabel from './elements/TagLabel';
 import CardPrice from "./elements/CardPrice";
 import { ColorVariant, Product, ProductVariant } from "@/types/product";
 import { useSelector } from "react-redux";
@@ -26,6 +25,8 @@ import { selectWishlist } from "@/store/slices/wishlist/wishlistSlice";
 import { toast } from "react-toastify";
 import { isUserLoggedIn } from "@/utility/helper";
 import { RESPONSE_MESSAGES } from "@/utility/constant";
+import AuthComponent from "@/features/auth";
+
 export interface ProductCardProps extends Product {
   className?: string;
   onPreview?: () => void;
@@ -38,6 +39,8 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation();
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation();
+
+  const [isLoginModalVisible, setIsLoginModalVisible] = useState(false); // State to manage login modal visibility
 
   const {
     id,
@@ -85,12 +88,12 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   };
 
   const addToCartHandler = async () => {
-    try {
-      if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
-        return;
-      }
+    if (!isUserLoggedIn()) {
+      setIsLoginModalVisible(true); // Show login modal if user is not logged in
+      return;
+    }
 
+    try {
       const addToCartDetails = {
         user_id: user.id,
         products: [
@@ -121,11 +124,13 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   };
 
   const addToWishListHandler = async (id: number) => {
+    if (!isUserLoggedIn()) {
+      toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+      setIsLoginModalVisible(true); // Show login modal if user is not logged in
+      return;
+    }
+
     try {
-      if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
-        return;
-      }
       const addToWishList = {
         user_id: user.id,
         product_id: id,
@@ -149,67 +154,84 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   };
 
   return (
-    <div className={cn("group relative mb-2.5", className)}>
-      <div className="relative overflow-hidden">
-        <Link href={`/products/${slug}`} className="relative">
-          <Image
-            fill
-            src={image}
-            alt="Product image"
-            className="!relative w-full height-auto min-h-[277px]"
-            blurDataURL="/default_image.jpg"
-          />
-        </Link>
-
-        <button
-          className={productVerticalActionStyles}
-          onClick={() => addToWishListHandler(id)}
-        >
-          {!checkInWishlist() ? (
-            <IconWithText
-              icon={<i className="lar la-heart"></i>}
-              text="Add Wishlist"
+    <>
+      <div className={cn("group relative mb-2.5", className)}>
+        <div className="relative overflow-hidden">
+          <Link href={`/products/${slug}`} className="relative">
+            <Image
+              fill
+              src={image}
+              alt="Product image"
+              className="!relative w-full height-auto min-h-[277px]"
+              blurDataURL="/default_image.jpg"
             />
-          ) : (
-            <IconWithText
-              icon={<i className="las la-heart"></i>}
-              text="Remove Wishlist"
-            />
-          )}
-        </button>
-
-        <div className={previewBtnStyles}>
-          <Button
-            className="w-full justify-center"
-            variant="white"
-            onClick={onPreview}
-          >
-            quick view
-          </Button>
-        </div>
-      </div>
-      <div className="pt-4 pb-5">
-        <h3 className="text-sm font-extralight text-black-100 mb-[3px]">
-          <Link href="/products" className="hover:text-primary">
-            {name}
           </Link>
-        </h3>
-        <CardPrice price={price} oldPrice={0} />
 
-        <ReadOnlyColorVariants
-          variants={colorVarientFilter(product_variants)}
-        />
-
-        <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
           <button
-            onClick={addToCartHandler}
-            className="text-sm font-extralight text-primary hover:shadow-[0_0.1rem_0_0_#cc9966] leading-[18px]"
+            className={productVerticalActionStyles}
+            onClick={() => addToWishListHandler(id)}
           >
-            Add to cart<i className="las la-long-arrow-alt-right ml-2.5"></i>
+            {!checkInWishlist() ? (
+              <IconWithText
+                icon={<i className="lar la-heart"></i>}
+                text="Add Wishlist"
+              />
+            ) : (
+              <IconWithText
+                icon={<i className="las la-heart"></i>}
+                text="Remove Wishlist"
+              />
+            )}
           </button>
+
+          <div className={previewBtnStyles}>
+            <Button
+              className="w-full justify-center"
+              variant="white"
+              onClick={onPreview}
+            >
+              quick view
+            </Button>
+          </div>
+        </div>
+        <div className="pt-4 pb-5">
+          <h3 className="text-sm font-extralight text-black-100 mb-[3px]">
+            <Link href="/products" className="hover:text-primary">
+              {name}
+            </Link>
+          </h3>
+          <CardPrice price={price} oldPrice={0} />
+
+          <ReadOnlyColorVariants
+            variants={colorVarientFilter(product_variants)}
+          />
+
+          <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-[0.35s] ease">
+            <button
+              onClick={addToCartHandler}
+              className="text-sm font-extralight text-primary hover:shadow-[0_0.1rem_0_0_#cc9966] leading-[18px]"
+            >
+              Add to cart<i className="las la-long-arrow-alt-right ml-2.5"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Login Modal */}
+      {isLoginModalVisible && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative bg-white p-8 rounded-md shadow-lg w-[90%] max-w-lg">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+              onClick={() => setIsLoginModalVisible(false)}
+            >
+              <i className="las la-times text-2xl"></i>
+            </button>
+            <AuthComponent onClose={() => setIsLoginModalVisible(false)} />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
