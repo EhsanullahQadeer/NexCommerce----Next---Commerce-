@@ -1,10 +1,10 @@
-import { FC } from 'react';
-import ProductCategories from '@/features/product';
-import Slider from '@/components/Slider';
-import { getMetadata } from '@/store/api/getMetaData';
+import { FC } from "react";
+import ProductCategories from "@/features/product";
+import Slider from "@/components/Slider";
+import { getMetadata } from "@/store/api/getMetaData";
 
 export async function generateMetadata() {
-  const { data } = await getMetadata();
+  const data = await getMetadata();
   if (!data) return {};
 
   return {
@@ -16,7 +16,7 @@ export async function generateMetadata() {
       description: data.description,
       url: data.site_url,
       siteName: data.brand_name,
-      locale: 'en_US',
+      locale: "en_US",
     },
   };
 }
