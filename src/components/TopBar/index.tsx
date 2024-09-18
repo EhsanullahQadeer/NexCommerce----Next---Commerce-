@@ -14,10 +14,16 @@ import { RootState } from "@/store";
 import { clearCart } from "@/store/slices/cart/cartSlice";
 import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
 
-import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
+import {
+  selectSiteSetting,
+  SiteSetting,
+  updateSiteName,
+} from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectLanguage } from "@/store/slices/languagelist/languageSlice";
+import { useTranslations } from "next-intl";
 
 const TopBar: React.FC = () => {
+  const t = useTranslations();
   const { user } = useSelector((state: RootState) => state.auth);
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,6 +38,7 @@ const TopBar: React.FC = () => {
   const { languageData } = useSelector(selectLanguage);
   const { selected_currencies_id } = useSelector(selectSiteSetting);
   const { selected_language_id } = useSelector(selectSiteSetting);
+  console.log(selected_language_id, "selected_language_id");
   const filteredLinks: LinkType[] = topBarLinks.filter(
     (link) => link.url !== pathname
   );
@@ -123,6 +130,10 @@ const TopBar: React.FC = () => {
               selected={languageOptions.find(
                 (el) => el.id == selected_language_id.toString()
               )}
+              onSelect={(e: any, item) => {
+                window.sessionStorage.setItem("lang", item.name);
+                dispatch(updateSiteName({ selected_language_id: e } as SiteSetting));
+              }}
               style="px-0"
             />
           </div>
@@ -147,7 +158,7 @@ const TopBar: React.FC = () => {
                           href="/dashboard"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                         >
-                          Dashboard
+                          {t("Dashboard")}
                         </Link>
                         <Link
                           href="/settings"
@@ -218,7 +229,7 @@ const TopBar: React.FC = () => {
                       href="/dashboard"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                     >
-                      Dashboard
+                      {t("Dashboard")}
                     </Link>
                     <Link
                       href="/settings"

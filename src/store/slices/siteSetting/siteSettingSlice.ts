@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store";
 
-interface SiteSetting {
+export interface SiteSetting {
   id: number;
   brand_name: string;
   description: string;
@@ -57,7 +57,7 @@ const initialState: SiteSetting = {
   country: "",
   postal_code: "",
   logo_url: "",
-}
+};
 
 export const siteSettingSlice = createSlice({
   name: "siteSetting",
@@ -69,16 +69,19 @@ export const siteSettingSlice = createSlice({
     ) => {
       let obj: any = {};
       action.payload.map((item) => {
-        if(item) {
+        if (item) {
           obj[item.key] = item.value;
         }
       });
       Object.assign(state, obj);
     },
+    updateSiteName: (state, action: PayloadAction<SiteSetting>) => {
+      state.selected_language_id = action.payload.selected_language_id;
+    },
   },
 });
 
-export const { updateSiteSettings } = siteSettingSlice.actions;
+export const { updateSiteSettings, updateSiteName } = siteSettingSlice.actions;
 
 // Selectors
 export const selectSiteSetting = (state: RootState) => state.siteSettingSlice;
