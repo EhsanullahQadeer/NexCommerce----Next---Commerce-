@@ -309,7 +309,7 @@ const AddressTab = () => {
                 <div>
                   <select value={newAddress.city} className="p-2 block w-full border border-gray-300 rounded-md" name="city" onChange={handleAddressChange}>
                     <option value={0}>City</option>
-                    {cityData.map((row) => <option value={row.value}>{row.label}</option>)}
+                    {cityData.map((row,i) => <option key={`city_${i}`} value={row.value}>{row.label}</option>)}
                   </select>
                   {/* <Select
                     label="City"
@@ -338,7 +338,7 @@ const AddressTab = () => {
                     className="p-2 block w-full border border-gray-300 rounded-md"
                   /> */}
                   <select value={newAddress.state} className="p-2 block w-full border border-gray-300 rounded-md" name="city" onChange={handleAddressChange}>
-                    {stateData.map((row) => <option value={row.value}>{row.label}</option>)}
+                    {stateData.map((row,i) => <option key={`state_${i}`} value={row.value}>{row.label}</option>)}
                   </select>
                   {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
                 </div>
