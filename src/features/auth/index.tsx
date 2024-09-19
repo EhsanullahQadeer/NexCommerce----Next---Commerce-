@@ -10,6 +10,8 @@ const tabButtonStyles =
 
 interface AuthComponentProps {
   setIsOpen?: (isOpen: boolean) => void;
+  onClose?: () => void;
+  
 }
 
 const AuthComponent: FC<AuthComponentProps> = ({ setIsOpen }) => {
