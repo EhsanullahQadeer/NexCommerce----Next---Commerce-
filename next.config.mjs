@@ -6,11 +6,11 @@ const nextConfig = {
     images: {
       domains: ['alertifyhub.com'],
     },
-    // i18n: {
-    //   defaultLocale: 'en',
-    //   locales: ['tr', 'en'],
-    //   localeDetection: true
-    // }
+    i18n: {
+      defaultLocale: 'en',
+      locales: ['tr', 'en'],
+      localeDetection: true
+    }
 };
 
 export default withNextIntl(nextConfig);
