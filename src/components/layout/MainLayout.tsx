@@ -21,6 +21,7 @@ import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
 import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
 import { useAddVisitorMutation } from "@/store/api/visitorApi";
 import { debug } from "console";
+import ProductDetailPage from "@/app/products/[slug]/page";
 
 function detectBrowser() {
   var userAgent = navigator.userAgent;

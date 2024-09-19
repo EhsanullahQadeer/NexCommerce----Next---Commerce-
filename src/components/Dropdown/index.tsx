@@ -19,7 +19,7 @@ interface DropdownProps {
   hasImage?: boolean;
   style?: string;
   selected?: DropdownItem | null;
-  onSelect?: (id: string) => void;
+  onSelect?: (id: string, item?: any) => void;
 }
 
 const Dropdown = ({
@@ -35,7 +35,7 @@ const Dropdown = ({
   const [selectedItem, setSelectedItem] = useState<DropdownItem | null>(null);
   const handleChange = (item: DropdownItem) => {
     setSelectedItem(item);
-    onSelect && onSelect(item.id);
+    onSelect && onSelect(item.id, item);
     setIsOpen(false);
   };
 

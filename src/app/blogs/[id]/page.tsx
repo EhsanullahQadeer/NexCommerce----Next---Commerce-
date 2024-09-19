@@ -9,10 +9,14 @@ import PreviewModal from "@/features/elements/PreviewModal";
 import ProductDetails from "@/features/product-details";
 import ProductSlider from "@/features/product-details/ProductSlider";
 import StickyBarBottom from "@/features/product-details/StickyBarBottom";
+import { useFetchCategoriesListMutation } from "@/store/api/productApi";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const ProductDetailPage = () => {
+  const [fetchCategoriesList, { data: categoriesData }] = useFetchCategoriesListMutation();
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const links = [
     {
       url: "/",
@@ -27,6 +31,20 @@ const ProductDetailPage = () => {
       name: "Default",
     },
   ];
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const response = await fetchCategoriesList().unwrap();
+  //     if (response.data) {
+  //       setRelatedProducts(response.data.map((product: { description: any; }) => ({
+  //         ...product,
+  //         description: stripHtml(product.description), // Clean HTML from description
+  //       })));
+  //     }
+  //   };
+    
+  //   fetchData();
+  // }, [fetchCategoriesList]);
+  
   return (
     <div>
       <Container>

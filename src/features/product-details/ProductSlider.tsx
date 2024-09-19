@@ -1,33 +1,39 @@
-import { useDispatch } from 'react-redux';
-import ProductCardBoxed from '@/components/Cards/ProductCardBoxed';
-import { products } from '@/store/slices/products/fakeProducts';
-import { Product } from '@/types/product';
-import { togglePreviewModal } from '@/store/slices/products/productsSlice';
-import { SwiperSlide } from 'swiper/react';
-import { Swiper } from 'swiper/react';
-import { useEffect, useRef } from 'react';
-import type { Swiper as SwiperType } from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
-import SlideArrow from '@/components/Slider/elements/SlideArrow';
+import { useDispatch, useSelector } from "react-redux";
+import ProductCardBoxed from "@/components/Cards/ProductCardBoxed";
+// import { products } from "@/store/slices/products/fakeProducts";
+import { Product, ProductCategory } from "@/types/product";
+import {
+  selectProducts,
+  togglePreviewModal,
+} from "@/store/slices/products/productsSlice";
+import { SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper/react";
+import { useEffect, useRef } from "react";
+import type { Swiper as SwiperType } from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
+import SlideArrow from "@/components/Slider/elements/SlideArrow";
 
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/thumbs';
-import 'swiper/css/pagination';
-import '@/components/Slider/styles/slider.css';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import "swiper/css/pagination";
+import "@/components/Slider/styles/slider.css";
+import { useFetchFilteredProductsMutation } from "@/store/api/productApi";
 
-const ProductSlider = () => {
+interface ProductSliderProps {
+  product_categories?: any;
+}
+const ProductSlider = (props: ProductSliderProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
-  const dispatch = useDispatch();
-
+  const [fetchFilteredProducts] = useFetchFilteredProductsMutation();
   useEffect(() => {
     const handleResize = () => {
-      const slides = document.querySelectorAll('.swiper-slide');
+      const slides = document.querySelectorAll(".swiper-slide");
       let maxHeight = 0;
 
       // Reset all slides height
       slides.forEach((slide) => {
-        (slide as HTMLElement).style.height = 'auto';
+        (slide as HTMLElement).style.height = "auto";
       });
 
       // Calculate the maximum height of all slides
@@ -46,12 +52,26 @@ const ProductSlider = () => {
     handleResize();
 
     // Recalculate heights on window resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+
+    // if (props.product_categories != undefined) {
+    //   const categoryId = props.product_categories[0].category_id;
+    //     // const { data: relatedProducts = [], isLoading } = useFetchProductsByCategoryQuery(product?.categoryId);
+    // }
+    if (props.product_categories && props.product_categories.length > 0) {
+      const categoryId = props.product_categories[0].category_id;
+
+      // Fetch products based on the selected category
+      fetchFilteredProducts({ filters: { categoryId }, pagination: { page: 1, limit: 10 } });
+    }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [props.product_categories, fetchFilteredProducts]);
+
+  const dispatch = useDispatch();
+  const { products } = useSelector(selectProducts);
 
   return (
     <div>

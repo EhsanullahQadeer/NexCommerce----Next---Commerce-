@@ -36,7 +36,7 @@ interface ProductDetailsProps {
 }
 
 const ProductDetails = ({ productData }: ProductDetailsProps ) => {
-  const { images, image } = productData || {}
+  const { images, image,product_categories } = productData || {}
   const imagesLinks = images?.map((el:any) => el.images) || []
 
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const ProductDetails = ({ productData }: ProductDetailsProps ) => {
         <div className="my-[50px]">
           <Tabs tabs={tabs} />
         </div>
-        <ProductSlider />
+        <ProductSlider product_categories={product_categories} />
       </Container>
     </>
   );
