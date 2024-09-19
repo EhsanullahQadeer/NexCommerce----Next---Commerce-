@@ -7,6 +7,11 @@ import { BillingAddressSlice, selectBillingAddress, updateBillingAddress } from 
 import { RootState } from '@/store';
 import { selectShippingAddress } from '@/store/slices/shippingaddress/shippingAddressSlice';
 import { useAddShippingAddressMutation, useFetchgetShippingAddressMutation } from '@/store/api/shippingAddressApi';
+import Select from '@/components/Select';
+import { useFetchCitiesMutation } from '@/store/api/cityApi';
+import { selectCityList } from '@/store/slices/citylist/citySlice';
+import { useFetchStatesMutation } from '@/store/api/stateApi';
+import { selectstateList } from '@/store/slices/statelist/stateSlice';
 const cardStyles = 'w-full py-10 px-7 border border-black-300 bg-[#f9f9f9]';
 const titleStyles = 'text-xl text-black-75 font-normal leading-[24px] mb-[5px]';
 const textStyles =
@@ -17,8 +22,9 @@ const AddressTab = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const shippingaddress = useSelector(selectShippingAddress);
   const billingaddress = useSelector(selectBillingAddress);
-
-  console.log("billingaddress", billingaddress);
+  const { cityData } = useSelector(selectCityList);
+  const { stateData } = useSelector(selectstateList);
+  console.log("stateData", stateData)
 
   const { first_name, last_name, email, phone, postal_code, country, city, state, address_line1, address_line2 } = billingaddress
 
@@ -40,24 +46,38 @@ const AddressTab = () => {
   });
 
   const dispatch = useDispatch();
-  
+
   const [fetchgetBillingAddress] = useFetchgetBillingAddressMutation();
   const [addBillingAddress] = useAddBillingAddressMutation();
   const [fetchgetShippingAddress] = useFetchgetShippingAddressMutation();
   const [addShippingAddress] = useAddShippingAddressMutation();
-
+  const [fetchCities] = useFetchCitiesMutation();
+  const [fetchStates] = useFetchStatesMutation();
   const fetchAddressData = async () => {
     try {
-      if(user.id){
+      if (user.id) {
+        await fetchCities({}).unwrap();
         await fetchgetBillingAddress({ user_id: user.id }).unwrap();
-      await fetchgetShippingAddress({ user_id: user.id }).unwrap();
+        await fetchgetShippingAddress({ user_id: user.id }).unwrap();
+
       }
 
     } catch (error) {
       console.error('Failed to fetch billing address', error);
     }
   };
-
+  const fetchAddressStates = async () => {
+    try {
+      if (user.id) {
+        await fetchStates({ cityId: newAddress.city }).unwrap();
+      }
+    } catch (error) {
+      console.error('Failed to fetch states', error);
+    }
+  };
+  useEffect(() => {
+    fetchAddressStates();
+  }, [newAddress.city]);
 
   useEffect(() => {
     fetchAddressData();
@@ -107,11 +127,11 @@ const AddressTab = () => {
     try {
       if (!validateForm()) return;
       if (addresstype == "billingaddress") {
-        await addBillingAddress({...newAddress, user_id: user.id});
+        await addBillingAddress({ ...newAddress, user_id: user.id });
         await fetchgetBillingAddress({ user_id: user.id }).unwrap();
       }
       if (addresstype == "shippingaddress") {
-        await addShippingAddress({...newAddress, user_id: user.id});
+        await addShippingAddress({ ...newAddress, user_id: user.id });
         await fetchgetShippingAddress({ user_id: user.id }).unwrap();
       }
 
@@ -287,26 +307,39 @@ const AddressTab = () => {
 
               <div className="grid grid-cols-3 gap-3 mt-4">
                 <div>
-                  <input
+                  <select value={newAddress.city} className="p-2 block w-full border border-gray-300 rounded-md" name="city" onChange={handleAddressChange}>
+                    <option value={0}>City</option>
+                    {cityData.map((row,i) => <option key={`city_${i}`} value={row.value}>{row.label}</option>)}
+                  </select>
+                  {/* <Select
+                    label="City"
+                    options={cityData}
+                    value={newAddress.city}
+                    
+                  /> */}
+                  {/* <input
                     type="text"
                     name="city"
                     placeholder="City"
                     value={newAddress.city}
                     onChange={handleAddressChange}
                     className="p-2 block w-full border border-gray-300 rounded-md"
-                  />
+                  /> */}
                   {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
                 </div>
 
                 <div>
-                  <input
+                  {/* <input
                     type="text"
                     name="state"
                     placeholder="State"
                     value={newAddress.state}
                     onChange={handleAddressChange}
                     className="p-2 block w-full border border-gray-300 rounded-md"
-                  />
+                  /> */}
+                  <select value={newAddress.state} className="p-2 block w-full border border-gray-300 rounded-md" name="city" onChange={handleAddressChange}>
+                    {stateData.map((row,i) => <option key={`state_${i}`} value={row.value}>{row.label}</option>)}
+                  </select>
                   {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
                 </div>
 
