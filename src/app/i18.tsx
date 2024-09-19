@@ -1,23 +1,3 @@
-// import React, { ReactNode } from "react";
-// import { NextIntlClientProvider } from "next-intl";
-// import locales from "../../locales";
-// import { getLocale, getMessages } from "next-intl/server";
-
-// export const I18Provider = async ({ children }: any) => {
-//   const locale = await getLocale();
-//   console.log(locale,"locale")
-//   const messages = await getMessages();
-
-//   return (
-//     <NextIntlClientProvider locale={locale} messages={messages}>
-//       {children}
-//     </NextIntlClientProvider>
-//   );
-// };
-
-// export default I18Provider;
-'use client' // Ensure this component is treated as a Client Component
-
 "use client"; // Ensure this component is treated as a Client Component
 
 import React, { useEffect, useState } from "react";
@@ -33,7 +13,7 @@ import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
   useEffect(() => {
     const fetchLocaleData = async () => {
       const lang = selected_language_id == 1 ? "EN" : "TR"; 
-      const fetchedMessages = await import(`../../locales/${lang}/common.json`);
+      const fetchedMessages = await import(`../../locales/${lang.toLowerCase()}/common.json`);
       setLocale(lang);
       setMessages(fetchedMessages.default);
       window.sessionStorage.setItem("lang", lang); 

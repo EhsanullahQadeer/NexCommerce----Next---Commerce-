@@ -1,5 +1,5 @@
-import en from './EN/common.json';
-import tr from './TR/common.json';
+import en from './en/common.json';
+import tr from './tr/common.json';
 
 const messages:any = {
   en,
