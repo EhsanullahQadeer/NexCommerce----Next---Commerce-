@@ -16,6 +16,9 @@ import slidersSlice from "./slices/sliders/slidersSlice"
 import cart from "./slices/cart/cartSlice";
 import auth from "./slices/auth/authSlice";
 import { apiSlice } from "./slices/api/apiSlice";
+import siteCity from "./slices/citylist/citySlice";
+import siteState from "./slices/statelist/stateSlice";
+
 
 
 const store = configureStore({
@@ -33,8 +36,10 @@ const store = configureStore({
     siteCurrency,
     siteLanguage,
     siteCoupenCodeSlice,
-    siteShippingAddressSlice
-    ,siteBillingAddressSlice
+    siteShippingAddressSlice,
+    siteBillingAddressSlice,
+    siteCity,
+    siteState
     
     
   },
