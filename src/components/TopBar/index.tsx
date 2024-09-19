@@ -38,7 +38,7 @@ const TopBar: React.FC = () => {
   const { languageData } = useSelector(selectLanguage);
   const { selected_currencies_id } = useSelector(selectSiteSetting);
   const { selected_language_id } = useSelector(selectSiteSetting);
-  console.log(selected_language_id, "selected_language_id");
+
   const filteredLinks: LinkType[] = topBarLinks.filter(
     (link) => link.url !== pathname
   );
