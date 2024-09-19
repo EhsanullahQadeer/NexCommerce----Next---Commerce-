@@ -1,24 +1,21 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '@/store';
-import {
-  products,
-  productCategories,
-} from './fakeProducts';
-import { Product, ProductCategory, ProductVariant } from '@/types/product';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "@/store";
+import { products, productCategories } from "./fakeProducts";
+import { Product, ProductCategory, ProductVariant } from "@/types/product";
 
 export interface categoryPayload {
   id: number;
-  isChecked: boolean
+  isChecked: boolean;
 }
 
 export interface SortPayload {
   sort_by: string;
-  order: string
+  order: string;
 }
 
 export interface OtherSortPayload {
   key: string;
-  value: string | number
+  value: string | number;
 }
 
 // Define a type for the slice state
@@ -40,27 +37,26 @@ export interface ProductsState {
   searchFilter: string;
   sizeFilter: string;
   quickViewProduct: Product | null;
-  currentVarient: ProductVariant | null
-  currentVarientQuantity: number
+  currentVarient: ProductVariant | null;
+  currentVarientQuantity: number;
 }
-
 
 // Define the initial state using that type
 const initialState: ProductsState = {
   products,
   totalProducts: 0,
   max_price: 10000,
-  filterKey: '*',
+  filterKey: "*",
   productCategories,
   isPreviewModalOpen: false,
   isGalleryFullView: false,
   categoriesFilter: [],
   sortByFilter: {
     sort_by: "price",
-    order: "DESC"
+    order: "DESC",
   },
   colorFilter: "",
-  priceRangeFilter: '5000',
+  priceRangeFilter: "5000",
   skip: 0,
   limitFilter: 8,
   currentPage: 1,
@@ -72,58 +68,62 @@ const initialState: ProductsState = {
 };
 
 export const productsSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState,
   reducers: {
     handleProduct: (state, action: PayloadAction<Product[]>) => {
-      let cloneProducts = [...state.products]
-      action.payload.forEach(el => {
-        if (!cloneProducts.find(item => item.id == el.id)) {
-          cloneProducts.push(el)
+      let cloneProducts = [...state.products];
+      action.payload.forEach((el) => {
+        if (!cloneProducts.find((item) => item.id == el.id)) {
+          cloneProducts.push(el);
         }
-      })
-      state.products = cloneProducts
+      });
+      state.products = cloneProducts;
     },
     handleTotalProduct: (state, action: PayloadAction<number>) => {
-      state.totalProducts = action.payload
+      state.totalProducts = action.payload;
     },
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
-      state.max_price = action.payload
+      state.max_price = action.payload;
       if (state.max_price !== action.payload) {
-        state.priceRangeFilter = action.payload.toString()
+        state.priceRangeFilter = action.payload.toString();
       }
     },
     handlePriceRange: (state, action: PayloadAction<string>) => {
-      state.priceRangeFilter = action.payload
+      state.priceRangeFilter = action.payload;
     },
-    handleProductCategories: (state, action: PayloadAction<ProductCategory[]>) => {
+    handleProductCategories: (
+      state,
+      action: PayloadAction<ProductCategory[]>
+    ) => {
       state.productCategories = action.payload;
+      console.log(state.productCategories, "categoris");
     },
     handleCategoriesFilter: (state, action: PayloadAction<categoryPayload>) => {
-      state.products = []
+      state.products = [];
       if (action.payload.isChecked) {
-        state.categoriesFilter.push(action.payload.id)
+        state.categoriesFilter.push(action.payload.id);
       } else {
-        state.categoriesFilter = state.categoriesFilter.filter(id => id !== action.payload.id)
+        state.categoriesFilter = state.categoriesFilter.filter(
+          (id) => id !== action.payload.id
+        );
       }
-      state.currentPage = 1
+      state.currentPage = 1;
     },
     selectCategoryFilter: (state, action: PayloadAction<number>) => {
-
-      state.products = []
-      state.categoriesFilter = [action.payload]
-      state.currentPage = 1
+      state.products = [];
+      state.categoriesFilter = [action.payload];
+      state.currentPage = 1;
     },
     handleSortFilter: (state, action: PayloadAction<SortPayload>) => {
-      state.products = []
-      state.sortByFilter = action.payload
-      state.currentPage = 1
+      state.products = [];
+      state.sortByFilter = action.payload;
+      state.currentPage = 1;
     },
     handleOtherFilter: (state, action: PayloadAction<OtherSortPayload>) => {
       (state as any)[action.payload.key] = action.payload.value;
-      state.currentPage = 1
-      state.products = []
-
+      state.currentPage = 1;
+      state.products = [];
     },
     handleMoreProduct: (state) => {
       state.currentPage++;
@@ -139,34 +139,48 @@ export const productsSlice = createSlice({
     },
     clearFilter: (state) => {
       state.categoriesFilter = [];
-      state.categoriesFilter = []
+      state.categoriesFilter = [];
       state.sortByFilter = {
         sort_by: "price",
-        order: "DESC"
-      }
-      state.colorFilter = ""
-      state.skip = 0
-      state.currentPage = 1
-      state.searchFilter = ""
+        order: "DESC",
+      };
+      state.colorFilter = "";
+      state.skip = 0;
+      state.currentPage = 1;
+      state.searchFilter = "";
     },
     addQuickViewProduct: (state, action: PayloadAction<Product | null>) => {
-      state.currentVarient = action.payload?.product_variants?.[0] || null
-      state.quickViewProduct = action.payload
+      state.currentVarient = action.payload?.product_variants?.[0] || null;
+      state.quickViewProduct = action.payload;
     },
     changeCurrentVarient: (state, action: PayloadAction<ProductVariant>) => {
-      state.currentVarient = action.payload
+      state.currentVarient = action.payload;
     },
     changeCurrentVarientQuantity: (state, action: PayloadAction<number>) => {
-      state.currentVarientQuantity = action.payload
+      state.currentVarientQuantity = action.payload;
     },
-    
   },
 });
 
-export const { handleProduct, handleTotalProduct, handlePriceRange, handleMaxPriceProduct, handleProductCategories, handleCategoriesFilter, selectCategoryFilter,
-  handleSortFilter, handleMoreProduct, handleOtherFilter, handleFilterKeyChange,
-  togglePreviewModal, toggleGalleryModal, clearFilter, addQuickViewProduct, changeCurrentVarient, changeCurrentVarientQuantity } =
-  productsSlice.actions;
+export const {
+  handleProduct,
+  handleTotalProduct,
+  handlePriceRange,
+  handleMaxPriceProduct,
+  handleProductCategories,
+  handleCategoriesFilter,
+  selectCategoryFilter,
+  handleSortFilter,
+  handleMoreProduct,
+  handleOtherFilter,
+  handleFilterKeyChange,
+  togglePreviewModal,
+  toggleGalleryModal,
+  clearFilter,
+  addQuickViewProduct,
+  changeCurrentVarient,
+  changeCurrentVarientQuantity,
+} = productsSlice.actions;
 
 // selectors can use the imported `RootState`
 export const selectProducts = (state: RootState) => state.products;

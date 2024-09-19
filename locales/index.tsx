@@ -1,9 +1,9 @@
 import en from './en/common.json';
-import fr from './fr/common.json';
+import tr from './tr/common.json';
 
 const messages:any = {
   en,
-  fr,
+  tr,
 };
 
 export default messages;

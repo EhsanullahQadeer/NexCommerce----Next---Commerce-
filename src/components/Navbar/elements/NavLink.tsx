@@ -1,7 +1,6 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { useTranslations } from "next-intl";
 
 export interface NavLinkProps {
   name: string;
@@ -16,10 +15,9 @@ const noActiveLinkStyles = 'scale-x-0 scale-y-100 group-hover:scale-x-100 group-
 const activeLinkStyles = '';
 
 const NavLink: FC<NavLinkProps> = ({ name, url, className, isActive }) => {
-  const t = useTranslations();
   return (
     <Link href={url} className={cn(baseStyles, isActive && 'text-primary', className)}>
-      {t(name)}
+      {name}
       <span
         className={cn(
           linkBottomLineStyles,
