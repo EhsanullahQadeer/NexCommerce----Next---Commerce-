@@ -9,10 +9,10 @@ export interface BillingAddressSlice {
   phone: number
   email: string
   address_line1: string
-  address_line2: string
-  city: string
-  state: string
-  country: string
+  // address_line2: string
+  province: string
+  district: string
+  village: string
   postal_code: number
 }
 
@@ -24,10 +24,10 @@ const initialState: BillingAddressSlice = {
   phone: 0,
   email: "",
   address_line1: "",
-  address_line2: "",
-  city: "",
-  state: "",
-  country: "",
+  // address_line2: "",
+  province: "",
+  district: "",
+  village: "",
   postal_code: 0
 }
 

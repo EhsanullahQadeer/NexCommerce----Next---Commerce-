@@ -10,9 +10,9 @@ export interface ShippingAddressSlice {
   email: string
   address_line1: string
   address_line2: string
-  city: string
-  state: string
-  country: string
+  province: string
+  district: string
+  village: string
   postal_code: number
 }
 
@@ -24,9 +24,9 @@ const initialState: ShippingAddressSlice = {
   email: "",
   address_line1: "",
   address_line2: "",
-  city: "",
-  state: "",
-  country: "",
+  province: "",
+  district: "",
+  village: "",
   postal_code: 0
 }
 

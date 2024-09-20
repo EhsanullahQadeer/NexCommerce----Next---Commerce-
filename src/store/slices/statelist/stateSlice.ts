@@ -5,6 +5,7 @@ import type { RootState } from '@/store';
 export interface state {
   value: number
   label: string
+  villages:[]
 }
 
 export interface stateState {
@@ -12,16 +13,16 @@ export interface stateState {
 }
 
 const initialState: stateState = {
-  stateData: []
+  stateData: [{ value: 0, label: 'District', villages:[]}]
 }
 
 export const siteStateSlice = createSlice({
   name: 'statelist',
   initialState,
   reducers: {
-    saveStateList: (state, action: PayloadAction<{ id: number, district_name: string }[]>) => {
-      state.stateData = action.payload.map((row) => { return { value: row.id, label: row.district_name } })
-      state.stateData=[{ value: 0, label: 'State' },...state.stateData]
+    saveStateList: (state, action: PayloadAction<{ id: number, district_name: string,villages:[] }[]>) => {
+      state.stateData = action.payload.map((row) => { return { value: row.id, label: row.district_name,villages:row.villages } })
+      state.stateData=[{ value: 0, label: 'District', villages:[]},...state.stateData]
     }
   },
 });
