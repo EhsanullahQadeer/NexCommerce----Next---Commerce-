@@ -7,7 +7,6 @@ import { BillingAddressSlice, selectBillingAddress, updateBillingAddress } from 
 import { RootState } from '@/store';
 import { selectShippingAddress } from '@/store/slices/shippingaddress/shippingAddressSlice';
 import { useAddShippingAddressMutation, useFetchgetShippingAddressMutation } from '@/store/api/shippingAddressApi';
-import Select from '@/components/Select';
 import { useFetchCitiesMutation } from '@/store/api/cityApi';
 import { selectCityList } from '@/store/slices/citylist/citySlice';
 import { useFetchStatesMutation } from '@/store/api/stateApi';
@@ -24,9 +23,8 @@ const AddressTab = () => {
   const billingaddress = useSelector(selectBillingAddress);
   const { cityData } = useSelector(selectCityList);
   const { stateData } = useSelector(selectstateList);
-  console.log("stateData", stateData)
 
-  const { first_name, last_name, email, phone, postal_code, village, city, state, address_line1, } = billingaddress
+  const { first_name, last_name, email, phone, postal_code, village, province, district, address_line1, } = billingaddress
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [addresstype, setAddressType] = useState("")
@@ -39,8 +37,8 @@ const AddressTab = () => {
     email: "",
     address_line1: "",
     // address_line2: "",
-    city: "",
-    state: "",
+    province: "",
+    district: "",
     village: "",
     postal_code: 0
   });
@@ -69,7 +67,7 @@ const AddressTab = () => {
   const fetchAddressStates = async () => {
     try {
       if (user.id) {
-        await fetchStates({ cityId: newAddress.city }).unwrap();
+        await fetchStates({ cityId: newAddress.province }).unwrap();
       }
     } catch (error) {
       console.error('Failed to fetch states', error);
@@ -77,7 +75,7 @@ const AddressTab = () => {
   };
   useEffect(() => {
     fetchAddressStates();
-  }, [newAddress.city]);
+  }, [newAddress.province]);
 
   useEffect(() => {
     fetchAddressData();
@@ -99,8 +97,8 @@ const AddressTab = () => {
       email: "",
       address_line1: "",
       // address_line2: "",
-      city: "",
-      state: "",
+      province: "",
+      district: "",
       village: "",
       postal_code: 0
     })
@@ -114,8 +112,8 @@ const AddressTab = () => {
     if (!newAddress.email || !/\S+@\S+\.\S+/.test(newAddress.email)) newErrors.email = "A valid email is required.";
     if (!newAddress.phone || isNaN(Number(newAddress.phone))) newErrors.phone = "A valid phone number is required.";
     if (!newAddress.address_line1) newErrors.address_line1 = "Address Line 1 is required.";
-    if (!newAddress.city) newErrors.city = "City is required.";
-    if (!newAddress.state) newErrors.state = "State is required.";
+    if (!newAddress.province) newErrors.city = "City is required.";
+    if (!newAddress.district) newErrors.state = "State is required.";
     if (!newAddress.village) newErrors.village = "village is required.";
     if (!newAddress.postal_code || isNaN(Number(newAddress.postal_code))) newErrors.postal_code = "A valid postal code is required.";
 
@@ -180,7 +178,7 @@ const AddressTab = () => {
                     <p className={textStyles}>{address_line2}</p>
                   )} */}
                   <p className={textStyles}>
-                    {city}, {state},{' '}
+                    {province}, {district},{' '}
                     {postal_code}, {village}
                   </p>
                   <p className={textStyles}>Email: {email}</p>
@@ -214,7 +212,7 @@ const AddressTab = () => {
                 <p className={textStyles}>{shippingaddress.address_line2}</p>
               )} */}
               <p className={textStyles}>
-                {shippingaddress.city}, {shippingaddress.state},{' '}
+                {shippingaddress.province}, {shippingaddress.district},{' '}
                 {shippingaddress.postal_code}, {shippingaddress.village}
               </p>
               <p className={textStyles}>Email: {shippingaddress.email}</p>
@@ -307,8 +305,8 @@ const AddressTab = () => {
 
               <div className="grid grid-cols-3 gap-3 mt-4">
                 <div>
-                  <select value={newAddress.city} className="p-2 block w-full border border-gray-300 rounded-md" name="city" onChange={handleAddressChange}>
-                    <option value={0}>City</option>
+                  <select value={newAddress.province} className="p-2 block w-full border border-gray-300 rounded-md" name="province" onChange={handleAddressChange}>
+                    <option value={0}>Province</option>
                     {cityData.map((row, i) => <option key={`city_${i}`} value={row.value}>{row.label}</option>)}
                   </select>
 
@@ -317,7 +315,7 @@ const AddressTab = () => {
 
                 <div>
 
-                  <select value={newAddress.state} className="p-2 block w-full border border-gray-300 rounded-md" name="state" onChange={handleAddressChange}>
+                  <select value={newAddress.district} className="p-2 block w-full border border-gray-300 rounded-md" name="district" onChange={handleAddressChange}>
                     {stateData.map((row, i) => <option key={`state_${i}`} value={row.value}>{row.label}</option>)}
                   </select>
                   {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
@@ -325,9 +323,9 @@ const AddressTab = () => {
                 <div >
                   <select value={newAddress.village} className="p-2 block w-full border border-gray-300 rounded-md" name="village" onChange={handleAddressChange}>
                     <option value={0}>Village</option>
-                    {newAddress.state &&
+                    {newAddress.district &&
                       stateData
-                        .find((row) => row.value === Number(newAddress.state))?.villages
+                        .find((row) => row.value === Number(newAddress.district))?.villages
                         .map((row1: { id: number; village_name: string }, i: number) => (
                           <option key={`village_${i}`} value={row1.id}>
                             {row1.village_name}

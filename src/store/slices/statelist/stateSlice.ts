@@ -13,7 +13,7 @@ export interface stateState {
 }
 
 const initialState: stateState = {
-  stateData: []
+  stateData: [{ value: 0, label: 'District', villages:[]}]
 }
 
 export const siteStateSlice = createSlice({
@@ -22,7 +22,7 @@ export const siteStateSlice = createSlice({
   reducers: {
     saveStateList: (state, action: PayloadAction<{ id: number, district_name: string,villages:[] }[]>) => {
       state.stateData = action.payload.map((row) => { return { value: row.id, label: row.district_name,villages:row.villages } })
-      state.stateData=[{ value: 0, label: 'State', villages:[]},...state.stateData]
+      state.stateData=[{ value: 0, label: 'District', villages:[]},...state.stateData]
     }
   },
 });
