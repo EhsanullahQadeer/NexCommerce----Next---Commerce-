@@ -12,7 +12,7 @@ export interface ShippingAddressSlice {
   address_line2: string
   city: string
   state: string
-  country: string
+  village: string
   postal_code: number
 }
 
@@ -26,7 +26,7 @@ const initialState: ShippingAddressSlice = {
   address_line2: "",
   city: "",
   state: "",
-  country: "",
+  village: "",
   postal_code: 0
 }
 
