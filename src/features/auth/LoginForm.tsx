@@ -35,6 +35,7 @@ const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
         email: username,
         password,
       });
+      console.log("login", response);
       localStorage.setItem("access_token", response.data.data.token);
       setIsOpen && setIsOpen(false)
 
