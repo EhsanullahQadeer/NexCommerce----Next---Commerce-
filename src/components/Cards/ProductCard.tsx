@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import { isUserLoggedIn } from "@/utility/helper";
 import { RESPONSE_MESSAGES } from "@/utility/constant";
 import AuthComponent from "@/features/auth";
+import Modal from "../Modal";
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -216,21 +217,13 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
           </div>
         </div>
       </div>
-
-      {/* Login Modal */}
-      {isLoginModalVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-white p-8 rounded-md shadow-lg w-[90%] max-w-lg">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-              onClick={() => setIsLoginModalVisible(false)}
-            >
-              <i className="las la-times text-2xl"></i>
-            </button>
-            <AuthComponent onClose={() => setIsLoginModalVisible(false)} />
-          </div>
-        </div>
-      )}
+       <Modal
+       isOpen={isLoginModalVisible}
+       onClose={() => setIsLoginModalVisible(false)}
+       className="!max-w-[575px]"
+     >
+       <AuthComponent setIsOpen={setIsLoginModalVisible} />
+     </Modal>
     </>
   );
 };
