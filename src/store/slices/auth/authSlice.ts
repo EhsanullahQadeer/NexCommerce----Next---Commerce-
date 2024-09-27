@@ -19,9 +19,12 @@ const authSlice = createSlice({
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
     },
+    userUpdate: (state, action) =>{
+      state.user = action.payload.user;
+    },
   },
 });
 
-export const { userLoggedIn, userInitialTransaction } = authSlice.actions;
+export const { userLoggedIn, userUpdate, userInitialTransaction } = authSlice.actions;
 
 export default authSlice.reducer;

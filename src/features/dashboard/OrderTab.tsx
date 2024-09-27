@@ -7,8 +7,6 @@ import OrderExpanded from "./OrderExpanded";
 import { orders, orderStatuses } from "./data";
 import { useSelector } from 'react-redux';
 import { useFetchOrdersMutation } from "@/store/api/ordersApi";
-import { Joan } from "next/font/google";
-import { jsxDEV } from "react/jsx-dev-runtime";
 
 export interface ORDERS {
   id: number;
@@ -123,10 +121,6 @@ export interface ORDERS {
   }
 }
 
-
-
-
-
 const OrderTab = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [visibleOrders, setVisibleOrders] = useState(5);
@@ -138,22 +132,24 @@ const OrderTab = () => {
   const [fetchOrders, isLoading] = useFetchOrdersMutation();
 
   useEffect(() => {
+    const fetchOrdersData = async () => {
+      try {
+        let userId = data?.auth?.user?.id;
+        const response = await fetchOrders({userId})
+        console.log("Orders_Data", response?.data?.data?.orderList)
+        if (response?.data?.data) {
+          setOrdersToShow(response?.data?.data?.orderList)
+          setOrders(response?.data?.data?.orderList)
+        }
+      } catch (error) {
+        console.error("fetch orders:", error);
+      }
+    }
+
     fetchOrdersData()
   }, [])
 
-  const fetchOrdersData = async () => {
-    try {
-      let userId = data?.auth?.user?.id;
-      const response = await fetchOrders({ userId })
-      if (response?.data?.data) {
-        setOrdersToShow(response?.data?.data?.orderList)
-        setOrders(response?.data?.data?.orderList)
-      }
-    } catch (error) {
-      console.error("fetch orders:", error);
-    }
-  }
-
+ 
 
   const loadMoreOrders = () => {
     setVisibleOrders((prev) => prev + 5);
@@ -216,7 +212,7 @@ const OrderTab = () => {
       </div>
 
       <div className="space-y-4">
-        {ordersToShow.slice(0, visibleOrders).map((order: ORDERS) =>
+        { ordersToShow?.length > 0 ? ordersToShow.slice(0, visibleOrders).map((order: ORDERS) =>
         (
           <div key={order?.id} className="border rounded-lg p-4">
             <div
@@ -261,7 +257,10 @@ const OrderTab = () => {
             {expandedOrder === order.id && <OrderExpanded order={order} />}
           </div>
         )
-        )}
+        )
+      :
+      <div className="flex justify-center mt-4">No orders</div>
+      }
       </div>
 
       {visibleOrders < ordersToShow.length && (

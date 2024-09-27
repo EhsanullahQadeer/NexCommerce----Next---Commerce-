@@ -54,14 +54,16 @@ const DashboardComponent = () => {
         })}
       </ul>
       <div className="flex-1 bg-white">
-        {tabs.map((tab) => (
-          <div
+        {tabs.map((tab) => {
+          if(activeTab === tab.id){
+           return ( <div
             key={tab.id}
-            className={`${activeTab === tab.id ? "block" : "hidden"}`}
-          >
+            className={`"block"}`}
+            >
             {tab.content}
-          </div>
-        ))}
+            </div>)
+          }
+})}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client'
 import { apiSlice } from "../slices/api/apiSlice";
-import { userLoggedIn } from "../slices/auth/authSlice";
+import { userLoggedIn, userUpdate } from "../slices/auth/authSlice";
 import { toast } from "react-toastify";
 
 
@@ -25,7 +25,7 @@ export const authApi = apiSlice.injectEndpoints({
             const message = result.data.message
             toast.success(message)
           }
-          localStorage.setItem("user", JSON.stringify(result.data.data.user ||''));
+          localStorage.setItem("user", JSON.stringify(result.data.data.user || ''));
           dispatch(
             userLoggedIn({
               user: result.data.data.user,
@@ -56,7 +56,7 @@ export const authApi = apiSlice.injectEndpoints({
             const message = result.data.message
             toast.success(message)
           }
-          localStorage.setItem("user", JSON.stringify(result.data.data.user ||''));
+          localStorage.setItem("user", JSON.stringify(result.data.data.user || ''));
           dispatch(
             userLoggedIn({
               user: result.data.data.user,
@@ -71,7 +71,41 @@ export const authApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    userUpdate: builder.mutation({
+      query: (data) => (
+        {
+          url: "user-update",
+          method: "POST",
+          body: data,
+        }
+      ),
+
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+          if (!result?.data?.data) {
+            const message = result?.data?.message
+            toast.error(message)
+            throw new Error(message)
+          } else {
+            const message = result?.data?.message
+            localStorage.setItem("user", JSON.stringify(result?.data?.data || ''));
+            dispatch(
+              userUpdate({
+                user: result?.data?.data
+              })
+            );
+            toast.success(message)
+          }
+        } catch (error: any) {
+          if (error?.error?.data?.message) {
+            const message = error?.error?.data?.message
+            toast.error(message)
+          }
+        }
+      },
+    }),
   }),
 });
 
-export const { useSignUpMutation, useLoginMutation } = authApi;
+export const { useSignUpMutation, useLoginMutation, useUserUpdateMutation } = authApi;

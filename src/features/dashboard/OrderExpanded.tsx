@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import { Oregano } from "next/font/google";
 import Image from "next/image";
 import React, { useState } from "react";
 
@@ -316,6 +315,14 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
                  %{order?.vat_amount}
+                </p>
+              </div>
+              <div className="flex justify-between my-2">
+                <p className="text-black-500 text-sm flex items-center">
+                  Discount
+                </p>
+                <p className="text-black-75 text-sm flex items-center font-semibold">
+                  ${order.discount_amount}
                 </p>
               </div>
               <div className="flex justify-between my-2 border-t pt-2">
