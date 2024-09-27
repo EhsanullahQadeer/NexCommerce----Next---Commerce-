@@ -13,7 +13,7 @@ import { userLoggedIn } from "@/store/slices/auth/authSlice";
 import { RootState } from "@/store";
 import { clearCart } from "@/store/slices/cart/cartSlice";
 import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
-
+import Cookies from 'js-cookie';
 import {
   selectSiteSetting,
   SiteSetting,
@@ -51,6 +51,7 @@ const TopBar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("access_token");
+    Cookies.remove("access_token");
     dispatch(userLoggedIn({ user: undefined, isAuthenticated: false }));
     dispatch(clearCart());
     setDropdownOpen(false);

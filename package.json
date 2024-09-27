@@ -11,7 +11,10 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "clsx": "^2.1.1",
+    "cookie": "^0.6.0",
     "isotope-layout": "^3.0.6",
+    "js-cookie": "^3.0.5",
+    "molla": "file:",
     "next": "14.2.5",
     "next-intl": "^3.19.3",
     "react": "^18",

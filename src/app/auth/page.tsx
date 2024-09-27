@@ -19,15 +19,15 @@ const Login = () => {
     },
     {
       url: '#',
-      name: 'Login',
+      name: 'Login',  
     },
   ];
 
   useEffect(() => {
     if(isAuthenticated){
       route.push("/")
-    } else {
-      setLoading(false)
+    } else {    
+      setLoading(false)    
     }
   }, [isAuthenticated])
 

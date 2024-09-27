@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIcon from "@/components/Icons/ProgressIcon";
-
+import Cookies from 'js-cookie';
 interface LoginFormProps {
   setIsOpen?: (isOpen: boolean) => void;
   onClose?: () => void;
@@ -35,11 +35,11 @@ const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
         email: username,
         password,
       });
-      console.log("login", response);
       localStorage.setItem("access_token", response.data.data.token);
+      Cookies.set("access_token", response.data.data.token); 
       setIsOpen && setIsOpen(false)
 
-      router.push('/dashboard')
+      router.push('/dashboard') 
     } catch (error) {
       console.error("Login failed:", error);
     }
