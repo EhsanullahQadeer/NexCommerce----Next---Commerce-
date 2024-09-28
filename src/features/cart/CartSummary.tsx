@@ -6,13 +6,10 @@ import { selectCart } from "@/store/slices/cart/cartSlice";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
 import useCurrency from "@/hooks/useCurrency";
-import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
-
 const CartSummary = () => {
   const { totalAmount } = useSelector(selectCart);
-  const { shipping_amount, free_shipping_threshold, selected_currencies_id } =
+  const { shipping_amount, free_shipping_threshold, vat_amount } =
     useSelector(selectSiteSetting);
-
   const { formatPrice, calculatePrice } = useCurrency();
   const { couponData } = useSelector(selectCoupenCode);
   const { discount_type, discount_amount, discount_percentage } =
@@ -23,12 +20,19 @@ const CartSummary = () => {
       ? totalAmount * (discount_percentage / 100)
       : calculatePrice(discount_amount, couponData.currency_id)
     : 0;
+
   const shippingFee =
     totalAmount >= parseInt(free_shipping_threshold)
       ? 0
       : parseInt(shipping_amount);
 
-  const calculatedTotalAmount = totalAmount - discountAmount + shippingFee;
+  const vatFee =
+ Number(vat_amount) > 0
+      ? totalAmount * (Number(vat_amount)/ 100)
+      : 0;
+
+  const calculatedTotalAmount =
+    totalAmount + vatFee + shippingFee - discountAmount;
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-medium pb-[17px]">
@@ -40,7 +44,7 @@ const CartSummary = () => {
           {formatPrice(totalAmount)}
         </span>
       </div>
-      <Shipping {...{ discountAmount, shippingFee }} />
+      <Shipping {...{ discountAmount, shippingFee ,vatFee}} />
       {/* <div className="border-b border-black-300 py-[14px] pb-[23px]">
         <h4 className="text-black-75 leading-[22.88px]">
           Estimate for your country

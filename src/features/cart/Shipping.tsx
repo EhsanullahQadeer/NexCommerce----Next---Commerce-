@@ -10,9 +10,10 @@ import { useSelector } from "react-redux";
 interface Iprops {
   discountAmount: number;
   shippingFee: number;
+  vatFee:number
 }
 const Shipping = (props: Iprops) => {
-  const { discountAmount, shippingFee } = props;
+  const { discountAmount, shippingFee ,vatFee} = props;
   const {formatPrice}=  useCurrency();
   const { totalAmount } = useSelector(selectCart);
   const { free_shipping_threshold } =
@@ -43,6 +44,19 @@ const Shipping = (props: Iprops) => {
         </span>
       </div>
 
+      {vatFee ? (
+        <React.Fragment>
+          <h4 className="text-black-75 leading-[56px]">Value Added Tax:</h4>
+          <div className="flex justify-between items-center py-[5px]">
+            <span className="text-black-75 font-light text-sm">VAT Charge</span>
+            <span className="text-black-75 font-light text-sm">
+              {formatPrice(vatFee)}
+            </span>
+          </div>
+        </React.Fragment>
+      ) : (
+        ""
+      )}
       {discountAmount ? (
         <React.Fragment>
           <h4 className="text-black-75 leading-[56px]">Discount:</h4>
@@ -56,6 +70,7 @@ const Shipping = (props: Iprops) => {
       ) : (
         ""
       )}
+
       {/* <div className="flex justify-between items-center py-[5px]">
         <Radio
           label="Standard:"
