@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { cn } from "@/lib/utils";
 import { selectSidebarToggle } from "@/store/slice";
 import {
@@ -22,6 +22,11 @@ import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
 import { useAddVisitorMutation } from "@/store/api/visitorApi";
 import { debug } from "console";
 import ProductDetailPage from "@/app/products/[slug]/page";
+import { selectCart, setCartTotalAmount } from "@/store/slices/cart/cartSlice";
+import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
+import { selectSiteSetting, updateSiteShippingData } from "@/store/slices/siteSetting/siteSettingSlice";
+import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
+import useCurrency from "@/hooks/useCurrency";
 
 function detectBrowser() {
   var userAgent = navigator.userAgent;
@@ -72,6 +77,17 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [currencyListGet] = useFetchCurrencyListMutation();
   const [languageListGet] = useFetchLanguageListMutation();
   const [addVisitor] = useAddVisitorMutation();
+  const { cartDetails} = useSelector(selectCart);
+  const { currencyData } = useSelector(selectCurrency);
+  const {
+    selected_currencies_id,
+    initial_selected_currencies_id,
+    initial_free_shipping_threshold,
+    initial_shipping_amount,
+  } = useSelector(selectSiteSetting);
+
+  const { calculatePrice } = useCurrency();
+  const dispatch=useDispatch()
 
   const handleFetchProductsWithFilter = async () => {
     try {
@@ -207,6 +223,40 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       setHideLayout(true);
     }
   }, []);
+
+
+  useEffect(() => {
+    const totalAmount = cartDetails.reduce(
+      (
+        total,
+        { price_at_purchase, quantity, product: { currency_id, price } }
+      ) => total + calculatePrice(quantity * price, currency_id),
+      0
+    );
+    dispatch(setCartTotalAmount(totalAmount));
+  }, [cartDetails, selected_currencies_id, currencyData, dispatch]);
+
+  useEffect(() => {
+    const freeShippingThreshold = calculatePrice(
+      Number(initial_free_shipping_threshold),
+      initial_selected_currencies_id
+    );
+    const shippingAmount = calculatePrice(
+      Number(initial_shipping_amount),
+      initial_selected_currencies_id
+    );
+    dispatch(
+      updateSiteShippingData({
+        free_shipping_threshold: freeShippingThreshold.toString(),
+        shipping_amount: shippingAmount.toString(),
+      })
+    );
+  }, [
+    selected_currencies_id,
+    initial_free_shipping_threshold,
+    initial_shipping_amount,
+    initial_selected_currencies_id,
+  ]);
 
   return (
     <div

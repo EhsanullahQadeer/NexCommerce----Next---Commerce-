@@ -81,10 +81,10 @@ const CartComponent = () => {
                   <i className="las la-long-arrow-alt-right"></i>
                 </Button>
               </div>
-              <Button className="uppercase !h-10 justify-center !text-black-75 !border-black-300 hover:!bg-[#f5f6f9] hover:!text-primary">
+              {/* <Button className="uppercase !h-10 justify-center !text-black-75 !border-black-300 hover:!bg-[#f5f6f9] hover:!text-primary">
                 Update cart
                 <i className="las la-sync ml-2.5"></i>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div>

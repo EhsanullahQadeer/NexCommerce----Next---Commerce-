@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
 import { Product } from '@/types/product';
+import { calculatePriceInCurrency } from '@/utility/calculatePriceInCurrency';
 
 // Define interfaces for CartItem, Product, and Variant
 interface Variant {
@@ -69,14 +70,13 @@ export const cartSlice = createSlice({
     },
     setCartDetails: (state, action: PayloadAction<CartItem[]>) => {
       state.cartDetails = action.payload;
-      state.totalAmount = action.payload.reduce(
-        (total, item) => total + item.price_at_purchase,
-        0
-      );
       state.totalItems = action.payload.reduce(
         (total, item) => total + item.quantity,
         0
       );
+    },
+    setCartTotalAmount: (state, action: PayloadAction<number>) => {
+      state.totalAmount = action.payload;
     },
     setShippingAmount: (state, action: PayloadAction<number>) => {
       state.shipping_amount = action.payload;
@@ -88,6 +88,7 @@ export const {
   removeCartItem,
   clearCart,
   setCartDetails,
+  setCartTotalAmount,
   setShippingAmount
 } = cartSlice.actions;
 

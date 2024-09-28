@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import NumberInput from '../NumberInput/NumberInput';
 import { useAddToCartMutation, useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 import { RootState } from '@/store';
+import useCurrency from '@/hooks/useCurrency';
 
 export type ColumnHeaders = {
   key: string;
@@ -32,6 +33,7 @@ const Table: FC<TableProps> = ({ headers, className }) => {
   const [addToCart] = useAddToCartMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [deletefromCart] = useDeletefromCartMutation()
+  const {formatPrice}=useCurrency()
 
   const handleFetchCart = async () => {
     try {
@@ -135,17 +137,18 @@ const Table: FC<TableProps> = ({ headers, className }) => {
         </tr>
       </thead>
       <tbody>
-        {cartDetails?.map((item, index) => (
-          <tr
-            key={index}
-            className="relative block lg:table-row border-b border-black-300 py-[42px] lg:py-0"
-          >
-            <td
-              className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell"
+        {cartDetails?.map((item, index) => {
+          const {
+            product: { price, currency_id },
+            quantity,
+          } = item;
+          return (
+            <tr
+              key={index}
+              className="relative block lg:table-row border-b border-black-300 py-[42px] lg:py-0"
             >
-              {
-                item?.product?.image
-                && (
+              <td className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell">
+                {item?.product?.image && (
                   <div className="flex items-center justify-center lg:justify-start">
                     <Image
                       src={item?.product?.image}
@@ -160,32 +163,39 @@ const Table: FC<TableProps> = ({ headers, className }) => {
                       {item?.product?.name}
                     </Link>
                   </div>
-                )
-              }
-            </td>
-            <td
-              className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell"
-            >
-              <div className="w-full text-black-75 pt-2 lg:pt-0">${item?.product?.price?.toFixed(2)}</div>
-            </td>
-            <td className='px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell'>
-              <div className='flex justify-center w-full lg:justify-start pt-2 lg:pt-0'>
-                <NumberInput
-                  value={item?.quantity}
-                  inputClass="!max-w-[100px]"
-                  className="!max-w-[100px]"
-                  onChange={(type) => handleCartItemChanges(type, item)}
-                />
-              </div>
-            </td>
-            <td className='px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell'><div className="w-full lg:w-[80px] text-primary text-base pt-2 lg:pt-0">
-              ${(item?.product?.price * item?.quantity).toFixed(2)}
-            </div></td>
-            <td> <button className="w-[38px] absolute top-4 right-4 lg:right-[unset] lg:top-[unset] lg:relative" onClick={() => handleCartItemDelete(item)}>
-              <i className="las la-times text-[17px] text-black-600 hover:text-black-75 cursor-pointer"></i>
-            </button></td>
-          </tr>
-        ))}
+                )}
+              </td>
+              <td className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell">
+                <div className="w-full text-black-75 pt-2 lg:pt-0">
+                  {formatPrice(price,currency_id)}
+                </div>
+              </td>
+              <td className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell">
+                <div className="flex justify-center w-full lg:justify-start pt-2 lg:pt-0">
+                  <NumberInput
+                    value={item?.quantity}
+                    inputClass="!max-w-[100px]"
+                    className="!max-w-[100px]"
+                    onChange={(type) => handleCartItemChanges(type, item)}
+                  />
+                </div>
+              </td>
+              <td className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell">
+                <div className="w-full lg:w-[80px] text-primary text-base pt-2 lg:pt-0">
+                  {formatPrice(price * quantity, currency_id)}
+                </div>
+              </td>
+              <td>
+                {" "}
+                <button
+                  className="w-[38px] absolute top-4 right-4 lg:right-[unset] lg:top-[unset] lg:relative"
+                  onClick={() => handleCartItemDelete(item)}
+                >
+                  <i className="las la-times text-[17px] text-black-600 hover:text-black-75 cursor-pointer"></i>
+                </button>
+              </td>
+            </tr>
+          );})}
       </tbody>
     </table>
   );

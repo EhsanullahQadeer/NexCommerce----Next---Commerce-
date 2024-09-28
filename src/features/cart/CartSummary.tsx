@@ -6,12 +6,14 @@ import { selectCart } from "@/store/slices/cart/cartSlice";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
 import useCurrency from "@/hooks/useCurrency";
+import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
 
 const CartSummary = () => {
   const { totalAmount } = useSelector(selectCart);
-  const { shipping_amount, free_shipping_threshold } =
+  const { shipping_amount, free_shipping_threshold, selected_currencies_id } =
     useSelector(selectSiteSetting);
-  const {formatPrice}=  useCurrency()
+
+  const { formatPrice, calculatePrice } = useCurrency();
   const { couponData } = useSelector(selectCoupenCode);
   const { discount_type, discount_amount, discount_percentage } =
     couponData || {};
@@ -19,9 +21,8 @@ const CartSummary = () => {
   const discountAmount = couponData
     ? discount_type === "percentage"
       ? totalAmount * (discount_percentage / 100)
-      : discount_amount
+      : calculatePrice(discount_amount, couponData.currency_id)
     : 0;
-
   const shippingFee =
     totalAmount >= parseInt(free_shipping_threshold)
       ? 0
@@ -40,7 +41,7 @@ const CartSummary = () => {
         </span>
       </div>
       <Shipping {...{ discountAmount, shippingFee }} />
-      <div className="border-b border-black-300 py-[14px] pb-[23px]">
+      {/* <div className="border-b border-black-300 py-[14px] pb-[23px]">
         <h4 className="text-black-75 leading-[22.88px]">
           Estimate for your country
         </h4>
@@ -50,7 +51,7 @@ const CartSummary = () => {
         >
           Change address
         </Link>
-      </div>
+      </div> */}
       <div className="flex items-center justify-between min-h-[70px] text-base text-primary font-light">
         <h4>Total:</h4>
         <span>{formatPrice(calculatedTotalAmount)}</span>

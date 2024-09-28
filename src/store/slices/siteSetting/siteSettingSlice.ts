@@ -9,10 +9,13 @@ export interface SiteSetting {
   phone_number: string;
   selected_language_id: number;
   selected_currencies_id: number;
+  initial_selected_currencies_id:number;
   social_media_details: string;
   vat_amount: string;
   shipping_amount: string;
+  initial_shipping_amount: string;
   free_shipping_threshold: string;
+  initial_free_shipping_threshold: string;
   created_at: string;
   updated_at: string;
   site_status: number;
@@ -43,10 +46,13 @@ const initialState: SiteSetting = {
   phone_number: "",
   selected_language_id: 0,
   selected_currencies_id: 0,
+  initial_selected_currencies_id:0,
   social_media_details: "",
   vat_amount: "",
   shipping_amount: "",
+  initial_shipping_amount: "",
   free_shipping_threshold: "",
+  initial_free_shipping_threshold: "",
   created_at: "",
   updated_at: "",
   site_status: 0,
@@ -60,6 +66,8 @@ const initialState: SiteSetting = {
   logo_url: "",
 };
 
+const preserveInitialValuesKeys: string[] = ["selected_currencies_id","free_shipping_threshold","shipping_amount"];
+
 export const siteSettingSlice = createSlice({
   name: "siteSetting",
   initialState,
@@ -70,10 +78,21 @@ export const siteSettingSlice = createSlice({
     ) => {
       let obj: any = {};
       action.payload.map((item) => {
-        if (item) {
+       
+        if (item  && item.key) {
+          if(preserveInitialValuesKeys.includes( item.key)){
+            const initialKey = `initial_${item.key}` as keyof SiteSetting; ;
+            const getType = typeof state[initialKey];
+            if (getType === 'string') {
+              obj[initialKey] = String(item.value); 
+            } else if (getType === 'number') {
+              obj[initialKey] = Number(item.value); 
+            }
+          }
           obj[item.key] = item.value;
         }
       });
+
       Object.assign(state, obj);
     },
     updateSiteName: (state, action: PayloadAction<SiteSetting>) => {
@@ -82,10 +101,14 @@ export const siteSettingSlice = createSlice({
     updateSiteCurrency: (state, action: PayloadAction<{selected_currencies_id:number}>) => {
       state.selected_currencies_id = action.payload.selected_currencies_id;
     },
+    updateSiteShippingData:(state, action: PayloadAction<{free_shipping_threshold:string,shipping_amount:string}>) => {
+      state.free_shipping_threshold = action.payload.free_shipping_threshold;
+      state.shipping_amount = action.payload.shipping_amount;
+    },
   },
 });
 
-export const { updateSiteSettings, updateSiteName ,updateSiteCurrency } = siteSettingSlice.actions;
+export const { updateSiteSettings, updateSiteName ,updateSiteCurrency ,updateSiteShippingData} = siteSettingSlice.actions;
 
 // Selectors
 export const selectSiteSetting = (state: RootState) => state.siteSettingSlice;

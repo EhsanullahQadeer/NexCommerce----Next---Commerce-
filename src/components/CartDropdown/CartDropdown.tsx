@@ -7,6 +7,7 @@ import CartDropdownActions from './CartActions';
 import useOutsideClick from '@/hooks/useOutSideClick';
 import { useSelector } from 'react-redux';
 import { selectCart } from '@/store/slices/cart/cartSlice';
+import useCurrency from '@/hooks/useCurrency';
 
 const dropdownBaseStyles =
   'absolute w-[300px] bg-white top-[60px] right-0 shadow-dropdown px-[30px] pt-[10px] pb-[25px] z-[9] opacity-0 invisible';
@@ -15,6 +16,7 @@ const activeStyles = '!visible !opacity-100';
 
 const CartDropdown = () => {
   const { cartDetails, totalAmount } = useSelector(selectCart)
+  const {formatPrice} = useCurrency()
   const dropdownRef = useRef<HTMLInputElement>(null);
   const [isActive, setisActive] = useState(false);
 
@@ -37,7 +39,7 @@ const CartDropdown = () => {
           count={cartDetails.length || 0}
         />
         <span className="font-light text-[13px] text-[#222] ml-4 mb-1 hover:text-primary">
-          ${totalAmount.toFixed(2) || 0}
+          {formatPrice(totalAmount)}
         </span>
       </div>
 

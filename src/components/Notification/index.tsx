@@ -2,9 +2,11 @@ import { useState } from 'react';
 import Container from '../Container';
 import { useSelector } from 'react-redux';
 import { selectSiteSetting } from '@/store/slices/siteSetting/siteSettingSlice';
+import useCurrency from '@/hooks/useCurrency';
 
 const Notification = () => {
   const { free_shipping_threshold } = useSelector(selectSiteSetting)
+  const {formatPrice} = useCurrency()
   const [isOpen, setIsOpen] = useState(true);
 
   if (!isOpen) return null;
@@ -17,7 +19,7 @@ const Notification = () => {
           { }
           <h3 className="text-[13px] font-normal tracking-[0.65px] leading-[14.3px] text-white md:text-center">
             {
-              parseInt(free_shipping_threshold) == 0 ? `FREE SHIPPING FOR ALL YOUR PURCHASES` : `FREE SHIPPING FOR ALL ORDERS OVER $${free_shipping_threshold}` 
+              parseInt(free_shipping_threshold) == 0 ? `FREE SHIPPING FOR ALL YOUR PURCHASES` : `FREE SHIPPING FOR ALL ORDERS OVER ${formatPrice(Number(free_shipping_threshold))}` 
             }
             
           </h3>
