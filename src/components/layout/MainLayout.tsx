@@ -27,6 +27,8 @@ import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
 import { selectSiteSetting, updateSiteShippingData } from "@/store/slices/siteSetting/siteSettingSlice";
 import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
 import useCurrency from "@/hooks/useCurrency";
+import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
+import { clearCoupon, selectCoupenCode, updateCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
 
 function detectBrowser() {
   var userAgent = navigator.userAgent;
@@ -77,8 +79,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [currencyListGet] = useFetchCurrencyListMutation();
   const [languageListGet] = useFetchLanguageListMutation();
   const [addVisitor] = useAddVisitorMutation();
+  const [fetchCoupenCode] = useFetchCoupenCodeMutation();
   const { cartDetails} = useSelector(selectCart);
   const { currencyData } = useSelector(selectCurrency);
+  const { coupon_code } = useSelector(selectCoupenCode);
+
   const {
     selected_currencies_id,
     initial_selected_currencies_id,
@@ -182,6 +187,21 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       }
     } catch (error) {}
   }
+ 
+   const getCouponDetails = async () => {
+    if(!coupon_code) return;
+     const response = await fetchCoupenCode(coupon_code).unwrap();
+     const couponData = response.data;
+     if (couponData) {
+       dispatch(
+         updateCoupenCode({
+           couponData,
+         })
+       );
+     } else {
+     dispatch(clearCoupon())
+     }
+   };
 
   const handleFetchVisitor = async (
     browser: string,
@@ -211,6 +231,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       handleFetchWishlist();
       handleFetchCurrencyList();
       handleFetchLanguageList();
+      getCouponDetails()
     }, 0);
   }, [user, isAuthenticated]);
 

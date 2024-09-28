@@ -7,13 +7,15 @@ import Input from "@/components/Input";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCart } from "@/store/slices/cart/cartSlice";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
 import {
+  clearCoupon,
   selectCoupenCode,
   updateCoupenCode,
 } from "@/store/slices/coupencode/coupenCodeSlice";
 import { RESPONSE_MESSAGES } from "@/utility/constant";
+import Cookies from 'js-cookie';
 import { toast } from "react-toastify";
 
 const CartComponent = () => {
@@ -35,6 +37,7 @@ const CartComponent = () => {
       if (couponData) {
         if (totalAmount >= couponData.minimum_order_amount) {
           toast.success(RESPONSE_MESSAGES.GENERAL.COUPON_APPLIED);
+          Cookies.set("coupon_code", couponCode); 
           dispatch(
             updateCoupenCode({
               coupon_code: couponCode,
@@ -58,6 +61,15 @@ const CartComponent = () => {
     }
   };
 
+  const handleCoupon = () => {
+    if (coupon_code) {
+      dispatch(clearCoupon())
+      setCouponCode("")
+      toast.warning("Your coupon has been cleared.");
+    } else {
+      handleApplyCoupon();
+    }
+  };
   return (
     <div className="flex flex-col lg:flex-row pt-10 pb-[50px] gap-5">
       {cartDetails.length > 0 ? (
@@ -74,11 +86,14 @@ const CartComponent = () => {
                 />
 
                 <Button
-                  variant={couponData ? "disabled" : "outlined"}
                   className="justify-center !p-0 h-10 w-10"
-                  onClick={handleApplyCoupon}
+                  onClick={handleCoupon}
                 >
-                  <i className="las la-long-arrow-alt-right"></i>
+                  <i
+                    className={`las ${
+                      coupon_code ? "la-times" : "la-long-arrow-alt-right"
+                    }`}
+                  ></i>
                 </Button>
               </div>
               {/* <Button className="uppercase !h-10 justify-center !text-black-75 !border-black-300 hover:!bg-[#f5f6f9] hover:!text-primary">

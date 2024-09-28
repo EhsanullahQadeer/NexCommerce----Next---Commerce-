@@ -23,6 +23,7 @@ import {
 } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectLanguage } from "@/store/slices/languagelist/languageSlice";
 import { useTranslations } from "next-intl";
+import { clearCoupon } from "@/store/slices/coupencode/coupenCodeSlice";
 
 const TopBar: React.FC = () => {
   const t = useTranslations();
@@ -58,6 +59,7 @@ const TopBar: React.FC = () => {
     dispatch(clearCart());
     setDropdownOpen(false);
     setDropdownMobileOpen(false);
+    dispatch(clearCoupon())
     return router.push("/");
   };
 
