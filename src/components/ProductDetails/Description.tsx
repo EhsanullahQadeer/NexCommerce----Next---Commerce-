@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import Stars from '../Stars';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { useSelector } from 'react-redux';
+import useCurrency from '@/hooks/useCurrency';
 
 interface DescriptionProps {
   className?: string;
@@ -10,6 +11,10 @@ interface DescriptionProps {
 
 const Description: FC<DescriptionProps> = ({ className }) => {
   const { quickViewProduct, currentVarient } = useSelector(selectProducts);
+  const {price:variantPrice ,currency_id} = currentVarient  ||{};
+  
+  const {formatPrice}=useCurrency()
+  console.log('currentVarient: ', currentVarient);
   const {name, price, description} = quickViewProduct || {}
   return (
     <div className={cn('mb-10', className)}>
@@ -18,7 +23,7 @@ const Description: FC<DescriptionProps> = ({ className }) => {
       </h2>
       <Stars count={5} reviewCount={2} className="mb-2.5" />
       <h3 className="text-2xl text-primary font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
-        ${currentVarient?.price}
+        {variantPrice&&formatPrice(Number(variantPrice) ,currency_id)}
       </h3>
       <p className="mt-[17px] font-extralight text-sm text-black-100 leading-[26.04px]">
        {description}

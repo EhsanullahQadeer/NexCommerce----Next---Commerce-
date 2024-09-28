@@ -4,15 +4,17 @@ import { useRouter } from 'next/navigation';
 import Button from '../Button';
 import { useSelector } from 'react-redux';
 import { selectCart } from '@/store/slices/cart/cartSlice';
+import useCurrency from '@/hooks/useCurrency';
 
 const CartDropdownActions = () => {
   const { totalAmount } = useSelector(selectCart)
+  const {formatPrice} = useCurrency()
   const router = useRouter();
   return (
     <div className="pt-2.5 pb-[5px]">
       <div className="flex justify-between items-center">
         <span>Total</span>
-        <span>${totalAmount.toFixed(2) || 0}</span>
+        <span>{formatPrice(totalAmount|| 0)}</span>
       </div>
       <div className="flex justify-between items-center">
         <Button

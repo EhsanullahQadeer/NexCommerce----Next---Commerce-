@@ -33,6 +33,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
     className,
     slug,
     onPreview,
+    currency_id
     // heading,
   } = productDetails
   const { user } = useSelector((state: RootState) => state.auth);
@@ -160,7 +161,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
             {name}
           </Link>
         </h3>
-        <CardPrice price={price} oldPrice={0} isBoxed />
+        <CardPrice currency_id={currency_id} price={price} oldPrice={0} isBoxed />
         <div className="mb-[17px] mt-[13px]">
           <Stars count={5} reviewCount={2} />
         </div>

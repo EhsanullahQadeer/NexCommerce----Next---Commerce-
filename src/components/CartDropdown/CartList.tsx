@@ -1,3 +1,4 @@
+import useCurrency from '@/hooks/useCurrency';
 import { RootState } from '@/store';
 import { useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 import { CartItem } from '@/store/slices/cart/cartSlice';
@@ -11,7 +12,9 @@ export interface cartItemProps {
 
 const CartList = ({ data }: cartItemProps) => {
   const { product, variant } = data
+  const { currency_id, price } = variant;
   const { user } = useSelector((state: RootState) => state.auth);
+  const {formatPrice} = useCurrency()
 
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [deletefromCart] = useDeletefromCartMutation()
@@ -48,7 +51,7 @@ const CartList = ({ data }: cartItemProps) => {
             </h4>
             <span className='font-light text-[13px] text-black-200'>
               <span>{data.quantity}</span>
-              <span> x ${variant.price}</span>
+              <span> x {formatPrice(Number(price) , currency_id)}</span>
             </span>
           </div>
         </Link>

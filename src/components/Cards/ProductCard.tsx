@@ -52,6 +52,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     className,
     slug,
     onPreview,
+    currency_id
   } = productDetails;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
@@ -201,7 +202,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
               {name}
             </Link>
           </h3>
-          <CardPrice price={price} oldPrice={0} />
+          <CardPrice currency_id={currency_id} price={price} oldPrice={0} />
 
           <ReadOnlyColorVariants
             variants={colorVarientFilter(product_variants)}
