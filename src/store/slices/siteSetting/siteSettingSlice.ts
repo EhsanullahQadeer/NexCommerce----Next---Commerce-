@@ -32,6 +32,7 @@ interface SiteSettingDB {
   value: "";
   created_at: "";
   updated_at: "";
+  selected_currencies_id:number
 }
 
 const initialState: SiteSetting = {
@@ -78,10 +79,13 @@ export const siteSettingSlice = createSlice({
     updateSiteName: (state, action: PayloadAction<SiteSetting>) => {
       state.selected_language_id = action.payload.selected_language_id;
     },
+    updateSiteCurrency: (state, action: PayloadAction<{selected_currencies_id:number}>) => {
+      state.selected_currencies_id = action.payload.selected_currencies_id;
+    },
   },
 });
 
-export const { updateSiteSettings, updateSiteName } = siteSettingSlice.actions;
+export const { updateSiteSettings, updateSiteName ,updateSiteCurrency } = siteSettingSlice.actions;
 
 // Selectors
 export const selectSiteSetting = (state: RootState) => state.siteSettingSlice;

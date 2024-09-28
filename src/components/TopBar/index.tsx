@@ -17,7 +17,9 @@ import Cookies from 'js-cookie';
 import {
   selectSiteSetting,
   SiteSetting,
+  updateSiteCurrency,
   updateSiteName,
+  updateSiteSettings,
 } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectLanguage } from "@/store/slices/languagelist/languageSlice";
 import { useTranslations } from "next-intl";
@@ -124,6 +126,9 @@ const TopBar: React.FC = () => {
                 (el) => el.id == selected_currencies_id.toString()
               )}
               style="px-0"
+              onSelect={(e: any, item) => {
+                dispatch(updateSiteCurrency({selected_currencies_id:e}))
+              }}
             />
             <Dropdown
               id="langauges"

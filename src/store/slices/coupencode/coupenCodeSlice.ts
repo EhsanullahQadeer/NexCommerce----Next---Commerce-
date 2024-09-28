@@ -3,12 +3,14 @@ import type { RootState } from '@/store';
 
 
 interface CoupenCodeSlice {
-  coupon_code: string
+  coupon_code: string;
+  couponData:any
 }
 
 const initialState: CoupenCodeSlice = {
 
-  coupon_code: ""
+  coupon_code: "",
+  couponData:null
 }
 
 export const siteCoupenCodeSlice = createSlice({
@@ -22,7 +24,7 @@ export const siteCoupenCodeSlice = createSlice({
 });
 
 export const {
-  updateCoupenCode
+  updateCoupenCode,
 } = siteCoupenCodeSlice.actions;
 
 // Selectors

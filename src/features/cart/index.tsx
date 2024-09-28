@@ -1,36 +1,60 @@
-'use client';
-import Table from '@/components/Table';
-import { tableHeader } from './data';
-import Button from '@/components/Button';
-import CartSummary from './CartSummary';
-import Input from '@/components/Input';
-import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectCart } from '@/store/slices/cart/cartSlice';
-import { useState } from 'react';
-import { useFetchCoupenCodeMutation } from '@/store/api/coupenCodeApi';
-import { updateCoupenCode } from '@/store/slices/coupencode/coupenCodeSlice';
-
-
+"use client";
+import Table from "@/components/Table";
+import { tableHeader } from "./data";
+import Button from "@/components/Button";
+import CartSummary from "./CartSummary";
+import Input from "@/components/Input";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCart } from "@/store/slices/cart/cartSlice";
+import { useEffect, useState } from "react";
+import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
+import {
+  selectCoupenCode,
+  updateCoupenCode,
+} from "@/store/slices/coupencode/coupenCodeSlice";
+import { RESPONSE_MESSAGES } from "@/utility/constant";
+import { toast } from "react-toastify";
 
 const CartComponent = () => {
-
-  const { cartDetails } = useSelector(selectCart)
-  const [couponCode, setCouponCode] = useState('');
+  const { cartDetails, totalAmount } = useSelector(selectCart);
+  const { couponData, coupon_code } = useSelector(selectCoupenCode);
+  const [couponCode, setCouponCode] = useState(coupon_code);
   const [fetchCoupenCode] = useFetchCoupenCodeMutation();
   const dispatch = useDispatch();
 
-
   const handleApplyCoupon = async () => {
     try {
+      if (!couponCode) {
+        toast.warning("Please enter a coupon code.");
+        return;
+      }
+
       const response = await fetchCoupenCode(couponCode).unwrap();
-    
-        console.log('Coupon applied successfully:', response);
-      
-      dispatch(updateCoupenCode({ coupon_code: couponCode }));
-      
+      const couponData = response.data;
+      if (couponData) {
+        if (totalAmount >= couponData.minimum_order_amount) {
+          toast.success(RESPONSE_MESSAGES.GENERAL.COUPON_APPLIED);
+          dispatch(
+            updateCoupenCode({
+              coupon_code: couponCode,
+              couponData: response.data,
+            })
+          );
+        } else {
+          toast.warning(
+            RESPONSE_MESSAGES.GENERAL.MINIMUM_AMOUNT_USE_COUPON.replace(
+              "?",
+              couponData.minimum_order_amount
+            )
+          );
+        }
+      } else {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.COUPON_NOT_FOUND);
+        setCouponCode("");
+      }
     } catch (error) {
-      console.error('Failed to apply coupon:', error);
+      toast.error(RESPONSE_MESSAGES.GENERAL.COUPON_ERROR);
     }
   };
 
@@ -42,12 +66,15 @@ const CartComponent = () => {
             <Table headers={tableHeader} />
             <div className="flex flex-col items-start gap-y-2.5 sm:items-center sm:justify-between my-[30px] sm:flex-row">
               <div className="flex items-center gap-2.5">
-                <Input placeholder="coupon code"  value={couponCode} 
-                  onChange={(e) => setCouponCode(e.target.value)}   />
-               
-               
+                <Input
+                  disabled={couponData}
+                  placeholder="coupon code"
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
+                />
+
                 <Button
-                  variant="outlined"
+                  variant={couponData ? "disabled" : "outlined"}
                   className="justify-center !p-0 h-10 w-10"
                   onClick={handleApplyCoupon}
                 >
@@ -75,7 +102,9 @@ const CartComponent = () => {
       ) : (
         <div className="flex flex-col items-center justify-center flex-1 py-10">
           <h2 className="text-lg font-semibold mb-4">Your cart is empty</h2>
-          <p className="text-gray-600 mb-6">Looks like you haven&apos;t added any items to your cart yet.</p>
+          <p className="text-gray-600 mb-6">
+            Looks like you haven&apos;t added any items to your cart yet.
+          </p>
           <Link href="/products">
             <Button className="uppercase !h-10 justify-center !text-black-75 !border-black-300 hover:!bg-[#f5f6f9] hover:!text-primary">
               Browse Products
