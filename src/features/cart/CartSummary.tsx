@@ -27,7 +27,7 @@ const CartSummary = () => {
       ? 0
       : parseInt(shipping_amount);
 
-  const calculatedTotalAmount = totalAmount - discountAmount - shippingFee;
+  const calculatedTotalAmount = totalAmount - discountAmount + shippingFee;
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-medium pb-[17px]">
