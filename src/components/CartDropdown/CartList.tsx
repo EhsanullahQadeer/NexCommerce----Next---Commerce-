@@ -51,7 +51,7 @@ const CartList = ({ data }: cartItemProps) => {
             </h4>
             <span className='font-light text-[13px] text-black-200'>
               <span>{data.quantity}</span>
-              <span> x {formatPrice(Number(price) , currency_id)}</span>
+              <span> x {formatPrice(Number(product.price) , currency_id)}</span>
             </span>
           </div>
         </Link>
