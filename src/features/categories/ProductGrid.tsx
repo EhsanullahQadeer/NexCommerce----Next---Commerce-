@@ -17,6 +17,8 @@ import GalleryModal from "../elements/GalleryModal";
 import { Product } from "@/types/product";
 import { useFetchFilteredProductsMutation } from "@/store/api/productApi";
 import ProductCardSkeleton from "@/components/Cards/ProductCardSkeleton";
+import useIsMutating from "@/hooks/useIsMutating";
+import ProductNotFound from "@/components/ProductDetails/ProductNotFound";
 
 const ProductGrid = () => {
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation();
@@ -31,6 +33,8 @@ const ProductGrid = () => {
     priceRangeFilter,
   } = useSelector(selectProducts);
   const dispatch = useDispatch();
+  const { apiStatus } = useIsMutating();
+  const { isLoading } = apiStatus("fetchFilteredProducts");
 
   const fetchMoreProducts = async () => {
     try {
@@ -57,13 +61,15 @@ const ProductGrid = () => {
       console.error("Failed to fetch products:", error);
     }
   };
-
+  const isMoreProducts = products.length == currentPage * limitFilter;
   return (
     <>
       <Container className="mt-5">
         <CategoryFilterToggle />
-        {products.length === 0 ? (
+        {isLoading ? (
           <ProductCardSkeleton />
+        ) : products.length === 0 ? (
+          <ProductNotFound />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5 gap-5">
             {products.map((item: Product) => (
@@ -79,7 +85,7 @@ const ProductGrid = () => {
           </div>
         )}
         <div className="mt-10 mb-10">
-          {products.length == currentPage * limitFilter && (
+          {isMoreProducts && (
             <Button className="mx-auto" onClick={fetchMoreProducts}>
               More Products <i className="las la-sync ml-2"></i>
             </Button>
