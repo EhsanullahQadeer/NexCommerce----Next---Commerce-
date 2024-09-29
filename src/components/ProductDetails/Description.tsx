@@ -11,10 +11,8 @@ interface DescriptionProps {
 
 const Description: FC<DescriptionProps> = ({ className }) => {
   const { quickViewProduct, currentVarient } = useSelector(selectProducts);
-  const {price:variantPrice ,currency_id} = currentVarient  ||{};
-  
   const {formatPrice}=useCurrency()
-  const {name, price, description} = quickViewProduct || {}
+  const {name, price, description ,currency_id} = quickViewProduct || {}
   return (
     <div className={cn('mb-10', className)}>
       <h2 className="text-2xl text-black-75 font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
@@ -22,7 +20,7 @@ const Description: FC<DescriptionProps> = ({ className }) => {
       </h2>
       <Stars count={5} reviewCount={2} className="mb-2.5" />
       <h3 className="text-2xl text-primary font-light mb-2.5 tracking-[-0.6px] leading-[30px]">
-        {variantPrice&&formatPrice(Number(variantPrice) ,currency_id)}
+        {price&&formatPrice(Number(price) ,currency_id)}
       </h3>
       <p className="mt-[17px] font-extralight text-sm text-black-100 leading-[26.04px]">
        {description}
