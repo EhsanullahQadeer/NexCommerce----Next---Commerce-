@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,7 @@ import IconWithText from "../Icons/IconWithTextOverlay";
 import ReadOnlyColorVariants from "../ColorVariants/ReadOnly";
 import CardPrice from "./elements/CardPrice";
 import { ColorVariant, Product, ProductVariant } from "@/types/product";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import {
   useAddToCartMutation,
@@ -25,8 +25,7 @@ import { selectWishlist } from "@/store/slices/wishlist/wishlistSlice";
 import { toast } from "react-toastify";
 import { isUserLoggedIn } from "@/utility/helper";
 import { RESPONSE_MESSAGES } from "@/utility/constant";
-import AuthComponent from "@/features/auth";
-import Modal from "../Modal";
+import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
 
 export interface ProductCardProps extends Product {
   className?: string;
@@ -40,8 +39,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation();
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation();
-
-  const [isLoginModalVisible, setIsLoginModalVisible] = useState(false); // State to manage login modal visibility
+  const dispatch = useDispatch()
 
   const {
     id,
@@ -91,7 +89,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
 
   const addToCartHandler = async () => {
     if (!isUserLoggedIn()) {
-      setIsLoginModalVisible(true); // Show login modal if user is not logged in
+      dispatch(setOpenAuthModal(true))
       return;
     }
 
@@ -128,7 +126,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
   const addToWishListHandler = async (id: number) => {
     if (!isUserLoggedIn()) {
       toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
-      setIsLoginModalVisible(true); // Show login modal if user is not logged in
+      dispatch(setOpenAuthModal(true))
       return;
     }
 
@@ -218,13 +216,6 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
           </div>
         </div>
       </div>
-       <Modal
-       isOpen={isLoginModalVisible}
-       onClose={() => setIsLoginModalVisible(false)}
-       className="!max-w-[575px]"
-     >
-       <AuthComponent setIsOpen={setIsLoginModalVisible} />
-     </Modal>
     </>
   );
 };

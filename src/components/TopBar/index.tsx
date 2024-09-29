@@ -6,10 +6,8 @@ import Container from "../Container";
 import Dropdown from "../Dropdown";
 import { LinkType, topBarLinks } from "./data";
 import DropdownMenu from "../DropdownMenu";
-import Modal from "../Modal";
-import AuthComponent from "@/features/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { userLoggedIn } from "@/store/slices/auth/authSlice";
+import { setOpenAuthModal, userLoggedIn } from "@/store/slices/auth/authSlice";
 import { RootState } from "@/store";
 import { clearCart } from "@/store/slices/cart/cartSlice";
 import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
@@ -19,7 +17,6 @@ import {
   SiteSetting,
   updateSiteCurrency,
   updateSiteName,
-  updateSiteSettings,
 } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectLanguage } from "@/store/slices/languagelist/languageSlice";
 import { useTranslations } from "next-intl";
@@ -28,7 +25,6 @@ import { clearCoupon } from "@/store/slices/coupencode/coupenCodeSlice";
 const TopBar: React.FC = () => {
   const t = useTranslations();
   const { user } = useSelector((state: RootState) => state.auth);
-  const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownMobileOpen, setDropdownMobileOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null); // Reference for the dropdown container
@@ -48,7 +44,7 @@ const TopBar: React.FC = () => {
 
   const handleToggleLoginModal = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    setIsOpen(true);
+    dispatch(setOpenAuthModal(true))
   };
 
   const handleLogout = () => {
@@ -260,13 +256,6 @@ const TopBar: React.FC = () => {
           </div>
         </div>
       </Container>
-      <Modal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="!max-w-[575px]"
-      >
-        <AuthComponent setIsOpen={setIsOpen} />
-      </Modal>
     </div>
   );
 };

@@ -9,7 +9,7 @@ import CardPrice from './elements/CardPrice';
 import Stars from '../Stars';
 import CardActions from './elements/Actions';
 import { ColorVariant, Product, ProductVariant } from '@/types/product';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { RootState } from '@/store';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
@@ -17,6 +17,7 @@ import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 import { isUserLoggedIn } from '@/utility/helper';
 import { toast } from 'react-toastify';
 import { RESPONSE_MESSAGES } from '@/utility/constant';
+import { setOpenAuthModal } from '@/store/slices/auth/authSlice';
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -42,6 +43,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
+  const dispatch = useDispatch()
   const productUrl = `/products/${slug}`;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
@@ -73,7 +75,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const addToCartHandler = async () => {
     try {
       if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        dispatch(setOpenAuthModal(true))
         return;
       }
       const addToCartDetails = { "user_id": user.id, products: [{ "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }] }

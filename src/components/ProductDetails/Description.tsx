@@ -14,7 +14,6 @@ const Description: FC<DescriptionProps> = ({ className }) => {
   const {price:variantPrice ,currency_id} = currentVarient  ||{};
   
   const {formatPrice}=useCurrency()
-  console.log('currentVarient: ', currentVarient);
   const {name, price, description} = quickViewProduct || {}
   return (
     <div className={cn('mb-10', className)}>

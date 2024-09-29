@@ -1,11 +1,12 @@
 import { RootState } from "@/store";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: any = {
   initialTransaction: undefined,
   signUpDetail: undefined,
   user: undefined,
   isAuthenticated: false,
+  openAuthModal:false
 };
 
 const authSlice = createSlice({
@@ -22,9 +23,12 @@ const authSlice = createSlice({
     userUpdate: (state, action) =>{
       state.user = action.payload.user;
     },
+    setOpenAuthModal: (state, action: PayloadAction<boolean>) => {
+      state.openAuthModal = action.payload
+    }
   },
 });
 
-export const { userLoggedIn, userUpdate, userInitialTransaction } = authSlice.actions;
+export const { userLoggedIn, userUpdate, userInitialTransaction ,setOpenAuthModal } = authSlice.actions;
 
 export default authSlice.reducer;

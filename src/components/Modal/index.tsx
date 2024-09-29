@@ -19,6 +19,10 @@ const baseContentStyles =
 const iconStyles =
   'absolute flex h-[20px] w-[20px] right-5 top-[15px] items-center justify-end cursor-pointer opacity-60 z-[99] hover:opacity-100';
 
+  // Generate a random modalId dynamically
+  const generateRandomId = () => `modal-${Math.random().toString(36).slice(2, 11)}-${Date.now()}`;
+
+
 const Modal: FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -30,9 +34,11 @@ const Modal: FC<ModalProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
+  const [modalId] = useState(generateRandomId); 
+  console.log('modalId: ', modalId);
   useOutsideClick(modalRef, () => {
     onClose?.();
-  });
+  },modalId);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -57,6 +63,7 @@ const Modal: FC<ModalProps> = ({
         isAnimating ? 'opacity-100' : 'opacity-0 pointer-events-none',
         !fullWidth && 'px-2.5'
       )}
+      data-modalid={modalId} 
     >
       <div
         className={cn(

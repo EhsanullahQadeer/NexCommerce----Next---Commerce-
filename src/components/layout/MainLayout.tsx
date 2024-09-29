@@ -29,6 +29,9 @@ import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
 import useCurrency from "@/hooks/useCurrency";
 import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
 import { clearCoupon, selectCoupenCode, updateCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
+import AuthComponent from "@/features/auth";
+import Modal from "../Modal";
+import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
 
 function detectBrowser() {
   var userAgent = navigator.userAgent;
@@ -56,7 +59,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
-  const { user, isAuthenticated } = useSelector(
+  const { user, isAuthenticated ,openAuthModal} = useSelector(
     (state: RootState) => state.auth
   );
   const [hideLayout, setHideLayout] = useState(false);
@@ -296,6 +299,13 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       )}
       <main>{children}</main>
       {!hideLayout && <Footer />}
+      <Modal
+        isOpen={openAuthModal}
+        onClose={() => dispatch(setOpenAuthModal(false))}
+        className="!max-w-[575px]"
+      >
+        <AuthComponent setIsOpen={(value)=>{dispatch(setOpenAuthModal(value))}} />
+      </Modal>
     </div>
   );
 };

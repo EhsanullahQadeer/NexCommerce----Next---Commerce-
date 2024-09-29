@@ -3,7 +3,7 @@ import Button from '@/components/Button';
 import LinkButton from './LinkButton';
 import { FC } from 'react';
 import { cn } from '@/lib/utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useAddToCartMutation, useCartDetailsGetMutation, useDeletefromCartMutation } from '@/store/api/cartApi';
 import { selectProducts } from '@/store/slices/products/productsSlice';
 import { RootState } from '@/store';
@@ -11,8 +11,7 @@ import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@
 import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
 import { CartItem, selectCart } from '@/store/slices/cart/cartSlice';
 import { isUserLoggedIn } from '@/utility/helper';
-import { toast } from 'react-toastify';
-import { RESPONSE_MESSAGES } from '@/utility/constant';
+import { setOpenAuthModal } from '@/store/slices/auth/authSlice';
 
 interface ActionsProps {
   isModal?: boolean;
@@ -29,6 +28,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [deletefromCart] = useDeletefromCartMutation()
+  const dispatch = useDispatch()
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
@@ -55,7 +55,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
       console.log("currentVarientQuantity", currentVarientQuantity);
 
       if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        dispatch(setOpenAuthModal(true))
         return;
       }
       
@@ -89,7 +89,7 @@ const Actions: FC<ActionsProps> = ({ isModal }) => {
   const addToWishListHandler = async (id: number) => {
     try {
       if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        dispatch(setOpenAuthModal(true))
         return;
       }
       
