@@ -35,7 +35,7 @@ const Modal: FC<ModalProps> = ({
   const [isVisible, setIsVisible] = useState(isOpen);
   const modalRef = useRef<HTMLDivElement>(null);
   const [modalId] = useState(generateRandomId); 
-  console.log('modalId: ', modalId);
+  
   useOutsideClick(modalRef, () => {
     onClose?.();
   },modalId);
