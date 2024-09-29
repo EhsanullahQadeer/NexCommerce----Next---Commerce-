@@ -7,13 +7,10 @@ import { useSelector } from 'react-redux';
 const ReviewsTab: FC = () => {
   const { quickViewProduct } = useSelector(selectProducts)
   const { reviews } = quickViewProduct || {}
-
-console.log("reviews-->  ",reviews);
-
   return (
     <div>
       <h3 className="text-black-75 text-base font-medium leading-[17.6px] tracking-[-0.16px] mb-[23px]">
-        Reviews (2)
+        Reviews ({reviews?.length})
       </h3>
       {reviews?.map((review, index) => (
         <div key={index} className="flex flex-col sm:flex-row sm:gap-5 pb-[13px] mb-5 border-b border-black-300">

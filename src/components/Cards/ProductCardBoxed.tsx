@@ -102,7 +102,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const addToWishListHandler = async (id: number) => {
     try {
       if (!isUserLoggedIn()) {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.ADD_TO_CART_WISHLIST);
+        dispatch(setOpenAuthModal(true))
         return;
       }
       const addToWishList = { "user_id": user.id, product_id: id, variant_id: product_variants[0]?.id }

@@ -10,6 +10,7 @@ import Button from '../Button';
 import { RootState } from '@/store';
 import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
 import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
+import useCurrency from '@/hooks/useCurrency';
 
 export type ColumnHeaders = {
   key: string;
@@ -35,6 +36,7 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
   const [cartDetailsGet] = useCartDetailsGetMutation()
   const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
   const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
+  const {formatPrice}=useCurrency()
 
   const handleFetchWishlist = async () => {
     try {
@@ -129,7 +131,10 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
         </tr>
       </thead>
       <tbody>
-        {wishListData?.map((item: WishlistItem, index: Key | null | undefined) => (
+        {wishListData?.map((item: WishlistItem, index: number) => {
+          const {product:{price , currency_id}} =item
+          
+          return(
           <tr
             key={index}
             className="relative block lg:table-row border-b border-black-300 py-[42px] lg:py-0"
@@ -160,7 +165,7 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
             <td
               className="px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell"
             >
-              <div className="w-full text-black-75 pt-2 lg:pt-0">${item?.product?.price?.toFixed(2)}</div>
+              <div className="w-full text-black-75 pt-2 lg:pt-0">{formatPrice(price , currency_id)}</div>
             </td>
             <td className='px-[30px] lg:px-0 py-0 lg:py-[30px] !block w-full lg:w-auto text-center lg:text-left lg:!table-cell'>
               <div className='flex justify-center w-full lg:justify-start pt-2 lg:pt-0'>
@@ -178,7 +183,7 @@ const WishList: FC<TableProps> = ({ headers, className }) => {
               <i className="las la-times text-[17px] text-black-600 hover:text-black-75 cursor-pointer"></i>
             </button></td>
           </tr>
-        ))}
+        )})}
       </tbody>
     </table>
   );

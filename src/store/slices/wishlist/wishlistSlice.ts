@@ -10,7 +10,7 @@ export interface WishlistItem {
   product_variant: ProductVariant
   created_at: string
   updated_at: string
-  product: Product | null
+  product: Product
 }
 
 export interface WishlistState {
