@@ -85,9 +85,6 @@ export const productsSlice = createSlice({
     },
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
       state.max_price = action.payload;
-      if (state.max_price !== action.payload) {
-        state.priceRangeFilter = action.payload.toString();
-      }
     },
     handlePriceRange: (state, action: PayloadAction<string>) => {
       state.priceRangeFilter = action.payload;

@@ -21,10 +21,10 @@ export const productsApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
-          console.log(data, "product data");
-          console.log("data?.data?.max_price", data);
           if (data?.data?.data?.length) {
             dispatch(handleProduct(data.data.data));
+          } else {
+            dispatch(handleProduct([]));
           }
 
           dispatch(handleTotalProduct(data?.data?.total || 0));

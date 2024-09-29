@@ -15,6 +15,7 @@ import Button from "../Button";
 import { Product } from "@/types/product";
 import ProductCardSkeleton from "../Cards/ProductCardSkeleton";
 import { useRouter } from "next/navigation";
+import useIsMutating from "@/hooks/useIsMutating";
 
 const createCatFilter = (item: any) => {
   if (item && item.length) {
@@ -31,6 +32,7 @@ const GridLayout: React.FC = () => {
   const imagesLoaded = useImagesLoaded(gridRef);
   const { filterKey, products, productCategories, currentPage, limitFilter } =
     useSelector(selectProducts);
+  const { apiStatus } = useIsMutating();
 
   const dispatch = useDispatch();
 
@@ -64,41 +66,58 @@ const GridLayout: React.FC = () => {
       });
     }
   }, [products, filterKey, productCategories]);
-
-  if (!products.length) {
+  const { isLoading } = apiStatus("fetchFilteredProducts");
+  console.log("isLoading: ", isLoading);
+  if (isLoading) {
     return <ProductCardSkeleton />;
   }
 
   return (
     <div className="bg-white">
-      <div ref={gridRef} className="!relative mt-5">
-        {products.map((item: Product, index) => (
-          <div
-            key={item.id + index}
-            className={cn(
-              "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
-              createCatFilter(item.product_categories)
-            )}
-          >
-            <ProductCard
-              {...item}
-              onPreview={() => {
-                dispatch(togglePreviewModal(true));
+      {products.length ? (
+        <>
+          <div ref={gridRef} className="!relative mt-5">
+            {products.map((item: Product, index) => (
+              <div
+                key={item.id + index}
+                className={cn(
+                  "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
+                  createCatFilter(item.product_categories)
+                )}
+              >
+                <ProductCard
+                  {...item}
+                  onPreview={() => {
+                    dispatch(togglePreviewModal(true));
 
-                dispatch(addQuickViewProduct(item));
-              }}
-            />
+                    dispatch(addQuickViewProduct(item));
+                  }}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-
-      <div className="mt-10 mb-10">
-        {products.length == currentPage * limitFilter && (
-          <Button className="mx-auto" onClick={() => router.push("/products")}>
-            More Products <i className="las la-sync ml-2"></i>
-          </Button>
-        )}
-      </div>
+          <div className="mt-10 mb-10">
+            {products.length == currentPage * limitFilter && (
+              <Button
+                className="mx-auto"
+                onClick={() => router.push("/products")}
+              >
+                More Products <i className="las la-sync ml-2"></i>
+              </Button>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="flex h-[50vh] flex-col items-center justify-center text-center p-6 rounded-lg">
+          <h2 className="text-xl font-semibold  text-black-75 mb-2">
+            No Products Found
+          </h2>
+          <p className="text-gray-500">
+            Sorry, we couldn{`'`}t find any products. Please adjust your filters
+            or check back later.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
