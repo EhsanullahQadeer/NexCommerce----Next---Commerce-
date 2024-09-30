@@ -23,27 +23,18 @@ const ProductDetails = ({ productData }: ProductDetailsProps) => {
   const imagesLinks = images?.map((el: any) => el.images) || [];
   const { quickViewProduct } = useSelector(selectProducts);
   const { reviews } = quickViewProduct || {};
-  const tabs = useMemo(
-    () => [
-      {
-        label: "Description",
-        content: <TabDescription label="Description" details={description} />,
-      },
-      {
-        label: "Additional Information",
-        content: <TabDescription details={additionalInformation} />,
-      },
-      {
-        label: "Shipping & Returns",
-        content: <TabDescription details={shipping} />,
-      },
-      {
-        label: `Reviews (${reviews?.length})`,
+  const tabLabels = ["Description", "Additional Information", "Shipping & Returns"];
+
+const tabs = useMemo(() => [
+    ...tabLabels.map(label => ({
+        label,
+        content: <TabDescription label={label} />,
+    })),
+    {
+        label: `Reviews (${reviews?.length || 0})`,
         content: <ReviewsTab />,
-      },
-    ],
-    [quickViewProduct]
-  );
+    },
+], [quickViewProduct, reviews]);
 
   const dispatch = useDispatch();
   return (
