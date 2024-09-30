@@ -32,7 +32,8 @@ import { clearCoupon, selectCoupenCode, updateCoupenCode } from "@/store/slices/
 import AuthComponent from "@/features/auth";
 import Modal from "../Modal";
 import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
-
+import useHome from "@/hooks/home/useHome";
+import useDebounce from "@/hooks/useDebounce";
 function detectBrowser() {
   var userAgent = navigator.userAgent;
   if (userAgent.indexOf("Edg") > -1) {
@@ -64,7 +65,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   );
   const [hideLayout, setHideLayout] = useState(false);
   const isSidebarToggle = useSelector(selectSidebarToggle);
-
   const {
     categoriesFilter,
     sortByFilter,
@@ -86,7 +86,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const { cartDetails} = useSelector(selectCart);
   const { currencyData } = useSelector(selectCurrency);
   const { coupon_code } = useSelector(selectCoupenCode);
-
   const {
     selected_currencies_id,
     initial_selected_currencies_id,
@@ -96,7 +95,6 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
 
   const { calculatePrice } = useCurrency();
   const dispatch=useDispatch()
-
   const handleFetchProductsWithFilter = async () => {
     try {
       const filter = {
@@ -237,10 +235,10 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       getCouponDetails()
     }, 0);
   }, [user, isAuthenticated]);
-
+  const debounceValue = useDebounce(priceRangeFilter, 300);
   useEffect(() => {
     handleFetchProductsWithFilter();
-  }, [categoriesFilter, sortByFilter, colorFilter, priceRangeFilter]);
+  }, [categoriesFilter, sortByFilter, colorFilter, debounceValue]);
 
   useEffect(() => {
     if (window && window.location.pathname === "/coming-soon") {

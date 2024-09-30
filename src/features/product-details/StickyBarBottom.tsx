@@ -1,16 +1,23 @@
-import { FC } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Button from '@/components/Button';
-import Container from '@/components/Container';
-import NumberInput from '@/components/NumberInput/NumberInput';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeCurrentVarientQuantity, selectProducts } from '@/store/slices/products/productsSlice';
+import { FC } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Button from "@/components/Button";
+import Container from "@/components/Container";
+import NumberInput from "@/components/NumberInput/NumberInput";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeCurrentVarientQuantity,
+  selectProducts,
+} from "@/store/slices/products/productsSlice";
+import useCurrency from "@/hooks/useCurrency";
 
 const StickyBarBottom: FC = () => {
-  const dispatch = useDispatch()
-  const {quickViewProduct, currentVarientQuantity} = useSelector(selectProducts)
-  const { price } = quickViewProduct || {}
+  const dispatch = useDispatch();
+  const { quickViewProduct, currentVarientQuantity } =
+    useSelector(selectProducts);
+  const { price, currency_id, image } = quickViewProduct || {};
+  console.log("quickViewProduct: ", quickViewProduct);
+  const { formatPrice } = useCurrency();
 
   const handleCartItemChanges = async (type: string) => {
     try {
@@ -20,7 +27,6 @@ const StickyBarBottom: FC = () => {
       if (type === "increment") {
         dispatch(changeCurrentVarientQuantity(currentVarientQuantity + 1));
       }
-
     } catch (error) {
       console.error("Failed to update cart:", error);
     }
@@ -31,9 +37,9 @@ const StickyBarBottom: FC = () => {
       <Container>
         <div className="flex items-center justify-between py-2.5">
           <div className="flex items-center gap-5">
-            <Link href="#"> 
+            <Link href="#">
               <Image
-                src="/product.jpg"
+                src={image || ""}
                 alt="Product image"
                 height={60}
                 width={60}
@@ -49,14 +55,23 @@ const StickyBarBottom: FC = () => {
             </h4>
           </div>
           <div className="flex items-center gap-5">
-            <span className='text-primary font-light'>${price}</span>
+            <span className="text-primary font-light">
+              {price && formatPrice(price, currency_id)}
+            </span>
             {/* <NumberInput /> */}
-            <NumberInput value={currentVarientQuantity || 0} onChange={handleCartItemChanges} />
-            <Button variant="outlined" size="xs" className='group !w-[200px] h-10 justify-center items-center'>
+            <NumberInput
+              value={currentVarientQuantity || 0}
+              onChange={handleCartItemChanges}
+            />
+            <Button
+              variant="outlined"
+              size="xs"
+              className="group !w-[200px] h-10 justify-center items-center"
+            >
               <i className="las la-cart-plus text-primary text-lg group-hover:text-white mr-2"></i>
-              add to cart 
+              add to cart
             </Button>
-            <Link href="#" className=''>
+            <Link href="#" className="">
               <i className="lar la-heart text-lg text-primary"></i>
             </Link>
           </div>

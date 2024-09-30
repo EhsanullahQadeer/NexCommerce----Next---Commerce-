@@ -2,6 +2,7 @@ import { FC } from "react";
 import ProductCategories from "@/features/product";
 import Slider from "@/components/Slider";
 import { getMetadata } from "@/store/api/getMetaData";
+import useHome from "@/hooks/home/useHome";
 
 export async function generateMetadata() {
   const data = await getMetadata();

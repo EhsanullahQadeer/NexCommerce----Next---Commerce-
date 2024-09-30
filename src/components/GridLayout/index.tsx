@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addQuickViewProduct,
   selectProducts,
+  selectHomePageProducts,
   togglePreviewModal,
 } from "@/store/slices/products/productsSlice";
 import { cn } from "@/lib/utils";
@@ -32,9 +33,8 @@ const GridLayout: React.FC = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const imagesLoaded = useImagesLoaded(gridRef);
   const { filterKey, products, productCategories, currentPage, limitFilter } =
-    useSelector(selectProducts);
+    useSelector(selectHomePageProducts);
   const { apiStatus } = useIsMutating();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const GridLayout: React.FC = () => {
       });
     }
   }, [products, filterKey, productCategories]);
-  const { isLoading } = apiStatus("fetchFilteredProducts");
+  const { isLoading } = apiStatus("_fetchFilteredProducts");
   if (isLoading) {
     return <ProductCardSkeleton />;
   }
@@ -97,18 +97,16 @@ const GridLayout: React.FC = () => {
             ))}
           </div>
           <div className="mt-10 mb-10">
-            {products.length == currentPage * limitFilter && (
               <Button
                 className="mx-auto"
                 onClick={() => router.push("/products")}
               >
-                More Products <i className="las la-sync ml-2"></i>
+                Explore More Products <i className="las la-sync ml-2"></i>
               </Button>
-            )}
           </div>
         </>
       ) : (
-       <ProductNotFound/>
+        <ProductNotFound />
       )}
     </div>
   );

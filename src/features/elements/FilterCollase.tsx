@@ -1,7 +1,7 @@
 import { FC, ReactNode } from 'react';
 import CategoryFilter from './CategoryFilters';
 import ColourFilters from './ColourFilters';
-import { selectProducts } from '@/store/slices/products/productsSlice';
+import { selectProducts, selectHomePageProducts } from '@/store/slices/products/productsSlice';
 import { useSelector } from 'react-redux';
 import { productSortCategories } from '@/store/slices/products/fakeProducts';
 import PriceRangeInput from '@/components/PriceRangeInput';
@@ -33,7 +33,7 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
           <ColourFilters />
         </FilterColumn>
         <FilterColumn title="Price: ">
-          <PriceRangeInput />
+          <PriceRangeInput origin="homePage" rootState={selectHomePageProducts} />
         </FilterColumn>
       </div>
     </Collapse>

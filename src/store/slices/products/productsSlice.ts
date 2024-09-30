@@ -42,7 +42,7 @@ export interface ProductsState {
 }
 
 // Define the initial state using that type
-const initialState: ProductsState = {
+const productInitialState: ProductsState = {
   products,
   totalProducts: 0,
   max_price: 10000,
@@ -67,6 +67,25 @@ const initialState: ProductsState = {
   currentVarientQuantity: 0,
 };
 
+export type Torigin = "homePage" | "productPage"
+
+const initialState: { homePage: ProductsState; productPage: ProductsState } & ProductsState = {
+  homePage: { ...productInitialState, priceRangeFilter: "", max_price: 0, limitFilter: 16 },
+  productPage: productInitialState,
+  ...productInitialState
+}
+
+const helper = <P>(
+  callback: (state: ProductsState, action: PayloadAction<P>) => void
+) => {
+  return (state: { [key in Torigin]: ProductsState }, action: PayloadAction<{ origin: Torigin, payload: P }>) => {
+    // Extract origin and the rest of the payload
+    const { origin, ...restPayload } = action.payload;
+
+    // Call the callback with the specific state and the modified action payload
+    callback(state[origin], { ...action, payload: restPayload.payload } as PayloadAction<P>);
+  };
+};
 export const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -80,15 +99,28 @@ export const productsSlice = createSlice({
       });
       state.products = cloneProducts;
     },
+    _handleProduct: helper<Product[]>(
+      (state, action) => {
+        const newProducts = action.payload;
+        newProducts.forEach((product) => {
+          if (!state.products.find((p) => p.id === product.id)) {
+            state.products.push(product);
+          }
+        });
+      }
+    ),
     handleTotalProduct: (state, action: PayloadAction<number>) => {
       state.totalProducts = action.payload;
     },
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
       state.max_price = action.payload;
     },
-    handlePriceRange: (state, action: PayloadAction<string>) => {
+    _handleMaxPriceProduct: helper<number>((state, action) => {
+      state.max_price = action.payload;
+    }),
+    handlePriceRange: helper<string>((state, action) => {
       state.priceRangeFilter = action.payload;
-    },
+    }),
     handleProductCategories: (
       state,
       action: PayloadAction<ProductCategory[]>
@@ -161,9 +193,11 @@ export const productsSlice = createSlice({
 
 export const {
   handleProduct,
+  _handleProduct,
   handleTotalProduct,
   handlePriceRange,
   handleMaxPriceProduct,
+  _handleMaxPriceProduct,
   handleProductCategories,
   handleCategoriesFilter,
   selectCategoryFilter,
@@ -181,5 +215,6 @@ export const {
 
 // selectors can use the imported `RootState`
 export const selectProducts = (state: RootState) => state.products;
-
+export const selectHomePageProducts = (state: RootState) => state.products.homePage;
+export const selectProductPageProducts = (state: RootState) => state.products.productPage;
 export default productsSlice.reducer;

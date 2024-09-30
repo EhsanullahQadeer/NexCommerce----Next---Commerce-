@@ -51,7 +51,7 @@ const CategoryFilterDrawer = () => {
           <ColourFilters isHorizontal />
         </Collapse>
         <Collapse title="Price Range" isOpen>
-          <PriceRangeInput />
+          <PriceRangeInput rootState={selectProducts}/>
         </Collapse>
       </div>
     </Drawer>
