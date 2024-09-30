@@ -25,7 +25,7 @@ const ProductCategoriesList: FC<ProductCategoriesListProps> = ({
       <div
         className={cn(
           'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
-          filterKey === `0` && 'text-primary border-b border-primary'
+          filterKey === `*` && 'text-primary border-b border-primary'
         )}
         onClick={() => onCategorySelect(`*`)}
       >

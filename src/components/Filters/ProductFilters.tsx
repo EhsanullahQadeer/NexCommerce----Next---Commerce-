@@ -1,29 +1,39 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
-import FilterCollapse from '../../features/elements/FilterCollase';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import FilterCollapse from "../../features/elements/FilterCollase";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  _clearFilter,
+  _handleFilterKeyChange,
+  _handleOtherFilter,
   clearFilter,
   handleFilterKeyChange,
+  selectHomePageProducts,
   selectProducts,
-} from '@/store/slices/products/productsSlice';
-import ProductCategoriesList from './ProductCategoriesList';
-import ToggleFilters from './ToggleFilters';
-import CleanAllButton from './CleanAllButton';
+} from "@/store/slices/products/productsSlice";
+import ProductCategoriesList from "./ProductCategoriesList";
+import ToggleFilters from "./ToggleFilters";
+import CleanAllButton from "./CleanAllButton";
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
-  const { productCategories, filterKey } = useSelector(selectProducts);
-
+  const { productCategories } = useSelector(selectProducts);
+  const { filterKey } = useSelector(selectHomePageProducts);
+  const handleCleanFilters = () => {
+    dispatch(_clearFilter({ origin: "homePage", payload: null }));
+  };
+  useEffect(() => {
+    handleCleanFilters();
+  }, []);
   return (
     <div>
       <div
         className={cn(
-          'relative flex  items-start justify-start sm:items-center sm:justify-between gap-2.5 md:gap-[30px]',
-          !isOpen ? 'flex-col sm:flex-row' : 'flex-row'
+          "relative flex  items-start justify-start sm:items-center sm:justify-between gap-2.5 md:gap-[30px]",
+          !isOpen ? "flex-col sm:flex-row" : "flex-row"
         )}
       >
         <ToggleFilters
@@ -35,15 +45,20 @@ const ProductFilters = () => {
           isOpen={isOpen}
           filterKey={filterKey}
           onCategorySelect={(category: string) =>
-            dispatch(handleFilterKeyChange(category))
+            dispatch(
+              _handleFilterKeyChange({
+                payload: category,
+                origin: "homePage",
+              })
+            )
           }
         />
         <CleanAllButton
           className={cn(
-            '!invisible !opacity-0',
-            isOpen ? '!visible !opacity-100' : 'hidden'
+            "!invisible !opacity-0",
+            isOpen ? "!visible !opacity-100" : "hidden"
           )}
-          onClick={() => dispatch(clearFilter())}
+          onClick={handleCleanFilters}
         />
       </div>
       <FilterCollapse isOpen={isOpen} />

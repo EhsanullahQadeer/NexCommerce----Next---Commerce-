@@ -139,6 +139,17 @@ export const productsSlice = createSlice({
       }
       state.currentPage = 1;
     },
+    _handleCategoriesFilter: helper<categoryPayload>((state, action) => {
+      state.products = [];
+      if (action.payload.isChecked) {
+        state.categoriesFilter.push(action.payload.id);
+      } else {
+        state.categoriesFilter = state.categoriesFilter.filter(
+          (id) => id !== action.payload.id
+        );
+      }
+      state.currentPage = 1;
+    }),
     selectCategoryFilter: (state, action: PayloadAction<number>) => {
       state.products = [];
       state.categoriesFilter = [action.payload];
@@ -149,17 +160,30 @@ export const productsSlice = createSlice({
       state.sortByFilter = action.payload;
       state.currentPage = 1;
     },
+    _handleSortFilter: helper<SortPayload>((state, action) => {
+      state.products = [];
+      state.sortByFilter = action.payload;
+      state.currentPage = 1;
+    }),
     handleOtherFilter: (state, action: PayloadAction<OtherSortPayload>) => {
       (state as any)[action.payload.key] = action.payload.value;
       state.currentPage = 1;
       state.products = [];
     },
+    _handleOtherFilter: helper<OtherSortPayload>((state, action) => {
+      (state as any)[action.payload.key] = action.payload.value;
+      state.currentPage = 1;
+      state.products = [];
+    }),
     handleMoreProduct: (state) => {
       state.currentPage++;
     },
     handleFilterKeyChange: (state, action: PayloadAction<string>) => {
       state.filterKey = action.payload;
     },
+    _handleFilterKeyChange: helper<string>((state, action) => {
+      state.filterKey = action.payload;
+    }),
     togglePreviewModal: (state, action: PayloadAction<boolean>) => {
       state.isPreviewModalOpen = action.payload;
     },
@@ -178,6 +202,19 @@ export const productsSlice = createSlice({
       state.currentPage = 1;
       state.searchFilter = "";
     },
+    _clearFilter: helper((state) => {
+      state.categoriesFilter = [];
+      state.categoriesFilter = [];
+      state.sortByFilter = {
+        sort_by: "price",
+        order: "DESC",
+      };
+      state.colorFilter = "";
+      state.skip = 0;
+      state.currentPage = 1;
+      state.searchFilter = "";
+      state.priceRangeFilter = state.max_price.toString()
+    }),
     addQuickViewProduct: (state, action: PayloadAction<Product | null>) => {
       state.currentVarient = action.payload?.product_variants?.[0] || null;
       state.quickViewProduct = action.payload;
@@ -200,14 +237,19 @@ export const {
   _handleMaxPriceProduct,
   handleProductCategories,
   handleCategoriesFilter,
+  _handleCategoriesFilter,
   selectCategoryFilter,
   handleSortFilter,
+  _handleSortFilter,
   handleMoreProduct,
   handleOtherFilter,
+  _handleOtherFilter,
   handleFilterKeyChange,
+  _handleFilterKeyChange,
   togglePreviewModal,
   toggleGalleryModal,
   clearFilter,
+  _clearFilter,
   addQuickViewProduct,
   changeCurrentVarient,
   changeCurrentVarientQuantity,
@@ -217,4 +259,9 @@ export const {
 export const selectProducts = (state: RootState) => state.products;
 export const selectHomePageProducts = (state: RootState) => state.products.homePage;
 export const selectProductPageProducts = (state: RootState) => state.products.productPage;
+export const selectProductsRootState = {
+  homePage: selectHomePageProducts,
+  productPage: selectProductPageProducts,
+};
+
 export default productsSlice.reducer;

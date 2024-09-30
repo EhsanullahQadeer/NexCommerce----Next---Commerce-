@@ -18,7 +18,6 @@ const useHome = () => {
     priceRangeFilter,
     limitFilter,
     skip,
-    products,
     max_price,
   } = useSelector(selectHomePageProducts);
   const dispatch = useDispatch();
@@ -72,9 +71,6 @@ const useHome = () => {
   const debounceValue = useDebounce(priceRangeFilter, 300);
   useEffect(() => {
     if (!stopApiRef.current) {
-        console.log('stopApiRef.current: ', stopApiRef.current);
-  console.log('debounceValue: ', debounceValue);
-
       handleFetchProductsWithFilter();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
