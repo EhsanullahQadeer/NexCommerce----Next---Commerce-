@@ -15,8 +15,6 @@ import useDebounce from "../useDebounce";
 interface Iprops {
   origin: Torigin;
 }
-let count = 1;
-
 const useProducts = (props: Iprops) => {
   const { origin } = props;
   const {
@@ -34,8 +32,6 @@ const useProducts = (props: Iprops) => {
     useFetchFilteredProductsMutation();
   const stopApiRef = useRef<boolean>(false);
   const handleFetchProductsWithFilter = async () => {
-    console.log("count: ", count);
-    count++;
     const skip = (currentPage - 1) * limitFilter;
     try {
       const filters: {
@@ -52,7 +48,7 @@ const useProducts = (props: Iprops) => {
       }
 
       if (priceRangeFilter) {
-        filters.priceRange = `1-${priceRangeFilter}`;
+        filters.priceRange = `0-${priceRangeFilter}`;
       }
 
       if (categoriesFilter.length) {
