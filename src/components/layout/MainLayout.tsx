@@ -39,7 +39,6 @@ import {
 import AuthComponent from "@/features/auth";
 import Modal from "../Modal";
 import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
-import useHome from "@/hooks/home/useHome";
 import useDebounce from "@/hooks/useDebounce";
 function detectBrowser() {
   var userAgent = navigator.userAgent;
