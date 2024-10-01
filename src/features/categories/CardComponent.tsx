@@ -13,7 +13,6 @@ import { ProductCategory } from "@/types/product";
 import { useDispatch } from "react-redux";
 import {
   clearFilter,
-  handleCategoriesFilter,
   selectCategoryFilter,
 } from "@/store/slices/products/productsSlice";
 import { useRouter } from "next/navigation";
