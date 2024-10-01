@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Isotope from "isotope-layout";
 import ProductCard from "../Cards/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,45 +29,49 @@ const createCatFilter = (item: any) => {
 
 const GridLayout: React.FC = () => {
   const router = useRouter();
-  const isotope = useRef<Isotope | null>(null);
+  const [isotope, setIsotope] = useState<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const imagesLoaded = useImagesLoaded(gridRef);
   const { filterKey, products, productCategories, currentPage, limitFilter } =
     useSelector(selectHomePageProducts);
   const { apiStatus } = useIsMutating();
+  const { isLoading } = apiStatus("_fetchFilteredProducts");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (imagesLoaded && gridRef.current && !isotope.current) {
-      isotope.current = new Isotope(gridRef.current, {
+    if (gridRef.current && !isotope && !isLoading) {
+      const newIsotope = new Isotope(gridRef.current, {
         itemSelector: ".product-item",
         layoutMode: "fitRows",
         fitRows: {
           gutter: 0,
         },
       });
+
+      setIsotope(newIsotope);
     }
 
     const handleResize = () => {
-      isotope.current?.layout();
+      isotope?.layout();
     };
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      isotope.current?.destroy();
-      isotope.current = null;
+      isotope?.destroy();
+      setIsotope(null);
     };
-  }, [products, filterKey, productCategories]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
 
   useEffect(() => {
-    if (isotope.current) {
-      isotope.current.arrange({
+    if (isotope && !isLoading) {
+      isotope.arrange({
         filter: filterKey !== "*" ? `.${filterKey}` : "*",
       });
     }
-  }, [products, filterKey, productCategories]);
-  const { isLoading } = apiStatus("_fetchFilteredProducts");
+  }, [isotope, products, filterKey, productCategories, isLoading]);
+
   if (isLoading) {
     return <ProductCardSkeleton />;
   }
@@ -97,12 +101,12 @@ const GridLayout: React.FC = () => {
             ))}
           </div>
           <div className="mt-10 mb-10">
-              <Button
-                className="mx-auto"
-                onClick={() => router.push("/products")}
-              >
-                Explore More Products <i className="las la-sync ml-2"></i>
-              </Button>
+            <Button
+              className="mx-auto"
+              onClick={() => router.push("/products")}
+            >
+              Explore More Products <i className="las la-sync ml-2"></i>
+            </Button>
           </div>
         </>
       ) : (

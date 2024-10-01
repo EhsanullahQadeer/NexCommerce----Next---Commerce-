@@ -22,7 +22,6 @@ const SortFilters: FC<SortProps> = (props) => {
   const { sortByFilter } = useSelector(
     origin ? selectProductsRootState[origin] : selectProducts
   );
-
   const handleClick = (sortValues: SortPayload) => {
     if (origin) {
       dispatch(_handleSortFilter({ payload: sortValues, origin }));
