@@ -55,7 +55,7 @@ const sharedInitialValue: IsharedInitialValue = {
 const productInitialState: ProductsState = {
   products,
   totalProducts: 0,
-  max_price: 10000,
+  max_price: 0,
   filterKey: "*",
   categoriesFilter: [],
   sortByFilter: {
@@ -235,6 +235,9 @@ export const productsSlice = createSlice({
     changeCurrentVarientQuantity: (state, action: PayloadAction<number>) => {
       state.currentVarientQuantity = action.payload;
     },
+    resetProductsData: helper((state) => {
+      state = initialState
+    })
   },
 });
 
@@ -263,6 +266,7 @@ export const {
   addQuickViewProduct,
   changeCurrentVarient,
   changeCurrentVarientQuantity,
+  resetProductsData
 } = productsSlice.actions;
 
 // selectors can use the imported `RootState`

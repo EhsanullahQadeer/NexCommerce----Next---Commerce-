@@ -26,11 +26,7 @@ const ProductFilters = () => {
   const handleCleanFilters = () => {
     dispatch(_clearFilter({ origin: "homePage", payload: null }));
   };
-  useEffect(() => {
-    return () => {
-      handleCleanFilters();
-    };
-  }, []);
+  
 
   useEffect(() => {
     // reset value to all when more filter options opened

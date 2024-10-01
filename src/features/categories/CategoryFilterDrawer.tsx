@@ -32,11 +32,9 @@ const CategoryFilterDrawer = () => {
     dispatch(_clearFilter({ payload: null, origin: "productPage" }));
   };
   
-  useEffect(() => {
-    return () => {
-      cleanFilters();
-    };
-  }, []);
+  // useEffect(() => {
+  //     cleanFilters();
+  // }, []);
   return (
     <Drawer
       isOpen={isToggleFilters}

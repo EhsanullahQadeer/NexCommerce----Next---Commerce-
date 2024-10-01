@@ -25,9 +25,9 @@ const useProducts = (props: Iprops) => {
     priceRangeFilter,
     limitFilter,
     max_price,
+    products,
     currentPage,
   } = useSelector(selectProductsRootState[origin]);
-  console.log('sortByFilter: ', sortByFilter);
   const dispatch = useDispatch();
   const [fetchFilteredProducts, { isLoading }] =
     useFetchFilteredProductsMutation();
@@ -85,7 +85,6 @@ const useProducts = (props: Iprops) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoriesFilter, sortByFilter, colorFilter, debounceValue, currentPage]);
-
   return { isLoading };
 };
 

@@ -19,15 +19,15 @@ import ProductNotFound from "@/components/ProductDetails/ProductNotFound";
 import useProducts from "@/hooks/home/useProducts";
 import ProductCardSkeletonWrap from "@/components/Cards/ProductCardSkeltonWrap";
 
+const origin = "productPage";
 const ProductGrid = () => {
   const { products, currentPage, limitFilter, totalProducts } = useSelector(
     selectProductPageProducts
   );
   const dispatch = useDispatch();
-  const { isLoading } = useProducts({ origin: "productPage" });
-
+  const { isLoading } = useProducts({ origin });
   const fetchMoreProducts = async () => {
-    dispatch(handleMoreProduct({ payload: null, origin: "productPage" }));
+    dispatch(handleMoreProduct({ payload: null, origin }));
   };
 
   const isMoreProducts = currentPage * limitFilter < totalProducts;
@@ -70,7 +70,11 @@ const ProductGrid = () => {
 
         <div className="mt-10 mb-10">
           {isMoreProducts && (
-            <Button className="mx-auto" onClick={fetchMoreProducts}>
+            <Button
+              variant={isLoading ? "disabled" : "outlined"}
+              className="mx-auto"
+              onClick={fetchMoreProducts}
+            >
               More Products <i className="las la-sync ml-2"></i>
             </Button>
           )}
