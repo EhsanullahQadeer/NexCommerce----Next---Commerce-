@@ -4,8 +4,9 @@ import { products, productCategories } from "./fakeProducts";
 import { Product, ProductCategory, ProductVariant } from "@/types/product";
 
 export interface categoryPayload {
-  id: number;
+  id: number | "*";
   isChecked: boolean;
+  type?: "single"
 }
 
 export interface SortPayload {
@@ -136,27 +137,26 @@ export const productsSlice = createSlice({
       action: PayloadAction<ProductCategory[]>
     ) => {
       state.productCategories = action.payload;
-      console.log(state.productCategories, "categoris");
-    },
-    handleCategoriesFilter: (state, action: PayloadAction<categoryPayload>) => {
-      state.products = [];
-      if (action.payload.isChecked) {
-        state.categoriesFilter.push(action.payload.id);
-      } else {
-        state.categoriesFilter = state.categoriesFilter.filter(
-          (id) => id !== action.payload.id
-        );
-      }
-      state.currentPage = 1;
     },
     _handleCategoriesFilter: helper<categoryPayload>((state, action) => {
       state.products = [];
-      if (action.payload.isChecked) {
-        state.categoriesFilter.push(action.payload.id);
-      } else {
-        state.categoriesFilter = state.categoriesFilter.filter(
-          (id) => id !== action.payload.id
-        );
+      const { id, type } = action.payload
+      if (id === "*") {
+        state.categoriesFilter = []
+      }
+      else {
+        if (type === "single") {
+          state.categoriesFilter = [id]
+        } else {
+          if (action.payload.isChecked) {
+            state.categoriesFilter.push(id);
+          } else {
+            state.categoriesFilter = state.categoriesFilter.filter(
+              (catId) => catId !== id
+            );
+          }
+        }
+
       }
       state.currentPage = 1;
     }),
@@ -249,7 +249,6 @@ export const {
   handleMaxPriceProduct,
   _handleMaxPriceProduct,
   handleProductCategories,
-  handleCategoriesFilter,
   _handleCategoriesFilter,
   selectCategoryFilter,
   handleSortFilter,

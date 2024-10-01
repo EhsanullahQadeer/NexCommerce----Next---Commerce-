@@ -9,6 +9,7 @@ import {
   selectProducts,
   selectHomePageProducts,
   togglePreviewModal,
+  handleMoreProduct,
 } from "@/store/slices/products/productsSlice";
 import { cn } from "@/lib/utils";
 import { useImagesLoaded } from "@/hooks/useImagesLoaded";
@@ -18,6 +19,7 @@ import ProductCardSkeleton from "../Cards/ProductCardSkeleton";
 import { useRouter } from "next/navigation";
 import useIsMutating from "@/hooks/useIsMutating";
 import ProductNotFound from "../ProductDetails/ProductNotFound";
+import ProductCardSkeletonWrap from "../Cards/ProductCardSkeltonWrap";
 
 const createCatFilter = (item: any) => {
   if (item && item.length) {
@@ -31,9 +33,11 @@ const GridLayout: React.FC = () => {
   const router = useRouter();
   const [isotope, setIsotope] = useState<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const { filterKey, products } = useSelector(selectHomePageProducts);
+  const { filterKey, products, currentPage, limitFilter, totalProducts } =
+    useSelector(selectHomePageProducts);
   const { apiStatus } = useIsMutating();
-  const { isLoading } = apiStatus("_fetchFilteredProducts");
+  const { isLoading } = apiStatus("fetchFilteredProducts");
+  console.log("totalProducts: ", totalProducts);
 
   const dispatch = useDispatch();
 
@@ -71,46 +75,65 @@ const GridLayout: React.FC = () => {
     }
   }, [isotope, products, filterKey, isLoading]);
 
-  if (isLoading) {
-    return <ProductCardSkeleton />;
-  }
+  const isMoreProducts = currentPage * limitFilter < totalProducts;
+  const handleMoreProducts = () => {
+    if (isMoreProducts) {
+      dispatch(handleMoreProduct({ payload: null, origin: "homePage" }));
+    } else {
+      router.push("/products");
+    }
+  };
+  const items =
+    currentPage === 1
+      ? limitFilter
+      : Math.min(limitFilter, totalProducts - products.length);
 
   return (
     <div className="bg-white">
-      {products.length ? (
-        <>
-          <div ref={gridRef} className="!relative mt-5">
-            {products.map((item: Product, index) => (
-              <div
-                key={item.id + index}
-                className={cn(
-                  "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
-                  createCatFilter(item.product_categories)
-                )}
-              >
-                <ProductCard
-                  {...item}
-                  onPreview={() => {
-                    dispatch(togglePreviewModal(true));
+      <ProductCardSkeletonWrap
+        {...{
+          skeletonPosition: currentPage > 1 ? "after" : "before",
+          items,
+          show: isLoading,
+        }}
+      >
+        {products.length ? (
+          <>
+            <div ref={gridRef} className="!relative mt-5">
+              {products.map((item: Product, index) => (
+                <div
+                  key={item.id + index}
+                  className={cn(
+                    "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
+                    createCatFilter(item.product_categories)
+                  )}
+                >
+                  <ProductCard
+                    {...item}
+                    onPreview={() => {
+                      dispatch(togglePreviewModal(true));
 
-                    dispatch(addQuickViewProduct(item));
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-          <div className="mt-10 mb-10">
-            <Button
-              className="mx-auto"
-              onClick={() => router.push("/products")}
-            >
-              Explore More Products <i className="las la-sync ml-2"></i>
-            </Button>
-          </div>
-        </>
-      ) : (
-        <ProductNotFound />
-      )}
+                      dispatch(addQuickViewProduct(item));
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <ProductNotFound />
+        )}
+      </ProductCardSkeletonWrap>
+      <div className="mt-10 mb-10">
+        <Button
+          variant={isMoreProducts && isLoading ? "disabled" : "outlined"}
+          className="mx-auto"
+          onClick={handleMoreProducts}
+        >
+          {!isMoreProducts && "Explore"} More Products
+          <i className="las la-sync ml-2"></i>
+        </Button>
+      </div>
     </div>
   );
 };

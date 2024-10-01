@@ -6,7 +6,7 @@ interface ProductCategoriesListProps {
   productCategories: ProductCategory[];
   isOpen?: boolean;
   filterKey: string;
-  onCategorySelect: (item: string) => void;
+  onCategorySelect: (item: number | "*") => void;
 }
 
 const ProductCategoriesList: FC<ProductCategoriesListProps> = ({
@@ -39,7 +39,7 @@ const ProductCategoriesList: FC<ProductCategoriesListProps> = ({
             'text-base text-black-500 font-light px-2.5 py-1 leading-[-0.16px] cursor-pointer hover:text-primary',
             filterKey === `cat-${item.id}` && 'text-primary border-b border-primary'
           )}
-          onClick={() => onCategorySelect(`cat-${item.id}`)}
+          onClick={() => onCategorySelect(item.id)}
         >
           {item.name}
         </div>

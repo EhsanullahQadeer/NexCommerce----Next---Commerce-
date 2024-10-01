@@ -15,6 +15,7 @@ import useDebounce from "../useDebounce";
 interface Iprops {
   origin: Torigin;
 }
+let count = 1;
 
 const useProducts = (props: Iprops) => {
   const { origin } = props;
@@ -33,6 +34,8 @@ const useProducts = (props: Iprops) => {
     useFetchFilteredProductsMutation();
   const stopApiRef = useRef<boolean>(false);
   const handleFetchProductsWithFilter = async () => {
+    console.log("count: ", count);
+    count++;
     const skip = (currentPage - 1) * limitFilter;
     try {
       const filters: {
@@ -65,6 +68,7 @@ const useProducts = (props: Iprops) => {
       const data = await fetchFilteredProducts(pramas).unwrap();
       dispatch(_handleProduct({ payload: data.data.data || [], origin }));
       dispatch(handleTotalProduct({ payload: data.data.total || 0, origin }));
+      console.log("payload: data.data.total : ", data.data.total);
       const maxValue = data.data.max_price;
       if (max_price !== maxValue && maxValue) {
         stopApiRef.current = true;

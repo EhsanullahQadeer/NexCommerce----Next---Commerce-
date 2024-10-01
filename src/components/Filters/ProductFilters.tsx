@@ -6,6 +6,7 @@ import FilterCollapse from "../../features/elements/FilterCollase";
 import { useDispatch, useSelector } from "react-redux";
 import {
   _clearFilter,
+  _handleCategoriesFilter,
   _handleFilterKeyChange,
   _handleOtherFilter,
   clearFilter,
@@ -16,6 +17,7 @@ import {
 import ProductCategoriesList from "./ProductCategoriesList";
 import ToggleFilters from "./ToggleFilters";
 import CleanAllButton from "./CleanAllButton";
+import useSkipFirstRender from "@/hooks/useSkipFirstRender";
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,9 +27,8 @@ const ProductFilters = () => {
   const handleCleanFilters = () => {
     dispatch(_clearFilter({ origin: "homePage", payload: null }));
   };
-  
 
-  useEffect(() => {
+  useSkipFirstRender(() => {
     // reset value to all when more filter options opened
     if (isOpen) {
       dispatch(
@@ -36,6 +37,8 @@ const ProductFilters = () => {
           origin: "homePage",
         })
       );
+    } else {
+      handleCleanFilters();
     }
   }, [isOpen]);
 
@@ -55,14 +58,20 @@ const ProductFilters = () => {
           productCategories={productCategories}
           isOpen={isOpen}
           filterKey={filterKey}
-          onCategorySelect={(category: string) =>
+          onCategorySelect={(id: number | "*") => {
             dispatch(
-              _handleFilterKeyChange({
-                payload: category,
+              _handleCategoriesFilter({
+                payload: { id, isChecked: true, type: "single" },
                 origin: "homePage",
               })
-            )
-          }
+            );
+            dispatch(
+              _handleFilterKeyChange({
+                payload: id === "*" ? id : `cat-${id}`,
+                origin: "homePage",
+              })
+            );
+          }}
         />
         <CleanAllButton
           className={cn(
