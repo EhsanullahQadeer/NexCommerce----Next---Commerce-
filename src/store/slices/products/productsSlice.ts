@@ -24,9 +24,6 @@ export interface ProductsState {
   totalProducts: number;
   max_price: number;
   products: Product[];
-  productCategories: ProductCategory[];
-  isPreviewModalOpen: boolean;
-  isGalleryFullView: boolean;
   categoriesFilter: number[];
   sortByFilter: SortPayload;
   colorFilter: string;
@@ -36,9 +33,22 @@ export interface ProductsState {
   currentPage: number;
   searchFilter: string;
   sizeFilter: string;
+}
+interface IsharedInitialValue {
+  productCategories: ProductCategory[];
+  isPreviewModalOpen: boolean;
+  isGalleryFullView: boolean;
   quickViewProduct: Product | null;
   currentVarient: ProductVariant | null;
   currentVarientQuantity: number;
+}
+const sharedInitialValue: IsharedInitialValue = {
+  productCategories,
+  isPreviewModalOpen: false,
+  isGalleryFullView: false,
+  quickViewProduct: null,
+  currentVarient: null,
+  currentVarientQuantity: 0,
 }
 
 // Define the initial state using that type
@@ -47,31 +57,26 @@ const productInitialState: ProductsState = {
   totalProducts: 0,
   max_price: 10000,
   filterKey: "*",
-  productCategories,
-  isPreviewModalOpen: false,
-  isGalleryFullView: false,
   categoriesFilter: [],
   sortByFilter: {
     sort_by: "price",
     order: "DESC",
   },
   colorFilter: "",
-  priceRangeFilter: "5000",
+  priceRangeFilter: "",
   skip: 0,
   limitFilter: 8,
   currentPage: 1,
   searchFilter: "",
   sizeFilter: "",
-  quickViewProduct: null,
-  currentVarient: null,
-  currentVarientQuantity: 0,
 };
 
 export type Torigin = "homePage" | "productPage"
 
-const initialState: { homePage: ProductsState; productPage: ProductsState } & ProductsState = {
-  homePage: { ...productInitialState, priceRangeFilter: "", max_price: 0, limitFilter: 16 },
+const initialState: { homePage: ProductsState; productPage: ProductsState } & ProductsState & IsharedInitialValue = {
+  homePage: { ...productInitialState, max_price: 0, limitFilter: 16 },
   productPage: productInitialState,
+  ...sharedInitialValue,
   ...productInitialState
 }
 
@@ -102,16 +107,21 @@ export const productsSlice = createSlice({
     _handleProduct: helper<Product[]>(
       (state, action) => {
         const newProducts = action.payload;
-        newProducts.forEach((product) => {
-          if (!state.products.find((p) => p.id === product.id)) {
-            state.products.push(product);
-          }
-        });
+        if (state.currentPage > 1) {
+          newProducts.forEach((product) => {
+            if (!state.products.find((p) => p.id === product.id)) {
+              state.products.push(product);
+            }
+          });
+        } else {
+          state.products = newProducts
+        }
+
       }
     ),
-    handleTotalProduct: (state, action: PayloadAction<number>) => {
+    handleTotalProduct: helper<number>((state, action) => {
       state.totalProducts = action.payload;
-    },
+    }),
     handleMaxPriceProduct: (state, action: PayloadAction<number>) => {
       state.max_price = action.payload;
     },
@@ -175,9 +185,9 @@ export const productsSlice = createSlice({
       state.currentPage = 1;
       state.products = [];
     }),
-    handleMoreProduct: (state) => {
+    handleMoreProduct: helper((state) => {
       state.currentPage++;
-    },
+    }),
     handleFilterKeyChange: (state, action: PayloadAction<string>) => {
       state.filterKey = action.payload;
     },

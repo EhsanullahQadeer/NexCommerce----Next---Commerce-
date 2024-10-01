@@ -2,8 +2,6 @@ import Checkbox from "@/components/Checkbox";
 import {
   _handleCategoriesFilter,
   categoryPayload,
-  handleCategoriesFilter,
-  selectProducts,
   selectProductsRootState,
   Torigin,
 } from "@/store/slices/products/productsSlice";
@@ -13,21 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 interface CategoryProps {
   categories: ProductCategory[];
-  origin?: Torigin;
+  origin: Torigin;
 }
 
 const CategoryFilter: FC<CategoryProps> = (props) => {
   const { origin, categories } = props;
   const dispatch = useDispatch();
-  const { categoriesFilter } = useSelector(
-    origin ? selectProductsRootState[origin] : selectProducts
-  );
+  const { categoriesFilter } = useSelector(selectProductsRootState[origin]);
   const handleChange = (payload: categoryPayload) => {
-    if (origin) {
-      dispatch(_handleCategoriesFilter({ payload, origin }));
-    } else {
-      dispatch(handleCategoriesFilter(payload));
-    }
+    dispatch(_handleCategoriesFilter({ payload, origin }));
   };
 
   return (

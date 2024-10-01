@@ -31,8 +31,7 @@ const GridLayout: React.FC = () => {
   const router = useRouter();
   const [isotope, setIsotope] = useState<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const { filterKey, products, productCategories, currentPage, limitFilter } =
-    useSelector(selectHomePageProducts);
+  const { filterKey, products } = useSelector(selectHomePageProducts);
   const { apiStatus } = useIsMutating();
   const { isLoading } = apiStatus("_fetchFilteredProducts");
 
@@ -70,7 +69,7 @@ const GridLayout: React.FC = () => {
         filter: filterKey !== "*" ? `.${filterKey}` : "*",
       });
     }
-  }, [isotope, products, filterKey, productCategories, isLoading]);
+  }, [isotope, products, filterKey, isLoading]);
 
   if (isLoading) {
     return <ProductCardSkeleton />;

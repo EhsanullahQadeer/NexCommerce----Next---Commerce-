@@ -1,11 +1,8 @@
-import { FC } from "react";
 import { cn } from "@/lib/utils";
 import CheckedIcon from "@/components/Icons/CheckedIcon";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  handleOtherFilter,
   _handleOtherFilter,
-  selectProducts,
   Torigin,
   selectProductsRootState,
 } from "@/store/slices/products/productsSlice";
@@ -22,25 +19,19 @@ const colorCircleStyles =
   "relative flex items-center h-6 w-6 rounded-full cursor-pointer border-[2px] border-white";
 interface IProps {
   isHorizontal?: boolean;
-  origin?: Torigin;
+  origin: Torigin;
 }
 const ColourFilters = (props: IProps) => {
   const { isHorizontal, origin } = props;
   const dispatch = useDispatch();
-  const { colorFilter } = useSelector(
-    origin ? selectProductsRootState[origin] : selectProducts
-  );
+  const { colorFilter } = useSelector(selectProductsRootState[origin]);
 
   const isActive = (colour: string) => colorFilter === colour;
 
   const handleColorSelect = (value: string) => {
-    if (origin) {
-      dispatch(
-        _handleOtherFilter({ payload: { key: "colorFilter", value }, origin })
-      );
-    } else {
-      dispatch(handleOtherFilter({ key: "colorFilter", value }));
-    }
+    dispatch(
+      _handleOtherFilter({ payload: { key: "colorFilter", value }, origin })
+    );
   };
 
   return (

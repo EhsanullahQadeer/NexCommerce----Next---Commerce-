@@ -2,34 +2,33 @@ import useCurrency from "@/hooks/useCurrency";
 import useDebounce from "@/hooks/useDebounce";
 import { RootState } from "@/store";
 import {
+  _handleOtherFilter,
   handleOtherFilter,
   handlePriceRange,
+  selectProductsRootState,
   Torigin,
 } from "@/store/slices/products/productsSlice";
 import { FC, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 type PriceRangeInputProps = {
-  rootState: (state: RootState) => any;
-  origin?: Torigin;
+  origin: Torigin;
 };
 const PriceRangeInput = (props: PriceRangeInputProps) => {
-  const { rootState, origin } = props;
+  const { origin } = props;
   const dispatch = useDispatch();
-  const { priceRangeFilter, max_price } = useSelector(rootState);
+  const { priceRangeFilter, max_price } = useSelector(
+    selectProductsRootState[origin]
+  );
   const { formatPrice } = useCurrency();
   const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    if (origin) {
-      dispatch(handlePriceRange({ origin, payload: value }));
-    } else {
-      dispatch(
-        handleOtherFilter({
-          key: "priceRangeFilter",
-          value: value,
-        })
-      );
-    }
+    dispatch(
+      _handleOtherFilter({
+        origin,
+        payload: { key: "priceRangeFilter", value },
+      })
+    );
   };
 
   return (
@@ -54,7 +53,7 @@ const PriceRangeInput = (props: PriceRangeInputProps) => {
       </div>
       <div className="flex justify-between text-sm text-black-75">
         <span id="minPrice">{formatPrice(1, 2)}</span>
-        <span id="maxPrice">{formatPrice(priceRangeFilter, 2)}</span>
+        <span id="maxPrice">{formatPrice(Number(priceRangeFilter), 2)}</span>
       </div>
     </>
   );

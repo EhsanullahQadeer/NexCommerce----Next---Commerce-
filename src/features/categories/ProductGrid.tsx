@@ -10,80 +10,64 @@ import PreviewModal from "../elements/PreviewModal";
 import {
   addQuickViewProduct,
   handleMoreProduct,
-  selectProducts,
+  selectProductPageProducts,
   togglePreviewModal,
 } from "@/store/slices/products/productsSlice";
 import GalleryModal from "../elements/GalleryModal";
 import { Product } from "@/types/product";
-import { useFetchFilteredProductsMutation } from "@/store/api/productApi";
-import ProductCardSkeleton from "@/components/Cards/ProductCardSkeleton";
-import useIsMutating from "@/hooks/useIsMutating";
 import ProductNotFound from "@/components/ProductDetails/ProductNotFound";
+import useProducts from "@/hooks/home/useProducts";
+import ProductCardSkeletonWrap from "@/components/Cards/ProductCardSkeltonWrap";
 
 const ProductGrid = () => {
-  const [fetchFilteredProducts] = useFetchFilteredProductsMutation();
-  const {
-    products,
-    sizeFilter,
-    currentPage,
-    limitFilter,
-    categoriesFilter,
-    sortByFilter,
-    colorFilter,
-    priceRangeFilter,
-  } = useSelector(selectProducts);
+  const { products, currentPage, limitFilter, totalProducts } = useSelector(
+    selectProductPageProducts
+  );
   const dispatch = useDispatch();
-  const { apiStatus } = useIsMutating();
-  const { isLoading } = apiStatus("fetchFilteredProducts");
+  const { isLoading } = useProducts({ origin: "productPage" });
 
   const fetchMoreProducts = async () => {
-    try {
-      if (products.length == currentPage * limitFilter) {
-        let skipData = currentPage * limitFilter;
-
-        const filter = {
-          filters: {
-            categories: categoriesFilter,
-            sort: sortByFilter,
-            color: colorFilter,
-            size: sizeFilter,
-            priceRange: `1-${priceRangeFilter}`,
-          },
-          pagination: {
-            skip: skipData,
-            limit: limitFilter,
-          },
-        };
-        await fetchFilteredProducts(filter).unwrap();
-        dispatch(handleMoreProduct());
-      }
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    }
+    dispatch(handleMoreProduct({ payload: null, origin: "productPage" }));
   };
-  const isMoreProducts = products.length == currentPage * limitFilter;
+
+  const isMoreProducts = currentPage * limitFilter < totalProducts;
+
+  // Calculate the number of items (remaining products)
+  const items =
+    currentPage === 1
+      ? limitFilter
+      : Math.min(limitFilter, totalProducts - products.length);
+
   return (
     <>
       <Container className="mt-5">
         <CategoryFilterToggle />
-        {isLoading ? (
-          <ProductCardSkeleton />
-        ) : products.length === 0 ? (
-          <ProductNotFound />
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5 gap-5">
-            {products.map((item: Product) => (
-              <ProductCardBoxed
-                key={item.id}
-                {...item}
-                onPreview={() => {
-                  dispatch(togglePreviewModal(true));
-                  dispatch(addQuickViewProduct(item));
-                }}
-              />
-            ))}
-          </div>
-        )}
+
+        <ProductCardSkeletonWrap
+          {...{
+            skeletonPosition: currentPage > 1 ? "after" : "before",
+            items,
+            show: isLoading,
+          }}
+        >
+          {products.length === 0
+            ? !isLoading && <ProductNotFound />
+            : products.length && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-5 gap-5">
+                  {products.map((item: Product) => (
+                    <ProductCardBoxed
+                      key={item.id}
+                      {...item}
+                      onPreview={() => {
+                        dispatch(togglePreviewModal(true));
+                        dispatch(addQuickViewProduct(item));
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+        </ProductCardSkeletonWrap>
+
         <div className="mt-10 mb-10">
           {isMoreProducts && (
             <Button className="mx-auto" onClick={fetchMoreProducts}>

@@ -24,11 +24,18 @@ import { debug } from "console";
 import ProductDetailPage from "@/app/products/[slug]/page";
 import { selectCart, setCartTotalAmount } from "@/store/slices/cart/cartSlice";
 import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
-import { selectSiteSetting, updateSiteShippingData } from "@/store/slices/siteSetting/siteSettingSlice";
+import {
+  selectSiteSetting,
+  updateSiteShippingData,
+} from "@/store/slices/siteSetting/siteSettingSlice";
 import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
 import useCurrency from "@/hooks/useCurrency";
 import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
-import { clearCoupon, selectCoupenCode, updateCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
+import {
+  clearCoupon,
+  selectCoupenCode,
+  updateCoupenCode,
+} from "@/store/slices/coupencode/coupenCodeSlice";
 import AuthComponent from "@/features/auth";
 import Modal from "../Modal";
 import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
@@ -60,7 +67,7 @@ interface MainLayoutProps {
 }
 
 const MainLayout: FC<MainLayoutProps> = ({ children }) => {
-  const { user, isAuthenticated ,openAuthModal} = useSelector(
+  const { user, isAuthenticated, openAuthModal } = useSelector(
     (state: RootState) => state.auth
   );
   const [hideLayout, setHideLayout] = useState(false);
@@ -83,7 +90,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   const [languageListGet] = useFetchLanguageListMutation();
   const [addVisitor] = useAddVisitorMutation();
   const [fetchCoupenCode] = useFetchCoupenCodeMutation();
-  const { cartDetails} = useSelector(selectCart);
+  const { cartDetails } = useSelector(selectCart);
   const { currencyData } = useSelector(selectCurrency);
   const { coupon_code } = useSelector(selectCoupenCode);
   const {
@@ -94,27 +101,7 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
   } = useSelector(selectSiteSetting);
 
   const { calculatePrice } = useCurrency();
-  const dispatch=useDispatch()
-  const handleFetchProductsWithFilter = async () => {
-    try {
-      const filter = {
-        filters: {
-          categories: categoriesFilter,
-          sort: sortByFilter,
-          color: colorFilter,
-          priceRange: `1-${priceRangeFilter}`,
-        },
-        pagination: {
-          skip: skip,
-          limit: limitFilter,
-        },
-      };
-      await fetchFilteredProducts(filter).unwrap();
-    } catch (error) {
-      console.error("Failed to fetch products:", error);
-    }
-  };
-
+  const dispatch = useDispatch();
   const handleFetchCategories = async () => {
     try {
       await fetchCategoriesList({}).unwrap();
@@ -188,21 +175,21 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       }
     } catch (error) {}
   }
- 
-   const getCouponDetails = async () => {
-    if(!coupon_code) return;
-     const response = await fetchCoupenCode(coupon_code).unwrap();
-     const couponData = response.data;
-     if (couponData) {
-       dispatch(
-         updateCoupenCode({
-           couponData,
-         })
-       );
-     } else {
-     dispatch(clearCoupon())
-     }
-   };
+
+  const getCouponDetails = async () => {
+    if (!coupon_code) return;
+    const response = await fetchCoupenCode(coupon_code).unwrap();
+    const couponData = response.data;
+    if (couponData) {
+      dispatch(
+        updateCoupenCode({
+          couponData,
+        })
+      );
+    } else {
+      dispatch(clearCoupon());
+    }
+  };
 
   const handleFetchVisitor = async (
     browser: string,
@@ -232,20 +219,15 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
       handleFetchWishlist();
       handleFetchCurrencyList();
       handleFetchLanguageList();
-      getCouponDetails()
+      getCouponDetails();
     }, 0);
   }, [user, isAuthenticated]);
-  const debounceValue = useDebounce(priceRangeFilter, 300);
-  useEffect(() => {
-    handleFetchProductsWithFilter();
-  }, [categoriesFilter, sortByFilter, colorFilter, debounceValue]);
 
   useEffect(() => {
     if (window && window.location.pathname === "/coming-soon") {
       setHideLayout(true);
     }
   }, []);
-
 
   useEffect(() => {
     const totalAmount = cartDetails.reduce(
@@ -302,7 +284,11 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         onClose={() => dispatch(setOpenAuthModal(false))}
         className="!max-w-[575px]"
       >
-        <AuthComponent setIsOpen={(value)=>{dispatch(setOpenAuthModal(value))}} />
+        <AuthComponent
+          setIsOpen={(value) => {
+            dispatch(setOpenAuthModal(value));
+          }}
+        />
       </Modal>
     </div>
   );

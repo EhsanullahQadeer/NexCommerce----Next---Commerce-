@@ -22,7 +22,6 @@ interface FilterColumnProps {
 const origin = "homePage";
 const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
   const { productCategories } = useSelector(selectProducts);
-
   return (
     <Collapse isOpen={isOpen}>
       <div className="grid grid-cols sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -30,13 +29,16 @@ const FilterCollapse: FC<FilterCollapseProps> = ({ isOpen }) => {
           <CategoryFilter {...{ origin }} categories={productCategories} />
         </FilterColumn>
         <FilterColumn title="Sort by: ">
-          <SortFilters {...{ origin }} productSortCategories={productSortCategories} />
+          <SortFilters
+            {...{ origin }}
+            productSortCategories={productSortCategories}
+          />
         </FilterColumn>
         <FilterColumn title="Colour: ">
           <ColourFilters {...{ origin }} />
         </FilterColumn>
         <FilterColumn title="Price: ">
-          <PriceRangeInput {...{ origin }} rootState={selectHomePageProducts} />
+          <PriceRangeInput {...{ origin }} />
         </FilterColumn>
       </div>
     </Collapse>

@@ -19,6 +19,7 @@ import CleanAllButton from "./CleanAllButton";
 
 const ProductFilters = () => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log("isOpen: ", isOpen);
   const dispatch = useDispatch();
   const { productCategories } = useSelector(selectProducts);
   const { filterKey } = useSelector(selectHomePageProducts);
@@ -26,8 +27,23 @@ const ProductFilters = () => {
     dispatch(_clearFilter({ origin: "homePage", payload: null }));
   };
   useEffect(() => {
-    handleCleanFilters();
+    return () => {
+      handleCleanFilters();
+    };
   }, []);
+
+  useEffect(() => {
+    // reset value to all when more filter options opened
+    if (isOpen) {
+      dispatch(
+        _handleFilterKeyChange({
+          payload: "*",
+          origin: "homePage",
+        })
+      );
+    }
+  }, [isOpen]);
+
   return (
     <div>
       <div
