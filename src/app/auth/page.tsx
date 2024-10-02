@@ -1,36 +1,38 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import Breadcrumb from '@/components/Breadcrumb';
-import Container from '@/components/Container';
-import AuthComponent from '@/features/auth';
-import {useSearchParams } from 'next/navigation';
-import { showToast } from '@/utility/showToast';
-import { useRouter } from 'next/navigation';
+import React, { Suspense, useEffect, useState } from "react";
+import Breadcrumb from "@/components/Breadcrumb";
+import Container from "@/components/Container";
+import AuthComponent from "@/features/auth";
+import { showToast } from "@/utility/showToast";
+import { useRouter, useSearchParams } from "next/navigation";
+
 const Login = () => {
-  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
   const links = [
     {
-      url: '/',
-      name: 'Home',
+      url: "/",
+      name: "Home",
     },
     {
-      url: '#',
-      name: 'Login',  
+      url: "#",
+      name: "Login",
     },
   ];
 
   useEffect(() => {
-    const notify = searchParams.get('notify');
-    if (notify === 'true') {
-       // Remove 'notify' from the URL after processing
-       const currentUrl = new URL(window.location.href);
-       currentUrl.searchParams.delete('notify');
-       router.replace(currentUrl.toString())
-      showToast('You are not authorized. Please log in.', "401_error");
+    const notify = searchParams.get("notify");
+    if (notify === "true") {
+      // Remove 'notify' from the URL after processing
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.delete("notify");
+      router.replace(currentUrl.toString());
+      showToast("You are not authorized. Please log in.", "401_error");
     }
   }, [searchParams]);
-  
+
   return (
     <div className="border-t">
       <Container>
@@ -44,5 +46,9 @@ const Login = () => {
     </div>
   );
 };
-
-export default Login;
+const LoginWrap = () => {
+  <Suspense>
+    <Login />
+  </Suspense>;
+};
+export default LoginWrap;
