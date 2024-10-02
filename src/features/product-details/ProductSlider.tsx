@@ -8,7 +8,7 @@ import {
 } from "@/store/slices/products/productsSlice";
 import { SwiperSlide } from "swiper/react";
 import { Swiper } from "swiper/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import SlideArrow from "@/components/Slider/elements/SlideArrow";
@@ -26,6 +26,7 @@ interface ProductSliderProps {
 const ProductSlider = (props: ProductSliderProps) => {
   const swiperRef = useRef<SwiperType | null>(null);
   const [fetchFilteredProducts] = useFetchFilteredProductsMutation();
+  const [products, setProducts] = useState<Product[]>([]);
   useEffect(() => {
     const handleResize = () => {
       const slides = document.querySelectorAll(".swiper-slide");
@@ -58,20 +59,26 @@ const ProductSlider = (props: ProductSliderProps) => {
     //   const categoryId = props.product_categories[0].category_id;
     //     // const { data: relatedProducts = [], isLoading } = useFetchProductsByCategoryQuery(product?.categoryId);
     // }
-    if (props.product_categories && props.product_categories.length > 0) {
-      const categoryId = props.product_categories[0].category_id;
 
-      // Fetch products based on the selected category
-      fetchFilteredProducts({ filters: { categoryId }, pagination: { page: 1, limit: 10 } });
-    }
-
+    (async () => {
+      if (props.product_categories && props.product_categories.length > 0) {
+        const categoryId = props.product_categories[0].category_id;
+        // Fetch products based on the selected category
+        try {
+          const response = await fetchFilteredProducts({
+            filters: { categoryId },
+            pagination: { skip: 0, limit: 10 },
+          }).unwrap();
+          setProducts(response.data.data);
+        } catch (error) {}
+      }
+    })();
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [props.product_categories, fetchFilteredProducts]);
 
   const dispatch = useDispatch();
-  const { products } = useSelector(selectProducts);
 
   return (
     <div>

@@ -4,7 +4,7 @@ import Description from '@/components/ProductDetails/Description';
 import { Label } from './Items';
 import CategoryWithIcons from './CategoryWithIcons';
 import Actions from './Actions';
-import { ColorVariant, ProductVariant, SizeVariant } from '@/types/product';
+import { ColorVariant, Product, ProductVariant, SizeVariant } from '@/types/product';
 import ColorVariants from '@/components/ColorVariants';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeCurrentVarient, changeCurrentVarientQuantity, selectProducts } from '@/store/slices/products/productsSlice';
@@ -15,13 +15,13 @@ import { useAddToCartMutation, useCartDetailsGetMutation, useDeletefromCartMutat
 
 interface ProductDetailsColumnProps {
   isModal?: boolean;
-  productData: any;  // Add productData prop
 }
 
-const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal, productData }) => {
+const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const { quickViewProduct, currentVarient, currentVarientQuantity } = useSelector(selectProducts);
+  console.log('quickViewProduct: ', quickViewProduct);
   const { cartDetails } = useSelector(selectCart);
   const { product_variants } = quickViewProduct || {};
 
@@ -184,23 +184,23 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal, productD
   return (
     <div>
       <Description className='!mb-2.5' />
-      {productData.product_variants && (
+      {product_variants && (
         <>
-          {colorVarientFilter(productData.product_variants).length > 0 && (
+          {colorVarientFilter(product_variants).length > 0 && (
             <div className="flex items-center mb-5">
               <Label text="Color" />
               <ColorVariants
-                variants={colorVarientFilter(productData.product_variants)}
+                variants={colorVarientFilter(product_variants)}
                 currenValue={checkCurrentColor()?.toLowerCase()}
                 onChangeColorVarient={onChangeColorVarient}
               />
             </div>
           )}
-          {sizeVarientFilter(productData.product_variants).length > 0 && (
+          {sizeVarientFilter(product_variants).length > 0 && (
             <div className="flex items-center mb-5">
               <Label text="Size" />
               <SizeVariants
-                options={sizeVarientFilter(productData.product_variants)}
+                options={sizeVarientFilter(product_variants)}
                 label="Select a size"
                 currenValue={checkCurrentSize()?.toLowerCase()}
                 onChangeSizeVarient={onChangeSizeVarient}

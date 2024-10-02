@@ -64,7 +64,6 @@ const useProducts = (props: Iprops) => {
       const data = await fetchFilteredProducts(pramas).unwrap();
       dispatch(_handleProduct({ payload: data.data.data || [], origin }));
       dispatch(handleTotalProduct({ payload: data.data.total || 0, origin }));
-      console.log("payload: data.data.total : ", data.data.total);
       const maxValue = data.data.max_price;
       if (max_price !== maxValue && maxValue) {
         stopApiRef.current = true;

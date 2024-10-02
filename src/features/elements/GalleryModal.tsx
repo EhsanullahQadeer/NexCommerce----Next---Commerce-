@@ -5,6 +5,7 @@ import {
   selectProducts,
   toggleGalleryModal,
 } from '@/store/slices/products/productsSlice';
+import { baseUrl } from '@/config/config';
 
 const Modal = lazy(() => import('@/components/Modal'));
 
@@ -17,9 +18,10 @@ export const images = [
 
 const GalleryModal: FC = () => {
   const { isGalleryFullView, quickViewProduct } = useSelector(selectProducts);
+  console.log('quickViewProduct: ', quickViewProduct);
   const {images, image} = quickViewProduct || {}
   const dispatch = useDispatch();
-  const imagesLinks = images?.map((el) => el.image_path) || []
+  const imagesLinks = images?.map((el) => baseUrl+el.image_path) || []
   return (
     <Modal
       isOpen={isGalleryFullView}
@@ -28,7 +30,7 @@ const GalleryModal: FC = () => {
       id="gallery-full-view"
     >
       <div className="max-w-[654px] mx-auto px-5 mb-10">
-        <GallerySlider direction="horizontal" showTotalSlides images={imagesLinks?.length ? [image || "", ...imagesLinks] : [image || ""]} />
+        <GallerySlider direction="horizontal" showTotalSlides images={imagesLinks?.length ? imagesLinks : [image || ""]} />
       </div>
     </Modal>
   );

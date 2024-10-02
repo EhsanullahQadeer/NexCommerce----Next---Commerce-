@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Breadcrumb from "@/components/Breadcrumb";
 import Container from "@/components/Container";
@@ -6,66 +6,56 @@ import GalleryModal from "@/features/elements/GalleryModal";
 import PreviewModal from "@/features/elements/PreviewModal";
 import ProductDetails from "@/features/product-details";
 import StickyBarBottom from "@/features/product-details/StickyBarBottom";
-import { addQuickViewProduct, selectProducts } from "@/store/slices/products/productsSlice";
+import { useFetchProductMutation } from "@/store/api/productApi";
+import { addQuickViewProduct } from "@/store/slices/products/productsSlice";
+import { Product } from "@/types/product";
 
-import { useParams, useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 const ProductDetailPage = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { slug } = useParams<{ slug: string }>();
-  const { products } = useSelector(selectProducts)
-
-  const productData = products.find(el => el.slug == slug)
-
-
-
-
+  const [fetchProduct] = useFetchProductMutation();
+  const [productData, setProductData] = useState<Product | null>(null);
   useEffect(() => {
-    if(productData){
-      dispatch(addQuickViewProduct(productData))
-    }
-
-  }, [productData])
-
+    (async () => {
+      try {
+        const response = await fetchProduct({ slug: slug }).unwrap();
+        setProductData(response.data);
+        dispatch(addQuickViewProduct(response.data));
+      } catch (error) {}
+    })();
+  }, []);
 
   const links = [
     {
-      url: '/',
-      name: 'Home',
+      url: "/",
+      name: "Home",
     },
     {
-      url: '/products',
-      name: 'products',
+      url: "/products",
+      name: "products",
     },
     {
-      url: '/default',
-      name: 'Product Details',
-    }
-  ]
-
-
+      url: "/default",
+      name: "Product Details",
+    },
+  ];
 
   return (
     <div>
-      {
-        productData ? <>
-          <Container>
-            <Breadcrumb links={links} border="top" />
-          </Container>
+      <Container>
+        <Breadcrumb links={links} border="top" />
+      </Container>
+      <ProductDetails productData={productData} />
+      <StickyBarBottom isLoading={!productData}/>
 
-          <ProductDetails  productData={productData} />
-          <StickyBarBottom />
-
-          <PreviewModal />
-          <GalleryModal />
-        </>
-        : <h1>Loading...</h1>
-      }
-
+      <PreviewModal />
+      <GalleryModal />
     </div>
-  )
-}
+  );
+};
 
 export default ProductDetailPage;

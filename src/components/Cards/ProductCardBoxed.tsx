@@ -36,7 +36,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
     onPreview,
     currency_id
     // heading,
-  } = productDetails
+  } = productDetails;
   const { user } = useSelector((state: RootState) => state.auth);
   const { wishListData } = useSelector(selectWishlist)
   const [addToCart] = useAddToCartMutation()

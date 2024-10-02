@@ -70,14 +70,13 @@ export const productsApi = apiSlice.injectEndpoints({
         }
       },
     }),
-    
-    _fetchFilteredProducts: builder.mutation({
-      query: ({ filters, pagination }) => ({
-        url: "filtered-product-list",
+
+    fetchProduct: builder.mutation({
+      query: ({ slug }: { slug: string }) => ({
+        url: "product-details",
         method: "POST",
         body: {
-          filters,
-          pagination,
+          slug
         },
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
@@ -96,5 +95,5 @@ export const productsApi = apiSlice.injectEndpoints({
 export const {
   useFetchFilteredProductsMutation,
   useFetchCategoriesListMutation,
-  use_fetchFilteredProductsMutation,
+  useFetchProductMutation
 } = productsApi;
