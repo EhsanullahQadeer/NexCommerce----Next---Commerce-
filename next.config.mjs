@@ -6,7 +6,7 @@ const nextConfig = {
     images: {
       domains: ['alertifyhub.com'],
     },
-    reactStrictMode: false,
+     reactStrictMode: false,
     // i18n: {
     //   defaultLocale: 'en',
     //   locales: ['tr', 'en'],

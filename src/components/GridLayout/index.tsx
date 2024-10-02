@@ -6,21 +6,17 @@ import ProductCard from "../Cards/ProductCard";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addQuickViewProduct,
-  selectProducts,
   selectHomePageProducts,
   togglePreviewModal,
   handleMoreProduct,
 } from "@/store/slices/products/productsSlice";
 import { cn } from "@/lib/utils";
-import { useImagesLoaded } from "@/hooks/useImagesLoaded";
 import Button from "../Button";
 import { Product } from "@/types/product";
-import ProductCardSkeleton from "../Cards/ProductCardSkeleton";
 import { useRouter } from "next/navigation";
-import useIsMutating from "@/hooks/useIsMutating";
 import ProductNotFound from "../ProductDetails/ProductNotFound";
 import ProductCardSkeletonWrap from "../Cards/ProductCardSkeltonWrap";
-
+import { motion } from "framer-motion";
 const createCatFilter = (item: any) => {
   if (item && item.length) {
     return "cat-" + item[0].category_id;
@@ -29,51 +25,51 @@ const createCatFilter = (item: any) => {
   return "cat-0";
 };
 
-const GridLayout: React.FC = () => {
+interface Iprops {
+  isLoading: boolean;
+}
+const GridLayout: React.FC<Iprops> = (props) => {
+  const { isLoading } = props;
   const router = useRouter();
-  const [isotope, setIsotope] = useState<Isotope | null>(null);
+  // const [isotope, setIsotope] = useState<Isotope | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const { filterKey, products, currentPage, limitFilter, totalProducts } =
     useSelector(selectHomePageProducts);
-  const { apiStatus } = useIsMutating();
-  const { isLoading } = apiStatus("fetchFilteredProducts");
-  console.log("totalProducts: ", totalProducts);
-
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (gridRef.current && !isotope && !isLoading) {
-      const newIsotope = new Isotope(gridRef.current, {
-        itemSelector: ".product-item",
-        layoutMode: "fitRows",
-        fitRows: {
-          gutter: 0,
-        },
-      });
+  // useEffect(() => {
+  //   if (gridRef.current && !isotope && !isLoading) {
+  //     const newIsotope = new Isotope(gridRef.current, {
+  //       itemSelector: ".product-item",
+  //       layoutMode: "fitRows",
+  //       fitRows: {
+  //         gutter: 0,
+  //       },
+  //     });
 
-      setIsotope(newIsotope);
-    }
+  //     setIsotope(newIsotope);
+  //   }
 
-    const handleResize = () => {
-      isotope?.layout();
-    };
-    window.addEventListener("resize", handleResize);
+  //   const handleResize = () => {
+  //     isotope?.layout();
+  //   };
+  //   window.addEventListener("resize", handleResize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      isotope?.destroy();
-      setIsotope(null);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading]);
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //     isotope?.destroy();
+  //     setIsotope(null);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isLoading]);
 
-  useEffect(() => {
-    if (isotope && !isLoading) {
-      isotope.arrange({
-        filter: filterKey !== "*" ? `.${filterKey}` : "*",
-      });
-    }
-  }, [isotope, products, filterKey, isLoading]);
+  // useEffect(() => {
+  //   if (isotope && !isLoading) {
+  //     isotope.arrange({
+  //       filter: filterKey !== "*" ? `.${filterKey}` : "*",
+  //     });
+  //   }
+  // }, [isotope, products, filterKey, isLoading]);
 
   const isMoreProducts = currentPage * limitFilter < totalProducts;
   const handleMoreProducts = () => {
@@ -93,35 +89,51 @@ const GridLayout: React.FC = () => {
       <ProductCardSkeletonWrap
         {...{
           skeletonPosition: currentPage > 1 ? "after" : "before",
-          items,
+          items: 8,
           show: isLoading,
         }}
       >
         {products.length ? (
           <>
-            <div ref={gridRef} className="!relative mt-5">
-              {products.map((item: Product, index) => (
-                <div
-                  key={item.id + index}
-                  className={cn(
-                    "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
-                    createCatFilter(item.product_categories)
-                  )}
-                >
-                  <ProductCard
-                    {...item}
-                    onPreview={() => {
-                      dispatch(togglePreviewModal(true));
-
-                      dispatch(addQuickViewProduct(item));
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
+            <motion.div
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1,
+                  },
+                },
+              }}
+            >
+              <div ref={gridRef} className="!relative mt-5">
+                {products.map((item: Product, index) => (
+                  <motion.div
+                    key={item.id + index}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className={cn(
+                      "product-item p-2.5 float-left w-full max-w-full xs:max-w-[50%] md:max-w-[33.33%] lg:max-w-[25%]",
+                      createCatFilter(item.product_categories)
+                    )}
+                  >
+                    <ProductCard
+                      {...item}
+                      onPreview={() => {
+                        dispatch(togglePreviewModal(true));
+                        dispatch(addQuickViewProduct(item));
+                      }}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </>
         ) : (
-          <ProductNotFound />
+          !isLoading && <ProductNotFound />
         )}
       </ProductCardSkeletonWrap>
       <div className="mt-10 mb-10">

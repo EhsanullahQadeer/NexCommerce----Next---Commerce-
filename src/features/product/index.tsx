@@ -11,14 +11,14 @@ const GridLayout = dynamic(() => import("@/components/GridLayout"), {
 });
 
 const ProductCategories = () => {
-  useProducts({ origin: "homePage" });
+  const { isLoading , } = useProducts({ origin: "homePage" });
   return (
     <div>
       <div className="max-w-container mx-auto px-2.5 !pt-10">
         <ProductFilters />
       </div>
       <div className="max-w-[1208px] mx-auto px-2.5">
-        <GridLayout />
+        <GridLayout {...{ isLoading }} />
       </div>
       <GalleryModal />
       <PreviewModal />

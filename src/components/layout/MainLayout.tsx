@@ -20,15 +20,12 @@ import { useWishlistDetailsGetMutation } from "@/store/api/wishlistApi";
 import { useFetchCurrencyListMutation } from "@/store/api/currencyListApi";
 import { useFetchLanguageListMutation } from "@/store/api/languageListApi";
 import { useAddVisitorMutation } from "@/store/api/visitorApi";
-import { debug } from "console";
-import ProductDetailPage from "@/app/products/[slug]/page";
 import { selectCart, setCartTotalAmount } from "@/store/slices/cart/cartSlice";
 import { selectCurrency } from "@/store/slices/currenctlist/currencySlice";
 import {
   selectSiteSetting,
   updateSiteShippingData,
 } from "@/store/slices/siteSetting/siteSettingSlice";
-import { calculatePriceInCurrency } from "@/utility/calculatePriceInCurrency";
 import useCurrency from "@/hooks/useCurrency";
 import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
 import {
@@ -39,7 +36,6 @@ import {
 import AuthComponent from "@/features/auth";
 import Modal from "../Modal";
 import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
-import useDebounce from "@/hooks/useDebounce";
 function detectBrowser() {
   var userAgent = navigator.userAgent;
   if (userAgent.indexOf("Edg") > -1) {

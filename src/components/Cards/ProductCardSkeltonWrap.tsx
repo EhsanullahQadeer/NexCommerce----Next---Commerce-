@@ -9,9 +9,9 @@ interface Iprops {
 }
 const ProductCardSkeletonWrap = (props: Iprops) => {
   const { items, children, skeletonPosition = "before", show } = props;
-
+  console.log('show: ', show);
   return (
-    <div>
+    <div className="flex flex-col">
       {skeletonPosition === "before" && show && (
         <ProductCardSkeleton {...{ items }} />
       )}

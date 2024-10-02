@@ -75,7 +75,7 @@ const productInitialState: ProductsState = {
 export type Torigin = "homePage" | "productPage"
 
 const initialState: { homePage: ProductsState; productPage: ProductsState } & ProductsState & IsharedInitialValue = {
-  homePage: { ...productInitialState, max_price: 0, limitFilter: 16 },
+  homePage: { ...productInitialState, max_price: 0, limitFilter: 8 },
   productPage: productInitialState,
   ...sharedInitialValue,
   ...productInitialState

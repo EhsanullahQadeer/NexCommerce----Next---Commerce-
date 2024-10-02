@@ -16,6 +16,7 @@ interface CategoryProps {
 
 const CategoryFilter: FC<CategoryProps> = (props) => {
   const { origin, categories } = props;
+  console.log('categories: ', categories);
   const dispatch = useDispatch();
   const { categoriesFilter } = useSelector(selectProductsRootState[origin]);
   const handleChange = (payload: categoryPayload) => {
