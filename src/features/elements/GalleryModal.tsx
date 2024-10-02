@@ -18,7 +18,6 @@ export const images = [
 
 const GalleryModal: FC = () => {
   const { isGalleryFullView, quickViewProduct } = useSelector(selectProducts);
-  console.log('quickViewProduct: ', quickViewProduct);
   const {images, image} = quickViewProduct || {}
   const dispatch = useDispatch();
   const imagesLinks = images?.map((el) => baseUrl+el.image_path) || []

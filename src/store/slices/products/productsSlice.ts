@@ -49,7 +49,7 @@ const sharedInitialValue: IsharedInitialValue = {
   isGalleryFullView: false,
   quickViewProduct: null,
   currentVarient: null,
-  currentVarientQuantity: 0,
+  currentVarientQuantity: 1,
 }
 
 // Define the initial state using that type

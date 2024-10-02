@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/Button";
@@ -11,30 +11,50 @@ import {
 } from "@/store/slices/products/productsSlice";
 import useCurrency from "@/hooks/useCurrency";
 import Skeleton from "react-loading-skeleton";
+import useCart from "@/hooks/useCart";
+import useWishList from "@/hooks/useWishList";
+import { GSP_NO_RETURNED_VALUE } from "next/dist/lib/constants";
 interface Iprops {
   isLoading: boolean;
 }
 const StickyBarBottom: FC<Iprops> = (props) => {
   const { isLoading } = props;
   const dispatch = useDispatch();
+  const { addToCartHandler } = useCart();
+  const { addToWishListHandler, checkInWishlist } = useWishList();
+
   const { quickViewProduct, currentVarientQuantity } =
     useSelector(selectProducts);
+
   const { price, currency_id, image } = quickViewProduct || {};
-  console.log('image: ', image);
+
   const { formatPrice } = useCurrency();
 
   const handleCartItemChanges = async (type: string) => {
     try {
-      if (type === "decrement" && currentVarientQuantity !== 0) {
-        dispatch(changeCurrentVarientQuantity(currentVarientQuantity - 1));
-      }
-      if (type === "increment") {
+      if (type === "decrement") {
+        if (currentVarientQuantity > 1) {
+          dispatch(changeCurrentVarientQuantity(currentVarientQuantity - 1));
+        }
+      } else if (type === "increment") {
         dispatch(changeCurrentVarientQuantity(currentVarientQuantity + 1));
       }
     } catch (error) {
       console.error("Failed to update cart:", error);
     }
   };
+
+  const addToCart = () => {
+    quickViewProduct &&
+      addToCartHandler(quickViewProduct, currentVarientQuantity);
+  };
+
+  const handleWishList = () => {
+    quickViewProduct && addToWishListHandler(quickViewProduct);
+  };
+  const isAddedInWishList = quickViewProduct
+    ? checkInWishlist(quickViewProduct)
+    : false;
 
   return (
     <div className="fixed bottom-0 w-full hidden bg-white lg:block py-2.5 z-[10]">
@@ -67,20 +87,24 @@ const StickyBarBottom: FC<Iprops> = (props) => {
               </span>
               {/* <NumberInput /> */}
               <NumberInput
-                value={currentVarientQuantity || 0}
+                value={currentVarientQuantity}
                 onChange={handleCartItemChanges}
               />
               <Button
                 variant="outlined"
                 size="xs"
                 className="group !w-[200px] h-10 justify-center items-center"
+                onClick={addToCart}
               >
                 <i className="las la-cart-plus text-primary text-lg group-hover:text-white mr-2"></i>
                 add to cart
               </Button>
-              <Link href="#" className="">
-                <i className="lar la-heart text-lg text-primary"></i>
-              </Link>
+              <i
+                onClick={handleWishList}
+                className={`${
+                  isAddedInWishList ? "las la-heart" : "lar la-heart"
+                } text-lg text-primary cursor-pointer`}
+              ></i>
             </div>
           </div>
         )}

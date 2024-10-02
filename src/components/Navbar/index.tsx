@@ -29,8 +29,10 @@ const Navbar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const isActiveLink = (path: string) =>
-    path === pathname || (path !== '/' && pathname.includes(path));
+  const isActiveLink = (path: string) => {
+    const pathnameWithoutQuery = pathname.split('?')[0];
+    return pathnameWithoutQuery === path;
+  };
 
   const handleScroll = () => {
     const offset = 200;

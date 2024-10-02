@@ -1,3 +1,5 @@
+import { SEOData } from "./seo"
+
 export enum ProductLabel {
   OUT_OF_STOCK = 'Out of Stock',
   SALE = 'Sale',
@@ -35,6 +37,7 @@ export interface Product {
   additional_description: string
   additional_info: string
   shipping_return: string
+  seo_meta_data:SEOData
 }
 
 export interface ProductCategory {

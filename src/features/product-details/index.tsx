@@ -17,9 +17,10 @@ import { baseUrl } from "@/config/config";
 import Skeleton from "react-loading-skeleton";
 interface ProductDetailsProps {
   productData: Product | null;
+  isLoading: boolean;
 }
 
-const ProductDetails = ({ productData }: ProductDetailsProps) => {
+const ProductDetails = ({ productData, isLoading }: ProductDetailsProps) => {
   const { images, image, product_categories } = productData || {};
   const imagesLinks = images?.map((el: any) => baseUrl + el.image_path) || [];
   const { quickViewProduct } = useSelector(selectProducts);
@@ -49,20 +50,18 @@ const ProductDetails = ({ productData }: ProductDetailsProps) => {
     <Container>
       <div className="grid grid-cols md:grid-cols-2 gap-5 pb-10">
         <div className="[&_.swiper]:max-h-[470px]">
-          {productData ? (
+          {isLoading ? (
+            <Skeleton height={470} />
+          ) : (
             <GallerySlider
               images={imagesLinks.length ? imagesLinks : [image]}
               onFullScreen={() => dispatch(toggleGalleryModal(true))}
             />
-          ) : (
-            <Skeleton height={470} />
           )}
         </div>
 
         <div>
-          {productData ? (
-            <ProductDetailsColumn />
-          ) : (
+          {isLoading ? (
             <div className="flex flex-col gap-2">
               <Skeleton height={20} width={80} />
               <Skeleton height={15} width={120} />
@@ -75,18 +74,22 @@ const ProductDetails = ({ productData }: ProductDetailsProps) => {
               </div>
               <Skeleton className="my-4" height={1} width={"100%"} />
             </div>
+          ) : (
+            <ProductDetailsColumn />
           )}
         </div>
       </div>
 
       <div className="my-[50px]">
-        <Tabs tabs={tabs} isLoading={!productData} />
+        <Tabs tabs={tabs} isLoading={isLoading} />
       </div>
 
-      {productData ? (
-        <ProductSlider product_categories={productData.product_categories} />
-      ) : (
+      {isLoading ? (
         <Skeleton height={300} width={"100%"} />
+      ) : (
+        productData && (
+          <ProductSlider product_categories={productData.product_categories} />
+        )
       )}
     </Container>
   );

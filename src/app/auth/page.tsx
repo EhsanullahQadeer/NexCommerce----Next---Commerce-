@@ -1,17 +1,14 @@
-'use client';
-
+"use client";
 import React, { useEffect, useState } from 'react';
 import Breadcrumb from '@/components/Breadcrumb';
 import Container from '@/components/Container';
 import AuthComponent from '@/features/auth';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import {useSearchParams } from 'next/navigation';
+import { showToast } from '@/utility/showToast';
 import { useRouter } from 'next/navigation';
-
 const Login = () => {
-  const [loading, setLoading] = useState(true)
-  const route = useRouter()
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const links = [
     {
       url: '/',
@@ -24,17 +21,16 @@ const Login = () => {
   ];
 
   useEffect(() => {
-    if(isAuthenticated){
-      route.push("/")
-    } else {    
-      setLoading(false)    
+    const notify = searchParams.get('notify');
+    if (notify === 'true') {
+       // Remove 'notify' from the URL after processing
+       const currentUrl = new URL(window.location.href);
+       currentUrl.searchParams.delete('notify');
+       router.replace(currentUrl.toString())
+      showToast('You are not authorized. Please log in.', "401_error");
     }
-  }, [isAuthenticated])
-
-  if(loading){
-    return <></>
-  }
-
+  }, [searchParams]);
+  
   return (
     <div className="border-t">
       <Container>

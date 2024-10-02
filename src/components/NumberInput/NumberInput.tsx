@@ -8,13 +8,15 @@ interface NumberInputProps {
   value?: number;
   inputClass?: string;
   onChange?: (type: string) => void;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 }
 
 const NumberInput: FC<NumberInputProps> = ({
   className,
   value,
   inputClass,
-  onChange
+  onChange,
+  inputProps
 }) => {
 
   return (
@@ -37,6 +39,7 @@ const NumberInput: FC<NumberInputProps> = ({
         )}
         value={value || 0}
         readOnly
+        {...inputProps} 
       />
       <button
         className="absolute flex w-[26px] items-center justify-center right-0 top-0 bottom-0 z-[1] cursor-pointer outline-0"

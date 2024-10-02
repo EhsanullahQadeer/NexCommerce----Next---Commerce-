@@ -1,5 +1,9 @@
 import { RootState } from "@/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setOpenAuthModal } from "../auth/authSlice";
+import { toast } from "react-toastify";
+import { showToast } from "@/utility/showToast";
+import { handleLogout } from "@/utility/handleLogout";
 
 const getAuthToken = () => {
   const token = localStorage.getItem('access_token');
@@ -17,10 +21,24 @@ const baseQuery = fetchBaseQuery({
     return headers;
   },
 });
+const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
+  const result = await baseQuery(args, api, extraOptions);
+
+  // Handle global error detection
+  if (result.error) {
+    if (result.error.status === 401) {
+      handleLogout()
+    } else {
+      showToast('An error occurred. Please try again later.', 'general_error');
+    }
+  }
+
+  return result;
+};
 
 export const apiSlice = createApi({
   reducerPath: "api",
-  baseQuery: baseQuery,
-  tagTypes: ["User", "Product", "Category", "Cart", "SiteSetting", "Sliders", "Wishlist","Currencylist","CoupenCode","SiteCity"],
+  baseQuery: customBaseQuery,
+  tagTypes: ["User", "Product", "Category", "Cart", "SiteSetting", "Sliders", "Wishlist", "Currencylist", "CoupenCode", "SiteCity"],
   endpoints: () => ({}),
 });

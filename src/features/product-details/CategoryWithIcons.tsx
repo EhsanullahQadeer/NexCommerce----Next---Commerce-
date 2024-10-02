@@ -40,7 +40,7 @@ const CategoryWithIcons: FC<CategoryWithIconsProps> = ({ isModal }) => {
           isModal && 'mb-[45px]'
         )}
       >
-        <span className="mr-1">Category: </span>
+        {/* <span className="mr-1">Category: </span> */}
         {
           product_categories.map(el => {
             return <button key={el.id} className="mx-1" onClick={() => filterCategoryhandler(el.category_id)}>

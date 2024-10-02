@@ -21,7 +21,6 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state: RootState) => state.auth);
   const { quickViewProduct, currentVarient, currentVarientQuantity } = useSelector(selectProducts);
-  console.log('quickViewProduct: ', quickViewProduct);
   const { cartDetails } = useSelector(selectCart);
   const { product_variants } = quickViewProduct || {};
 
@@ -169,10 +168,11 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
 
   const handleCartItemChanges = async (type: string) => {
     try {
-      if (type === "decrement" && currentVarientQuantity !== 0) {
-        dispatch(changeCurrentVarientQuantity(currentVarientQuantity - 1));
-      }
-      if (type === "increment") {
+      if (type === "decrement") {
+        if (currentVarientQuantity > 1) {
+          dispatch(changeCurrentVarientQuantity(currentVarientQuantity - 1));
+        }
+      } else if (type === "increment") {
         dispatch(changeCurrentVarientQuantity(currentVarientQuantity + 1));
       }
 
@@ -211,7 +211,7 @@ const ProductDetailsColumn: FC<ProductDetailsColumnProps> = ({ isModal }) => {
       )}
       <div className="flex items-center">
         <Label text="Qty" />
-        <NumberInput value={currentVarientQuantity || 0} onChange={handleCartItemChanges} />
+        <NumberInput value={currentVarientQuantity || 1} onChange={handleCartItemChanges} />
       </div>
       <Actions isModal={isModal} />
       <CategoryWithIcons isModal={isModal} />
