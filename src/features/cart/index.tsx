@@ -17,57 +17,24 @@ import {
 import { RESPONSE_MESSAGES } from "@/utility/constant";
 import Cookies from 'js-cookie';
 import { toast } from "react-toastify";
+import useCart from "@/hooks/useCart";
 
 const CartComponent = () => {
   const { cartDetails, totalAmount } = useSelector(selectCart);
   const { couponData, coupon_code } = useSelector(selectCoupenCode);
   const [couponCode, setCouponCode] = useState(coupon_code);
-  const [fetchCoupenCode] = useFetchCoupenCodeMutation();
   const dispatch = useDispatch();
+  const {handleApplyCoupon}= useCart()
+  
 
-  const handleApplyCoupon = async () => {
-    try {
-      if (!couponCode) {
-        toast.warning("Please enter a coupon code.");
-        return;
-      }
-
-      const response = await fetchCoupenCode(couponCode).unwrap();
-      const couponData = response.data;
-      if (couponData) {
-        if (totalAmount >= couponData.minimum_order_amount) {
-          toast.success(RESPONSE_MESSAGES.GENERAL.COUPON_APPLIED);
-          Cookies.set("coupon_code", couponCode); 
-          dispatch(
-            updateCoupenCode({
-              coupon_code: couponCode,
-              couponData: response.data,
-            })
-          );
-        } else {
-          toast.warning(
-            RESPONSE_MESSAGES.GENERAL.MINIMUM_AMOUNT_USE_COUPON.replace(
-              "?",
-              couponData.minimum_order_amount
-            )
-          );
-        }
-      } else {
-        toast.warning(RESPONSE_MESSAGES.GENERAL.COUPON_NOT_FOUND);
-        setCouponCode("");
-      }
-    } catch (error) {
-      toast.error(RESPONSE_MESSAGES.GENERAL.COUPON_ERROR);
-    }
-  };
-
-  const handleCoupon = () => {
+  const handleCoupon =async () => {
     if (coupon_code) {
       dispatch(clearCoupon())
       setCouponCode("")
       toast.warning("Your coupon has been cleared.");
     } else {
-      handleApplyCoupon();
+      const response = await handleApplyCoupon(couponCode);
+      response?.clear && setCouponCode("");
     }
   };
   return (

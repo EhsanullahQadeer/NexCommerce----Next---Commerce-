@@ -15,10 +15,6 @@ export const coupenCodeApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const {data} = await queryFulfilled;
-
-          console.log("CoupenCode-->  ", data.data);
-          dispatch(updateCoupenCode(data.data))
-          
         } catch (error) {
           console.error('Fetch Coupen Code Error:', error);
         }

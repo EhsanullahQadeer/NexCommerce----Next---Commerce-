@@ -7,11 +7,69 @@ import { isUserLoggedIn } from "@/utility/helper";
 import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import { Product, ProductVariant } from "@/types/product";
+import { toast } from "react-toastify";
+import { useFetchCoupenCodeMutation } from "@/store/api/coupenCodeApi";
+import { RESPONSE_MESSAGES } from "@/utility/constant";
+import { selectCart } from "@/store/slices/cart/cartSlice";
+import Cookies from "js-cookie";
+import { updateCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
+import useCurrency from "./useCurrency";
 const useCart = () => {
   const [addToCart] = useAddToCartMutation();
   const [cartDetailsGet] = useCartDetailsGetMutation();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { totalAmount } = useSelector(selectCart);
   const dispatch = useDispatch();
+  const [fetchCoupenCode] = useFetchCoupenCodeMutation();
+  const { formatPrice, calculatePrice } = useCurrency();
+  const handleApplyCoupon = async (
+    couponCode: string
+  ): Promise<{ clear: boolean } | void> => {
+    try {
+      if (!couponCode) {
+        toast.warning("Please enter a coupon code.");
+        return;
+      }
+
+      const response = await fetchCoupenCode(couponCode).unwrap();
+      const couponData = response.data;
+      if (couponData) {
+        if (
+          totalAmount >=
+          calculatePrice(
+            couponData.minimum_order_amount,
+            couponData.currency_id
+          )
+        ) {
+          toast.success(RESPONSE_MESSAGES.GENERAL.COUPON_APPLIED);
+          Cookies.set("coupon_code", couponCode);
+          debugger
+          dispatch(
+            updateCoupenCode({
+              coupon_code: couponCode,
+              couponData: response.data,
+            })
+          );
+        } else {
+          toast.warning(
+            RESPONSE_MESSAGES.GENERAL.MINIMUM_AMOUNT_USE_COUPON.replace(
+              "?",
+              formatPrice(
+                couponData.minimum_order_amount,
+                couponData.currency_id
+              )
+            )
+          );
+        }
+      } else {
+        toast.warning(RESPONSE_MESSAGES.GENERAL.COUPON_NOT_FOUND);
+        return { clear: true };
+      }
+    } catch (error) {
+      toast.error(RESPONSE_MESSAGES.GENERAL.COUPON_ERROR);
+      return { clear: true };
+    }
+  };
 
   const handleFetchCart = async (): Promise<void> => {
     try {
@@ -56,7 +114,7 @@ const useCart = () => {
     }
   };
 
-  return { handleFetchCart, addToCartHandler };
+  return { handleFetchCart, addToCartHandler, handleApplyCoupon };
 };
 
 export default useCart;

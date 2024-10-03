@@ -6,7 +6,9 @@ import { selectCart } from "@/store/slices/cart/cartSlice";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
 import useCurrency from "@/hooks/useCurrency";
+import { useRouter } from "next/navigation";
 const CartSummary = () => {
+  const router = useRouter();
   const { totalAmount } = useSelector(selectCart);
   const { shipping_amount, free_shipping_threshold, vat_amount } =
     useSelector(selectSiteSetting);
@@ -27,12 +29,14 @@ const CartSummary = () => {
       : parseInt(shipping_amount);
 
   const vatFee =
- Number(vat_amount) > 0
-      ? totalAmount * (Number(vat_amount)/ 100)
-      : 0;
+    Number(vat_amount) > 0 ? totalAmount * (Number(vat_amount) / 100) : 0;
 
   const calculatedTotalAmount =
     totalAmount + vatFee + shippingFee - discountAmount;
+
+  const handleProceedToCheckout = () => {
+    router.push("/checkout");
+  };
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-medium pb-[17px]">
@@ -44,7 +48,7 @@ const CartSummary = () => {
           {formatPrice(totalAmount)}
         </span>
       </div>
-      <Shipping {...{ discountAmount, shippingFee ,vatFee}} />
+      <Shipping {...{ discountAmount, shippingFee, vatFee }} />
       {/* <div className="border-b border-black-300 py-[14px] pb-[23px]">
         <h4 className="text-black-75 leading-[22.88px]">
           Estimate for your country
@@ -61,7 +65,10 @@ const CartSummary = () => {
         <span>{formatPrice(calculatedTotalAmount)}</span>
       </div>
       <div>
-        <Button className="uppercase w-full max-w-full justify-center">
+        <Button
+          onClick={handleProceedToCheckout}
+          className="uppercase w-full max-w-full justify-center"
+        >
           Proceed to checkout
         </Button>
       </div>
