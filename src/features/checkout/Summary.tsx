@@ -37,7 +37,7 @@ const CheckoutSummary = () => {
 
   const calculatedTotalAmount =
     totalAmount + vatFee + shippingFee - discountAmount;
-    console.log('calculatedTotalAmount: ', calculatedTotalAmount);
+  console.log("calculatedTotalAmount: ", calculatedTotalAmount);
 
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
@@ -46,16 +46,19 @@ const CheckoutSummary = () => {
       </h3>
 
       <div className="flex justify-between items-center min-h-[27px] mt-[21px]">
-        <h4 className="text-black-100 text-base text-black-75">Product</h4>
+        <h4 className="text-base text-black-75">Product</h4>
         <span className="text-black-100 text-base">Total</span>
       </div>
-      {cartDetails.map((productItem) => {
+      {cartDetails.map((productItem, idx) => {
         const {
           product: { price, currency_id, name, slug },
           quantity,
         } = productItem;
         return (
-          <div className="flex justify-between items-center min-h-[70px] border-b border-black-300 text-sm font-extralight">
+          <div
+            key={"product" + slug + idx}
+            className="flex justify-between items-center min-h-[70px] border-b border-black-300 text-sm font-extralight"
+          >
             <Link href={`/products/${slug}`} className={linkStyles}>
               {name}
             </Link>

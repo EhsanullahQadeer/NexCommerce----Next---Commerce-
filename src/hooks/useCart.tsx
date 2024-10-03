@@ -43,7 +43,6 @@ const useCart = () => {
         ) {
           toast.success(RESPONSE_MESSAGES.GENERAL.COUPON_APPLIED);
           Cookies.set("coupon_code", couponCode);
-          debugger
           dispatch(
             updateCoupenCode({
               coupon_code: couponCode,

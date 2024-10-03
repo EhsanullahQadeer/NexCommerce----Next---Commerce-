@@ -84,7 +84,6 @@ export const productsApi = apiSlice.injectEndpoints({
           const { data } = await queryFulfilled;
           return data
         } catch (error) {
-          debugger
           console.error("Fetch Filtered Products Error:", error);
           return null
         }
