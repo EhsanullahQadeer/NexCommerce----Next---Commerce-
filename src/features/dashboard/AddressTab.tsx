@@ -250,7 +250,7 @@ const AddressTab = () => {
               validationSchema={validationSchema}
               onSubmit={handleAddressSubmit}
             >
-              {({ setFieldValue }) => {
+              {({ setFieldValue, values }) => {
                 const handleLocationChange = (
                   e: ChangeEvent<HTMLSelectElement>
                 ) => {
@@ -377,13 +377,19 @@ const AddressTab = () => {
                           <select
                             value={locationData.disctrict.id}
                             className={`p-2 block w-full border rounded-md ${
-                              districts.length && !isDistrictLoading
+                              districts.length &&
+                              !isDistrictLoading &&
+                              values.provinces
                                 ? "border-gray-300 bg-white"
                                 : "border-gray-300 bg-gray-100 text-gray-500 cursor-not-allowed"
                             }`}
                             name="disctrict"
                             onChange={handleLocationChange}
-                            disabled={!districts.length || isDistrictLoading}
+                            disabled={
+                              !districts.length ||
+                              isDistrictLoading ||
+                              !values.provinces
+                            }
                           >
                             {isDistrictLoading ? (
                               <option value="">Loading...</option>
