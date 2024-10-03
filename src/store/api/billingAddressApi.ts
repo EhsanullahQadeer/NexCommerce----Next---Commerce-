@@ -2,11 +2,13 @@
 import { toast } from "react-toastify";
 import { apiSlice } from "../slices/api/apiSlice";
 import { updateBillingAddress } from "../slices/billingaddress/billingAddressSlice";
+import { IAddress } from "@/types/adress";
+
 
 export const billingAddressApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addBillingAddress: builder.mutation({
-      query: (addressData) => ({
+      query: (addressData: IAddress) => ({
         url: 'add-billing-address',
         method: 'POST',
         body: {
@@ -16,7 +18,7 @@ export const billingAddressApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          
+
         } catch (error) {
           console.error('Add Billing Address Api Error:', error);
         }
@@ -34,7 +36,7 @@ export const billingAddressApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          if(result?.data?.data){
+          if (result?.data?.data) {
             dispatch(updateBillingAddress(result.data.data))
           }
         } catch (error) {

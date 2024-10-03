@@ -11,17 +11,17 @@ export const citiesApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
-         
-          if (data?.data?.length) {
-            dispatch(saveCityList(data.data));
-          }
+          return data;
+          // if (data?.data?.length) {
+          //   dispatch(saveCityList(data.data));
+          // }
         } catch (error) {
           console.error('Fetch Filtered Products Error:', error);
         }
       },
     }),
-   
+
   }),
 });
 
-export const {  useFetchCitiesMutation } = citiesApi;
+export const { useFetchCitiesMutation } = citiesApi;

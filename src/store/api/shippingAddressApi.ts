@@ -2,11 +2,12 @@
 import { toast } from "react-toastify";
 import { apiSlice } from "../slices/api/apiSlice";
 import { updateShippingAddress } from "../slices/shippingaddress/shippingAddressSlice";
+import { IAddress } from "@/types/adress";
 
 export const shippingAddressApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     addShippingAddress: builder.mutation({
-      query: (addressData) => ({
+      query: (addressData:IAddress) => ({
         url: 'add-shipping-address',
         method: 'POST',
         body: {

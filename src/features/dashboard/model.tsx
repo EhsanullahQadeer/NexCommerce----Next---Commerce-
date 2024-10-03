@@ -14,7 +14,7 @@ const Modal = ({ onClose, children }:any) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-5 rounded-md shadow-lg max-w-lg w-full">
+      <div className="bg-white p-5 rounded-md shadow-lg max-w-xl w-full">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">Address</h3>
           <button onClick={onClose} className="text-gray-600 hover:text-gray-800">

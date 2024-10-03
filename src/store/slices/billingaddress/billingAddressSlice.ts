@@ -6,14 +6,15 @@ export interface BillingAddressSlice {
   user_id: number
   first_name: string
   last_name: string
-  phone: number
+  phone: string
   email: string
-  address_line1: string
-  // address_line2: string
+  address: string
   province: string
-  district: string
+  disctrict: string
   village: string
-  postal_code: number
+  postal_code: string
+  neighborhood: string
+  address_name: string
 }
 
 const initialState: BillingAddressSlice = {
@@ -21,14 +22,15 @@ const initialState: BillingAddressSlice = {
   user_id: 0,
   first_name: "",
   last_name: "",
-  phone: 0,
+  phone: "",
   email: "",
-  address_line1: "",
-  // address_line2: "",
+  address: "",
   province: "",
-  district: "",
+  disctrict: "",
   village: "",
-  postal_code: 0
+  postal_code: "",
+  neighborhood: "",
+  address_name: ""
 }
 
 export const siteBillingAddressSlice = createSlice({

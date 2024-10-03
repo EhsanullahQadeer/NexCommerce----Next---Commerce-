@@ -18,6 +18,7 @@ import auth from "./slices/auth/authSlice";
 import { apiSlice } from "./slices/api/apiSlice";
 import siteCity from "./slices/citylist/citySlice";
 import siteState from "./slices/statelist/stateSlice";
+import adress from "./slices/adress/adressSlice";
 
 
 
@@ -39,9 +40,8 @@ const store = configureStore({
     siteShippingAddressSlice,
     siteBillingAddressSlice,
     siteCity,
-    siteState
-    
-    
+    siteState,
+    adress
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
