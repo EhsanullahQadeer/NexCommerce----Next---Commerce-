@@ -103,14 +103,12 @@ const AddressCard = (props: Iprops) => {
 
                   return (
                     <div key={"address-" + id} className={addressBoxStyles}>
-                      <div className="flex justify-between items-center">
-                        <p className={textStyles + " mb-0"}>
-                          <strong>
-                            {first_name} {last_name}
-                          </strong>
-                        </p>
-                      </div>
-
+                      <p className={textStyles + " mb-0"}>
+                        <strong>{address_name}</strong>
+                      </p>
+                      <p className={textStyles}>
+                        Name: {first_name} {last_name}
+                      </p>
                       <p className={textStyles}>Phone: {phone}</p>
                       <p className={textStyles}>Province: {provinceId}</p>
                       <p className={textStyles}>District: {disctrictId}</p>

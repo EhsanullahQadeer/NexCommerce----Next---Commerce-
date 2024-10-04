@@ -26,6 +26,7 @@ import { RootState } from "@/store";
 import useIsMutating from "@/hooks/useIsMutating";
 import { PhoneInput } from "react-international-phone";
 import parsePhoneNumberFromString from "libphonenumber-js";
+import ProgressIcon from "@/components/Icons/ProgressIcon";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First Name is required."),
@@ -59,8 +60,14 @@ const AddressModal = (props: Iprops) => {
   const { apiStatus } = useIsMutating();
   const { isLoading: isprovinceLoading } = apiStatus("fetchProvinces");
   const { isLoading: isDistrictLoading } = apiStatus("fetchDistricts");
-  const [addBillingAddress] = useAddBillingAddressMutation();
-  const [addShippingAddress] = useAddShippingAddressMutation();
+  const [addBillingAddress, { isLoading: isBillingLoading }] =
+    useAddBillingAddressMutation();
+  const [addShippingAddress, { isLoading: isShippingLoading }] =
+    useAddShippingAddressMutation();
+  const loadingStates = {
+    shippingaddress: isShippingLoading,
+    billingaddress: isBillingLoading,
+  };
   const [fetchgetBillingAddress] = useFetchgetBillingAddressMutation();
   const [fetchgetShippingAddress] = useFetchgetShippingAddressMutation();
   const { user } = useSelector((state: RootState) => state.auth);
@@ -175,9 +182,9 @@ const AddressModal = (props: Iprops) => {
                       value={values.phone}
                       onChange={(value) => setFieldValue("phone", value)}
                       inputClassName=" block w-full border border-gray-300 rounded-md text-lg"
-                      inputStyle={{ height: "41.6px",fontSize:16 }}
+                      inputStyle={{ height: "41.6px", fontSize: 16 }}
                       countrySelectorStyleProps={{
-                        buttonStyle:{ height: "41.6px" ,padding:"6px"}
+                        buttonStyle: { height: "41.6px", padding: "6px" },
                       }}
                     />
 
@@ -339,7 +346,7 @@ const AddressModal = (props: Iprops) => {
                       name="address"
                       placeholder="Address"
                       className="p-2 block w-full border border-gray-300 rounded-md"
-                      style={{ maxHeight: '200px' ,minHeight:"70px" }}
+                      style={{ maxHeight: "200px", minHeight: "70px" }}
                     />
                     <ErrorMessage
                       name="address"
@@ -354,11 +361,21 @@ const AddressModal = (props: Iprops) => {
                     Cancel
                   </Button>
                   <Button
-                    variant={dirty ? "outlined" : "disabled"}
+                    variant={
+                      dirty && !loadingStates[addresstype]
+                        ? "outlined"
+                        : "disabled"
+                    }
                     className="bg-primary text-white"
                     type="submit"
                   >
-                    Save
+                    {loadingStates[addresstype] ? (
+                      <>
+                        Saving <ProgressIcon className="ml-2 !h-5" />
+                      </>
+                    ) : (
+                      "Save"
+                    )}
                   </Button>
                 </div>
               </div>
