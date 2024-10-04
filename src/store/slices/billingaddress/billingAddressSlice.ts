@@ -3,13 +3,14 @@ import type { RootState } from '@/store';
 
 
 export interface BillingAddressSlice {
+  id: string
   user_id: number
   first_name: string
   last_name: string
   phone: string
   email: string
   address: string
-  province: string
+  provinces: string
   disctrict: string
   village: string
   postal_code: string
@@ -18,14 +19,14 @@ export interface BillingAddressSlice {
 }
 
 const initialState: BillingAddressSlice = {
-
+  id: "",
   user_id: 0,
   first_name: "",
   last_name: "",
   phone: "",
   email: "",
   address: "",
-  province: "",
+  provinces: "",
   disctrict: "",
   village: "",
   postal_code: "",

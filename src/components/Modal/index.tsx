@@ -52,6 +52,7 @@ const Modal: FC<ModalProps> = ({
       const timer = setTimeout(() => setIsVisible(false), 600);
       return () => clearTimeout(timer);
     }
+    
   }, [isOpen]);
 
   if (!isVisible) return null;

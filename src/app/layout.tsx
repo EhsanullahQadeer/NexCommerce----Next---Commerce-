@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
+import 'react-international-phone/style.css';
+
 import { I18Provider } from "./i18";
 import { useEffect, useState } from "react";
 export interface SiteSettings {

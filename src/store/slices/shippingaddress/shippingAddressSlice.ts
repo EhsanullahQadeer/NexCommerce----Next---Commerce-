@@ -3,28 +3,30 @@ import type { RootState } from '@/store';
 
 
 export interface ShippingAddressSlice {
+  id: string
   user_id: number
   first_name: string
   last_name: string
   phone: string
   email: string
   address: string;
-  province: string
-  disctrict: string
-  village: string
+  provinces: string | number
+  disctrict: string | number
+  village: string | number
   postal_code: string
   neighborhood: string
   address_name: string
 }
 
 const initialState: ShippingAddressSlice = {
+  id: "",
   user_id: 0,
   first_name: "",
   last_name: "",
   phone: "",
   email: "",
   address: "",
-  province: "",
+  provinces: "",
   disctrict: "",
   village: "",
   postal_code: "",

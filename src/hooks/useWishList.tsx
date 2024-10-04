@@ -20,7 +20,7 @@ const useWishList = () => {
     return !!wishListData.find((el) => {
       return (
         el.product_id === productDetails.id &&
-        el.product_variant_id === productDetails.product_variants[0].id
+        el.product_variant_id === productDetails.product_variants[0]?.id
       );
     });
   };

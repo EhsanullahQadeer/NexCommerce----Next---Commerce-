@@ -2,43 +2,48 @@ import React, { useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import { ChangeEvent } from "react";
 
-import { IAddress, TadressType, Village } from "@/types/adress";
+import { IAddress, IlocationData, TadressType, Village } from "@/types/adress";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import useSkipFirstRender from "@/hooks/useSkipFirstRender";
+
 import {
-  useFetchDistrictsMutation,
-  useFetchProvincesMutation,
-} from "@/store/api/adressApi";
-import { selectAdress } from "@/store/slices/adress/adressSlice";
-import { useSelector } from "react-redux";
+  locationInitalData,
+  selectAdress,
+  setLocationData,
+} from "@/store/slices/adress/adressSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "@/components/Modal";
-import { useAddBillingAddressMutation } from "@/store/api/billingAddressApi";
-import { useAddShippingAddressMutation } from "@/store/api/shippingAddressApi";
+import {
+  useAddBillingAddressMutation,
+  useFetchgetBillingAddressMutation,
+} from "@/store/api/billingAddressApi";
+import {
+  useAddShippingAddressMutation,
+  useFetchgetShippingAddressMutation,
+} from "@/store/api/shippingAddressApi";
 import { toast } from "react-toastify";
 import { RootState } from "@/store";
+import useIsMutating from "@/hooks/useIsMutating";
+import { PhoneInput } from "react-international-phone";
+import parsePhoneNumberFromString from "libphonenumber-js";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First Name is required."),
   last_name: Yup.string().required("Last Name is required."),
-  phone: Yup.string().required("Phone number is required."),
+  phone: Yup.string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Phone number must be valid", (value) => {
+      if (!value) return false; // Skip if no value
+      const phoneNumber = parsePhoneNumberFromString(value, "TR");
+      return phoneNumber ? phoneNumber.isValid() : false;
+    }),
   address: Yup.string().required("Address is required."),
   address_name: Yup.string().required("Address name is required."),
   provinces: Yup.string().required("Province name is required."),
-  village: Yup.string().required("Village name is required."),
   disctrict: Yup.string().required("District name is required."),
+  village: Yup.string().required("Village name is required."),
+  postal_code: Yup.string().required("Postal code name is required."),
 });
-
-interface IlocationItem {
-  id: number;
-  name: string;
-}
-
-interface LocationData {
-  provinces: IlocationItem;
-  disctrict: IlocationItem;
-  village: IlocationItem;
-}
 
 interface Iprops {
   isOpen: boolean;
@@ -47,27 +52,19 @@ interface Iprops {
   adressData?: IAddress;
 }
 
-const locationInitalData: LocationData = {
-  provinces: { id: 0, name: "" },
-  disctrict: { id: 0, name: "" },
-  village: { id: 0, name: "" },
-};
-
 const AddressModal = (props: Iprops) => {
   const { isOpen, onClose, addresstype, adressData } = props;
-  const { provinces, districts } = useSelector(selectAdress);
-  const [fetchProvinces, { isLoading: isprovinceLoading }] =
-    useFetchProvincesMutation();
-  const [fetchDistricts, { isLoading: isDistrictLoading }] =
-    useFetchDistrictsMutation();
+  const { provinces, districts, villages, locationData } =
+    useSelector(selectAdress);
+  const { apiStatus } = useIsMutating();
+  const { isLoading: isprovinceLoading } = apiStatus("fetchProvinces");
+  const { isLoading: isDistrictLoading } = apiStatus("fetchDistricts");
   const [addBillingAddress] = useAddBillingAddressMutation();
   const [addShippingAddress] = useAddShippingAddressMutation();
+  const [fetchgetBillingAddress] = useFetchgetBillingAddressMutation();
+  const [fetchgetShippingAddress] = useFetchgetShippingAddressMutation();
   const { user } = useSelector((state: RootState) => state.auth);
-  useEffect(() => {
-    if (!provinces.length) {
-      fetchProvinces({}).unwrap();
-    }
-  }, []);
+  const dispatch = useDispatch();
 
   const initialValues: IAddress = adressData ?? {
     first_name: "",
@@ -76,40 +73,27 @@ const AddressModal = (props: Iprops) => {
     address: "",
     neighborhood: "",
     address_name: "",
-    provinces: null,
-    disctrict: null,
-    village: null,
+    provinces: "",
+    disctrict: "",
+    village: "",
     user_id: user.id,
+    postal_code: "",
   };
-  const [locationData, setLocationData] =
-    useState<LocationData>(locationInitalData);
-
-  useSkipFirstRender(async () => {
-    const { id: provinceId } = locationData.provinces;
-    if (provinceId > 0) {
-      fetchDistricts({ provinceId });
-    }
-  }, [locationData.provinces]);
-
-  const villages: Village[] = useMemo(() => {
-    const selectedDistrict = districts.find(
-      (item) => item.id == locationData.disctrict.id
-    )?.villages;
-
-    return selectedDistrict || [];
-  }, [districts, locationData.disctrict.id]);
 
   const handleModalClose = () => {
     onClose();
     setLocationData(locationInitalData);
+    document.body.style.overflow = "";
   };
 
   const handleAddressSubmit = async (values: IAddress) => {
     try {
       if (addresstype === "billingaddress") {
         await addBillingAddress(values);
+        fetchgetBillingAddress({ user_id: user.id });
       } else if (addresstype === "shippingaddress") {
         await addShippingAddress(values);
+        fetchgetShippingAddress({ user_id: user.id });
       }
       toast.success("Address submitted successfully!");
       handleModalClose();
@@ -117,37 +101,40 @@ const AddressModal = (props: Iprops) => {
       console.error("Error adding/updating address:", error);
     }
   };
+
   return (
     <Modal
-      className="max-w-xl rounded-sm px-6 pt-16 pb-8"
+      className="max-w-xl rounded-sm px-6  pb-8"
       isOpen={isOpen}
       onClose={handleModalClose}
     >
+      <div className="pt-4 pb-6 text-xl text-primary font-normal leading-[24px]">
+        <h1>{adressData ? "Edit Address" : "Add New Address"}</h1>
+      </div>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleAddressSubmit}
       >
-        {({ setFieldValue, values }) => {
+        {({ setFieldValue, values, dirty }) => {
           const handleLocationChange = (e: ChangeEvent<HTMLSelectElement>) => {
             const { value, name: keyName } = e.target;
             const selectedOption = e.target.options[e.target.selectedIndex];
             const name = selectedOption.dataset.name;
 
-            setLocationData((prev) => {
-              let body: LocationData = locationInitalData;
-              if (name === "provinces") {
-                body.provinces = { id: Number(value), name };
-              } else {
-                body = {
-                  ...prev,
-                  [keyName]: { id: value, name },
-                };
-              }
-              return body;
-            });
+            let body: IlocationData = locationInitalData;
+            if (name === "provinces") {
+              body.provinces = { id: Number(value), name };
+            } else {
+              body = {
+                ...locationData,
+                [keyName]: { id: value, name },
+              };
+            }
+            dispatch(setLocationData(body));
             setFieldValue(keyName, value);
           };
+
           return (
             <Form>
               <div className="">
@@ -181,14 +168,19 @@ const AddressModal = (props: Iprops) => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1  sm:grid-cols-2 gap-4 mt-4">
+                <div className="grid grid-cols-1  sm:grid-cols-2 gap-4 mt-4 \">
                   <div>
-                    <Field
-                      type="text"
-                      name="phone"
-                      placeholder="Phone Number"
-                      className="p-2 block w-full border border-gray-300 rounded-md"
+                    <PhoneInput
+                      defaultCountry={"tr"}
+                      value={values.phone}
+                      onChange={(value) => setFieldValue("phone", value)}
+                      inputClassName=" block w-full border border-gray-300 rounded-md text-lg"
+                      inputStyle={{ height: "41.6px",fontSize:16 }}
+                      countrySelectorStyleProps={{
+                        buttonStyle:{ height: "41.6px" ,padding:"6px"}
+                      }}
                     />
+
                     <ErrorMessage
                       name="phone"
                       component="div"
@@ -198,12 +190,12 @@ const AddressModal = (props: Iprops) => {
                   <div>
                     <Field
                       type="text"
-                      name="address_name"
-                      placeholder="Address Name"
+                      name="postal_code"
+                      placeholder="Postal Code"
                       className="p-2 block w-full border border-gray-300 rounded-md"
                     />
                     <ErrorMessage
-                      name="address_name"
+                      name="postal_code"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -328,9 +320,26 @@ const AddressModal = (props: Iprops) => {
                   <div>
                     <Field
                       type="text"
+                      name="address_name"
+                      placeholder="Address Name"
+                      className="p-2 block w-full border border-gray-300 rounded-md"
+                    />
+                    <ErrorMessage
+                      name="address_name"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 mt-4">
+                  <div>
+                    <Field
+                      as="textarea"
+                      type="text"
                       name="address"
                       placeholder="Address"
                       className="p-2 block w-full border border-gray-300 rounded-md"
+                      style={{ maxHeight: '200px' ,minHeight:"70px" }}
                     />
                     <ErrorMessage
                       name="address"
@@ -344,7 +353,11 @@ const AddressModal = (props: Iprops) => {
                   <Button className="mr-2" onClick={handleModalClose}>
                     Cancel
                   </Button>
-                  <Button className="bg-primary text-white" type="submit">
+                  <Button
+                    variant={dirty ? "outlined" : "disabled"}
+                    className="bg-primary text-white"
+                    type="submit"
+                  >
                     Save
                   </Button>
                 </div>

@@ -33,6 +33,7 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
+  console.log('productDetails: ', productDetails.product_variants);
   const { user } = useSelector((state: RootState) => state.auth);
   const { wishListData } = useSelector(selectWishlist);
   const [addToCart] = useAddToCartMutation();
@@ -147,7 +148,7 @@ const ProductCard: FC<ProductCardProps> = (productDetails) => {
     return !!wishListData.find((el) => {
       return (
         el.product_id === productDetails.id &&
-        el.product_variant_id === productDetails.product_variants[0].id
+        el.product_variant_id === productDetails.product_variants[0]?.id
       );
     });
   };

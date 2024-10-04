@@ -118,7 +118,7 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const checkInWishlist = (): boolean => {
 
     return !!wishListData.find(el => {
-      return el.product_id === productDetails.id && el.product_variant_id === productDetails.product_variants[0].id
+      return el.product_id === productDetails.id && el.product_variant_id === productDetails.product_variants[0]?.id
     })
   }
 
