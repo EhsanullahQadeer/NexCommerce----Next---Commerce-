@@ -36,7 +36,6 @@ export const billingAddressApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const result = await queryFulfilled;
-          debugger
           if (result?.data?.data) {
             dispatch(updateBillingAddress(result.data.data))
           }

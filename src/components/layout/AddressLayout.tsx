@@ -7,18 +7,29 @@ import {
   selectAdress,
   updateVillages,
 } from "@/store/slices/adress/adressSlice";
+import { selectBillingAddress } from "@/store/slices/billingaddress/billingAddressSlice";
+import { selectShippingAddress } from "@/store/slices/shippingaddress/shippingAddressSlice";
 import { ReactNode, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import {
+    useFetchgetBillingAddressMutation,
+  } from "@/store/api/billingAddressApi";
+import { useFetchgetShippingAddressMutation } from "@/store/api/shippingAddressApi";
+import { RootState } from "@/store";
 interface IProps {
   children: ReactNode;
 }
 const AddressLayout = (props: IProps) => {
   const { children } = props;
   const { provinces, districts, locationData } = useSelector(selectAdress);
+  const { user } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [fetchProvinces] = useFetchProvincesMutation();
   const [fetchDistricts] = useFetchDistrictsMutation();
+  const [fetchgetBillingAddress] = useFetchgetBillingAddressMutation();
+  const [fetchgetShippingAddress] = useFetchgetShippingAddressMutation();
+  const shippingaddress = useSelector(selectShippingAddress);
+  const billingaddress = useSelector(selectBillingAddress);
 
   useEffect(() => {
     if (!provinces.length) {
@@ -44,6 +55,16 @@ const AddressLayout = (props: IProps) => {
 
     dispatch(updateVillages(selectedDistrict || []));
   }, [districts, locationData.disctrict.id]);
+
+  useEffect(() => {
+    if (!shippingaddress.id) {
+        fetchgetBillingAddress({ user_id: user.id })
+    }
+    if (!billingaddress.id) {
+        fetchgetShippingAddress({ user_id: user.id })
+    }
+
+}, [])
 
   return children;
 };

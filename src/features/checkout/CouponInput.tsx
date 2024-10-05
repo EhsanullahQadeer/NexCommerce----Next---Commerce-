@@ -17,7 +17,7 @@ const CouponInput = () => {
 
   const [isFocused, setisFocused] = useState(false);
   const { couponData, coupon_code } = useSelector(selectCoupenCode);
-  console.log('coupon_code: ', coupon_code);
+
 
   const [couponCode, setCouponCode] = useState(coupon_code);
   const handleCoupon = async () => {
@@ -31,8 +31,8 @@ const CouponInput = () => {
     }
   };
   return (
-    <div className="mt-10 flex gap-2">
-      <div className="group relative max-w-[340px]">
+    <div className="mb-5 flex gap-2">
+      <div className="group relative">
         <input
           ref={inputRef}
           type="text"

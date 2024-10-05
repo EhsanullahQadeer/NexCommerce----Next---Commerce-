@@ -1,23 +1,23 @@
-'use client';
+"use client";
 
-import Breadcrumb from '@/components/Breadcrumb';
-import Container from '@/components/Container';
-import Hero from '@/components/Hero';
-import CheckoutComponent from '@/features/checkout';
+import Breadcrumb from "@/components/Breadcrumb";
+import Container from "@/components/Container";
+import Hero from "@/components/Hero";
+import CheckoutComponent from "@/features/checkout";
 
 const Checkout = () => {
   const links = [
     {
-      url: '/',
-      name: 'Home',
+      url: "/",
+      name: "Home",
     },
     {
-      url: '#',
-      name: 'Shop',
+      url: "#",
+      name: "Shop",
     },
     {
-      url: '/checkout',
-      name: 'Checkout',
+      url: "/checkout",
+      name: "Checkout",
     },
   ];
 

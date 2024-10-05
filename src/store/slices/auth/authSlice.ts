@@ -4,9 +4,9 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: any = {
   initialTransaction: undefined,
   signUpDetail: undefined,
-  user: undefined,
-  isAuthenticated: false,
-  openAuthModal:false
+  user:undefined ,
+  isAuthenticated:false,
+  openAuthModal: false
 };
 
 const authSlice = createSlice({
@@ -20,7 +20,7 @@ const authSlice = createSlice({
       state.isAuthenticated = action.payload.isAuthenticated;
       state.user = action.payload.user;
     },
-    userUpdate: (state, action) =>{
+    userUpdate: (state, action) => {
       state.user = action.payload.user;
     },
     setOpenAuthModal: (state, action: PayloadAction<boolean>) => {
@@ -29,6 +29,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { userLoggedIn, userUpdate, userInitialTransaction ,setOpenAuthModal } = authSlice.actions;
+export const { userLoggedIn, userUpdate, userInitialTransaction, setOpenAuthModal } = authSlice.actions;
 
 export default authSlice.reducer;

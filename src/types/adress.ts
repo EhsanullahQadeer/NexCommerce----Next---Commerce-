@@ -5,7 +5,7 @@ export interface IProvince {
     updated_at: string;
 }
 export interface Village {
-    id: number  | string;
+    id: number | string;
     village_name: string;
     district_id: number;
     created_at: string;
@@ -13,7 +13,7 @@ export interface Village {
 }
 
 export interface District {
-    id: number  | string;
+    id: number | string;
     district_name: string;
     province_id: number;
     created_at: string;
@@ -22,6 +22,7 @@ export interface District {
 }
 
 export interface IAddress {
+    id?: string
     user_id: string;
     address_name: string;
     first_name: string;

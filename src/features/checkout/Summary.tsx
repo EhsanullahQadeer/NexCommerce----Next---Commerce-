@@ -37,7 +37,6 @@ const CheckoutSummary = () => {
 
   const calculatedTotalAmount =
     totalAmount + vatFee + shippingFee - discountAmount;
-  console.log("calculatedTotalAmount: ", calculatedTotalAmount);
 
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">

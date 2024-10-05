@@ -2,17 +2,17 @@
 import { Poppins } from "next/font/google";
 import { StoreProvider } from "@/store/StoreProvider";
 import MainLayout from "@/components/layout/MainLayout";
-
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import 'react-international-phone/style.css';
+import "react-international-phone/style.css";
 
 import { I18Provider } from "./i18";
 import { useEffect, useState } from "react";
+import { theme } from "@/theme/theme";
 export interface SiteSettings {
   site_status: number;
   brand_name: string;
@@ -96,20 +96,20 @@ export default function RootLayout({
               </div>
             ) : (
               <MainLayout>
-                {children}
-                <ToastContainer
-                  position="top-right"
-                  autoClose={3000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                  limit={1}
-                />
+                  {children}
+                  <ToastContainer
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                    limit={1}
+                  />
               </MainLayout>
             )}
             <div id="sidebar-wrapper"></div>
