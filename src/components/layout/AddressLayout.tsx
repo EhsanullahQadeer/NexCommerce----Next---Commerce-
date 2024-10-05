@@ -57,14 +57,14 @@ const AddressLayout = (props: IProps) => {
   }, [districts, locationData.disctrict.id]);
 
   useEffect(() => {
-    if (!shippingaddress.id) {
+    if (!shippingaddress.id && user) {
         fetchgetBillingAddress({ user_id: user.id })
     }
-    if (!billingaddress.id) {
+    if (!billingaddress.id && user) {
         fetchgetShippingAddress({ user_id: user.id })
     }
 
-}, [])
+}, [user])
 
   return children;
 };
