@@ -32,7 +32,9 @@ const Form = () => {
               className: "cursor-pointer p-4 border border-dashed round[3px]",
               setSelectedAddress,
               selectedAddress,
-              disableEdit: true,
+              btnBoxProps: {
+                className: "justify-center",
+              },
             }}
           />
         </div>
@@ -63,7 +65,9 @@ const Form = () => {
                 className: "cursor-pointer p-4 border border-dashed round[3px]",
                 setSelectedAddress,
                 selectedAddress,
-                disableEdit: true,
+                btnBoxProps: {
+                  className: "justify-center",
+                },
               }}
             />
           </div>

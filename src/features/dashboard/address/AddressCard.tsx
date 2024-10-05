@@ -28,6 +28,10 @@ interface CardProps {
   setSelectedAddress?: (adress: IAddress) => void;
   selectedAddress?: IAddress;
   disableEdit?: boolean;
+  btnBoxProps?: {
+    className?: string;
+    style?: React.CSSProperties;
+  };
 }
 interface Iprops {
   title?: string;
@@ -39,7 +43,8 @@ interface Iprops {
 
 const AddressCard = (props: Iprops) => {
   const { title, addresstype, isLoading, type, cardProps } = props;
-  const { selectedAddress, setSelectedAddress, disableEdit } = cardProps || {};
+  const { selectedAddress, setSelectedAddress, disableEdit, btnBoxProps } =
+    cardProps || {};
   const { user } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [editAdressData, setEditAdressData] = useState<IAddress>();
@@ -140,7 +145,7 @@ const AddressCard = (props: Iprops) => {
               Location: {provinceId}, {disctrictId}, {villageId}
             </p>
             <p className={textStyles}>Address: {address}</p>
-            <div className="flex space-x-4 mt-4">
+            <div className={cn("flex space-x-4 mt-4", btnBoxProps?.className)}>
               {!disableEdit && (
                 <Button
                   className={buttonStyles}
