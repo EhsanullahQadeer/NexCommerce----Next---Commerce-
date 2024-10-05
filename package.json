@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.2.7",
     "clsx": "^2.1.1",
     "cookie": "^0.6.0",
+    "credit-card-type": "^10.0.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.9.0",
     "isotope-layout": "^3.0.6",
