@@ -1,23 +1,23 @@
-import React, { ReactNode, useContext, useMemo, useState } from "react";
+import React, { ReactNode, useMemo, useRef, useState } from "react";
 import { Formik, Form, FormikValues, FormikErrors } from "formik";
 import * as Yup from "yup";
 import creditCardType from "credit-card-type";
 import { useScrollToFieldError } from "@/hooks/useScrollToFieldError";
-import { createContext } from "vm";
-import {
-  CheckoutProvider,
-  useCheckoutContext,
-} from "./context/CheckoutContext";
+import { useCheckoutContext } from "./context/CheckoutContext";
 import { TadressType } from "@/types/adress";
 import AddressModal from "../dashboard/address/AddressModal";
 import { selectCart } from "@/store/slices/cart/cartSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useAddOrderMutation } from "@/store/api/ordersApi";
 import { OrderItem } from "@/types/order";
 import { RootState } from "@/store";
+import {
+  clearCoupon,
+  selectCoupenCode,
+} from "@/store/slices/coupencode/coupenCodeSlice";
+
 interface PaymentFormValues {
   card_number: string;
-  expiryDate: string;
   expire_month: string;
   expire_year: string;
   cvc: string;
@@ -71,11 +71,15 @@ const isExpirationDateValid = (month: string, year: string) => {
 };
 const initialValues: PaymentFormValues = {
   card_number: "",
-  expiryDate: "",
+  // card_number: "5526080000000006",
   expire_month: "",
+  // expire_month: "11",
   expire_year: "",
+  // expire_year: "2026",
   cvc: "",
+  // cvc: "123",
   card_holder_name: "",
+  // card_holder_name: "Test User",
   total_amount: "",
 };
 
@@ -85,17 +89,25 @@ const ScrollToFieldError = () => {
 };
 let addresstype: TadressType = "shippingaddress";
 const FormWrap = ({ children }: { children: ReactNode }) => {
+  const dispatch = useDispatch();
   const [addOrder, { isLoading }] = useAddOrderMutation();
   const { user } = useSelector((state: RootState) => state.auth);
+  const { coupon_code } = useSelector(selectCoupenCode);
   const { cartDetails } = useSelector(selectCart);
 
+  const totalAmountRed = useRef<number>(0);
+
   const orderItems: OrderItem[] = useMemo(() => {
-    return cartDetails.map((item) => ({
-      product_id: item.product_id,
-      quantity: item.quantity,
-      price_at_order: item.product.price,
-      variant_id: item.variant.id,
-    }));
+    return cartDetails.map((item) => {
+      const price_at_order = item.product.price * item.quantity;
+      totalAmountRed.current += price_at_order;
+      return {
+        product_id: item.product_id,
+        quantity: item.quantity,
+        price_at_order,
+        variant_id: item.variant.id,
+      };
+    });
   }, [cartDetails]);
 
   const { isBillingSame, selectedShippingAddress, selectedBillingAddress } =
@@ -104,6 +116,7 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
   const onSubmit = async (values: PaymentFormValues) => {
+
     if (!selectedShippingAddress) {
       addresstype = "shippingaddress";
       setModalOpen(true);
@@ -113,19 +126,32 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
       setModalOpen(true);
       return;
     }
+
     const shipping_address_id = selectedShippingAddress?.id;
     const billing_address_id = isBillingSame
       ? selectedShippingAddress?.id
       : selectedBillingAddress?.id;
+
     if (shipping_address_id && billing_address_id) {
       const body = {
         ...values,
+        card_number: values.card_number.replaceAll(" ", ""),
         shipping_address_id,
         billing_address_id,
         order_items: orderItems,
         user_id: user.id,
+        total_amount: totalAmountRed.current,
+        ...(coupon_code ? { coupon_code } : {}),
       };
-      await addOrder(body);
+
+      try {
+        await addOrder(body).unwrap();
+        if (coupon_code) {
+          dispatch(clearCoupon());
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
     }
   };
 

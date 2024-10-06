@@ -19,6 +19,7 @@ const Form = () => {
   const { apiStatus } = useIsMutating();
   const { isLoading: isBillingLoading } = apiStatus("fetchgetBillingAddress");
   const { isLoading: isShippingLoading } = apiStatus("fetchgetShippingAddress");
+  
   const {
     isBillingSame,
     setIsBillingSame,
@@ -27,6 +28,7 @@ const Form = () => {
     selectedBillingAddress,
     setSelectedBillingAddress,
   } = useCheckoutContext();
+
   const ShippingAdress = React.memo(() => {
     return (
       <div className="py-0 sm:py-8">
@@ -48,6 +50,7 @@ const Form = () => {
       </div>
     );
   });
+
   const BillingAdress = React.memo(() => {
     return (
       <div className="py-4">
@@ -88,6 +91,7 @@ const Form = () => {
       </div>
     );
   });
+  
   const stepsWithCustomContent = useMemo(
     () => [
       <div key={"step-1"} className="px-2 sm:px-6">
@@ -104,7 +108,7 @@ const Form = () => {
         <BillingAdress />
       </div>,
     ],
-    [isShippingLoading, isBillingLoading, isBillingSame]
+    [isShippingLoading, isBillingLoading, isBillingSame ,selectedShippingAddress,selectedBillingAddress]
   );
 
   return (
