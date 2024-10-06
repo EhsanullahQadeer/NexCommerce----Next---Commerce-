@@ -2,13 +2,9 @@ import Button from "@/components/Button";
 import { IAddress, TadressType } from "@/types/adress";
 import React, { useEffect, useState } from "react";
 import AddressModal from "./AddressModal";
-import { toast } from "react-toastify";
 import { RootState } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectAdress,
-  setLocationData,
-} from "@/store/slices/adress/adressSlice";
+import { setLocationData } from "@/store/slices/adress/adressSlice";
 import Skeleton from "react-loading-skeleton";
 import { cn } from "@/lib/utils";
 import { selectShippingAddress } from "@/store/slices/shippingaddress/shippingAddressSlice";
@@ -30,7 +26,12 @@ interface CardProps {
   disableEdit?: boolean;
   btnBoxProps?: {
     className?: string;
-    style?: React.CSSProperties;
+  };
+  addNewBtnBox?: {
+    className?: string;
+    btn?: {
+      className?: string;
+    };
   };
 }
 interface Iprops {
@@ -43,8 +44,13 @@ interface Iprops {
 
 const AddressCard = (props: Iprops) => {
   const { title, addresstype, isLoading, type, cardProps } = props;
-  const { selectedAddress, setSelectedAddress, disableEdit, btnBoxProps } =
-    cardProps || {};
+  const {
+    selectedAddress,
+    setSelectedAddress,
+    disableEdit,
+    btnBoxProps,
+    addNewBtnBox,
+  } = cardProps || {};
   const { user } = useSelector((state: RootState) => state.auth);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [editAdressData, setEditAdressData] = useState<IAddress>();
@@ -59,22 +65,6 @@ const AddressCard = (props: Iprops) => {
 
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (isAdressAvailable) {
-  //     const adressData = adressArray[0];
-  //     let body: IlocationData = {
-  //       ...locationInitalData,
-  //       provinces: { ...locationInitalData.provinces },
-  //       disctrict: { ...locationInitalData.disctrict },
-  //       village: { ...locationInitalData.village },
-  //     };
-
-  //     body.provinces.id = adressData.provinces;
-  //     body.disctrict.id = adressData.disctrict;
-  //     body.village.id = adressData.village;
-  //     dispatch(setLocationData(body));
-  //   }
-  // }, [isAdressAvailable]);
   useEffect(() => {
     if (isAdressAvailable && setSelectedAddress) {
       setSelectedAddress(adressArray[0] as unknown as IAddress);
@@ -97,6 +87,7 @@ const AddressCard = (props: Iprops) => {
           phone,
           address_name,
           postal_code,
+          email,
         } = item;
         const addressData: IAddress = {
           first_name,
@@ -109,17 +100,8 @@ const AddressCard = (props: Iprops) => {
           phone,
           address_name,
           postal_code,
+          email,
         };
-        // const provinceName = provinces.find(
-        //   (item) => item.id == id
-        // )?.name;
-        // const disctrictName = districts.find(
-        //   (item) => item.id == id
-        // )?.district_name;
-        // const villageName = villages.find(
-        //   (item) => item.id == id
-        // )?.village_name;
-
         return (
           <div
             key={"address-" + id}
@@ -141,6 +123,7 @@ const AddressCard = (props: Iprops) => {
               Name: {first_name} {last_name}
             </p>
             <p className={textStyles}>Phone: {phone}</p>
+            <p className={textStyles}>Email: {email}</p>
             <p className={textStyles}>
               Location: {provinceId}, {disctrictId}, {villageId}
             </p>
@@ -174,26 +157,28 @@ const AddressCard = (props: Iprops) => {
               </Button> */}
             </div>
             {selectedAddress?.id === id && (
-              <div className="flex  absolute top-[-10px] right-[-10px] w-7 h-7 rounded-full border-2 border-primary bg-primary items-center justify-center">
-                <i className="las la-check text-white text-lg" />
+              <div className="flex  absolute top-[-10px] right-[-10px] w-5 h-5 sm:w-7 sm:h-7 rounded-full border-2 border-primary bg-primary items-center justify-center">
+                <i className="las la-check text-white text-md sm:text-lg" />
               </div>
             )}
           </div>
         );
       })
     ) : (
-      <div>
+      <div className={addNewBtnBox?.className}>
         <p className={textStyles}>
           You have not set up this type of address yet.
         </p>
-        <Button
-          className={buttonStyles}
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
-          Add New <i className="lar la-edit ml-1"></i>
-        </Button>
+        <div className={addNewBtnBox?.btn?.className}>
+          <Button
+            className={buttonStyles}
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            Add New <i className="lar la-edit ml-1"></i>
+          </Button>
+        </div>
       </div>
     );
 

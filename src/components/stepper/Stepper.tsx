@@ -4,10 +4,10 @@ import Stack from "@mui/material/Stack";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import StepConnector, {
-  stepConnectorClasses,
-} from "@mui/material/StepConnector";
+import StepConnector, { stepConnectorClasses } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -41,14 +41,18 @@ const ColorlibStepIconRoot = styled("div")<{
   justifyContent: "center",
   alignItems: "center",
   boxShadow: ownerState.active ? "0 4px 10px 0 rgba(0,0,0,.25)" : "none",
+  "@media (max-width: 640px)": {
+    width: 35, 
+    height: 35, 
+  },
 }));
 
 function ColorlibStepIcon(props: StepIconProps) {
   const { active, completed } = props;
 
   const icons: { [index: string]: React.ReactElement<any> } = {
-    1: <i className="la la-truck text-2xl" />,
-    2: <i className="la la-credit-card text-2xl" />,
+    1: <i className="la la-truck text-lg sm:text-2xl" />,
+    2: <i className="la la-credit-card text-lg sm:text-2xl" />,
   };
 
   return (
@@ -63,16 +67,22 @@ export default function CustomizedSteppers({
 }: {
   steps: React.ReactNode[];
 }) {
+  const theme = useTheme();
+  const isMdScreen = useMediaQuery(theme.breakpoints.up('sm'));
+  
   return (
     <Stack sx={{ width: "100%" }} spacing={4}>
       <Stepper
-        alternativeLabel
+      alternativeLabel
         activeStep={1}
-        connector={<ColorlibConnector />}
+        orientation={isMdScreen ? "horizontal" : "vertical"}
+        connector={isMdScreen ? <ColorlibConnector /> : null} 
       >
         {steps.map((label, idx) => (
           <Step key={idx}>
-            <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
+            <StepLabel StepIconComponent={ColorlibStepIcon}>
+              {label}
+            </StepLabel>
           </Step>
         ))}
       </Stepper>

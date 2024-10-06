@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 const useCurrency = (): {
   formatPrice: (price: number, currency_id?: number) => string;
   calculatePrice: (price: number, currency_id: number) => number;
+  calculatePriceInTurkishCurency: (price: number) => number;
 } => {
   const { currencyData } = useSelector(selectCurrency);
   const { selected_currencies_id } = useSelector(selectSiteSetting);
@@ -47,7 +48,17 @@ const useCurrency = (): {
       currencyData,
     });
   };
-  return { formatPrice, calculatePrice };
+  const calculatePriceInTurkishCurency = (price: number) => {
+    if (selected_currencies_id == 2) {
+      return price;
+    } else {
+      const { exchange_rate_to_usd = 0.03 } =
+        findCurrencyById(currencyData, 2) || {};
+      return price / Number(exchange_rate_to_usd);
+    }
+  };
+
+  return { formatPrice, calculatePrice, calculatePriceInTurkishCurency };
 };
 
 export default useCurrency;

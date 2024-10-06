@@ -1,4 +1,5 @@
 'use client'
+import { OrderPayload } from "@/types/order";
 import { apiSlice } from "../slices/api/apiSlice";
 import { toast } from "react-toastify";
 
@@ -21,8 +22,25 @@ export const ordersApi = apiSlice.injectEndpoints({
       },
     }),
 
+    addOrder: builder.mutation({
+      query: (data:OrderPayload) => ({
+        url: "add-order",
+        method: 'POST',
+        body: data,
+      }
+      ),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const { data } = await queryFulfilled;
+          return data;
+        } catch (error) {
+          console.error('Add Order Error:', error);
+        }
+      },
+    }),
+
 
   }),
 });
 
-export const { useFetchOrdersMutation } = ordersApi;
+export const { useFetchOrdersMutation, useAddOrderMutation } = ordersApi;

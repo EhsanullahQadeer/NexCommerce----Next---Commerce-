@@ -31,6 +31,8 @@ import ProgressIcon from "@/components/Icons/ProgressIcon";
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First Name is required."),
   last_name: Yup.string().required("Last Name is required."),
+  email: Yup.string().email("Invalid email format.")
+  .required("Email is required."),
   phone: Yup.string()
     .required("Phone number is required")
     .test("is-valid-phone", "Phone number must be valid", (value) => {
@@ -53,6 +55,10 @@ interface Iprops {
   adressData?: IAddress;
 }
 
+const adressTypeLabel: Record<TadressType, string> = {
+  shippingaddress: "Shipping",
+  billingaddress: "Billing",
+};
 const AddressModal = (props: Iprops) => {
   const { isOpen, onClose, addresstype, adressData } = props;
   const { provinces, districts, villages, locationData } =
@@ -76,6 +82,7 @@ const AddressModal = (props: Iprops) => {
   const initialValues: IAddress = adressData ?? {
     first_name: "",
     last_name: "",
+    email: "",
     phone: "",
     address: "",
     neighborhood: "",
@@ -91,6 +98,7 @@ const AddressModal = (props: Iprops) => {
     onClose();
     setLocationData(locationInitalData);
     document.body.style.overflow = "";
+    dispatch(setLocationData(locationInitalData))
   };
 
   const handleAddressSubmit = async (values: IAddress) => {
@@ -116,7 +124,11 @@ const AddressModal = (props: Iprops) => {
       onClose={handleModalClose}
     >
       <div className="pt-4 pb-6 text-xl text-primary font-normal leading-[24px]">
-        <h1>{adressData ? "Edit Address" : "Add New Address"}</h1>
+        <h1>
+          {adressData
+            ? `Edit ${adressTypeLabel[addresstype]} Address`
+            : `Add ${adressTypeLabel[addresstype]}  Address`}
+        </h1>
       </div>
       <Formik
         initialValues={initialValues}
@@ -196,13 +208,12 @@ const AddressModal = (props: Iprops) => {
                   </div>
                   <div>
                     <Field
-                      type="text"
-                      name="postal_code"
-                      placeholder="Postal Code"
+                      name="email"
+                      placeholder="Email"
                       className="p-2 block w-full border border-gray-300 rounded-md"
                     />
                     <ErrorMessage
-                      name="postal_code"
+                      name="email"
                       component="div"
                       className="text-red-500 text-sm"
                     />
@@ -323,7 +334,7 @@ const AddressModal = (props: Iprops) => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 mt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                   <div>
                     <Field
                       type="text"
@@ -333,6 +344,19 @@ const AddressModal = (props: Iprops) => {
                     />
                     <ErrorMessage
                       name="address_name"
+                      component="div"
+                      className="text-red-500 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <Field
+                      type="text"
+                      name="postal_code"
+                      placeholder="Postal Code"
+                      className="p-2 block w-full border border-gray-300 rounded-md"
+                    />
+                    <ErrorMessage
+                      name="postal_code"
                       component="div"
                       className="text-red-500 text-sm"
                     />

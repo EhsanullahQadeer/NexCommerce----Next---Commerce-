@@ -31,7 +31,7 @@ const CouponInput = () => {
     }
   };
   return (
-    <div className="mb-5 flex gap-2">
+    <div className="mb-5 flex gap-2 justify-center sm:justify-start">
       <div className="group relative">
         <input
           ref={inputRef}

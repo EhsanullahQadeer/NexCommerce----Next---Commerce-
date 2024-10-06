@@ -27,13 +27,14 @@ export interface IAddress {
     address_name: string;
     first_name: string;
     last_name: string;
+    email:string;
     phone: string;
     provinces: number | string;
     disctrict: number | string;
     village: number | string;
     neighborhood?: string;
     address: string;
-    postal_code: number | string
+    postal_code: number | string;
 }
 
 export type TadressType = "shippingaddress" | "billingaddress";

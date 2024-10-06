@@ -13,25 +13,32 @@ import JcbPay from "@/assets/svgs/JcbPay";
 import UniounPay from "@/assets/svgs/UniounPay";
 import { Tooltip } from "@mui/material";
 import CustomizedSteppers from "@/components/stepper/Stepper";
+import { useCheckoutContext } from "./context/CheckoutContext";
 
 const Form = () => {
   const { apiStatus } = useIsMutating();
   const { isLoading: isBillingLoading } = apiStatus("fetchgetBillingAddress");
   const { isLoading: isShippingLoading } = apiStatus("fetchgetShippingAddress");
-  const [isBillingSame, setIsBillingSame] = useState<boolean>(true);
+  const {
+    isBillingSame,
+    setIsBillingSame,
+    selectedShippingAddress,
+    setSelectedShippingAddress,
+    selectedBillingAddress,
+    setSelectedBillingAddress,
+  } = useCheckoutContext();
   const ShippingAdress = React.memo(() => {
-    const [selectedAddress, setSelectedAddress] = useState<IAddress>();
     return (
-      <div className="py-8">
+      <div className="py-0 sm:py-8">
         <div className="grid grid-cols-1 w-full cursor-pointer ">
           <AddressCard
             isLoading={isShippingLoading}
             addresstype="shippingaddress"
             type="onlyChildCard"
             cardProps={{
-              className: "cursor-pointer p-4 border border-dashed round[3px]",
-              setSelectedAddress,
-              selectedAddress,
+              className: "cursor-pointer p-4 border border-dashed round[3px] text-center",
+              setSelectedAddress: setSelectedShippingAddress,
+              selectedAddress: selectedShippingAddress,
               btnBoxProps: {
                 className: "justify-center",
               },
@@ -42,32 +49,38 @@ const Form = () => {
     );
   });
   const BillingAdress = React.memo(() => {
-    const [selectedAddress, setSelectedAddress] = useState<IAddress>();
     return (
       <div className="py-4">
         <div className="mb-4">
           <Checkbox
+            id="same-billing-adress"
             checked={isBillingSame}
             label="Use billing address as shipping address"
-            labelClass="!text-black-75 !font-light"
+            labelClass="!text-black-75 !font-light text-center sm:text:left"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               setIsBillingSame(e.target.checked);
             }}
           />
         </div>
         {!isBillingSame && (
-          <div className="grid grid-cols-1 w-full cursor-pointer ">
+          <div className="grid grid-cols-1 w-full cursor-pointer">
             <AddressCard
               isLoading={isBillingLoading}
               addresstype="billingaddress"
               type="onlyChildCard"
               cardProps={{
-                className: "cursor-pointer p-4 border border-dashed round[3px]",
-                setSelectedAddress,
-                selectedAddress,
+                className: "cursor-pointer p-4 border border-dashed round[3px] text-center",
+                setSelectedAddress: setSelectedBillingAddress,
+                selectedAddress: selectedBillingAddress,
                 btnBoxProps: {
                   className: "justify-center",
                 },
+                addNewBtnBox:{
+                  className:"text-center sm:text:left",
+                  btn:{
+                    className:"flex justify-center sm:block"
+                  }
+                }
               }}
             />
           </div>
@@ -77,13 +90,17 @@ const Form = () => {
   });
   const stepsWithCustomContent = useMemo(
     () => [
-      <div key={"step-1"} className="px-6">
-        <div className="text-black-75">Shiping Address</div>
-        <div className="py-[13px]"></div>
+      <div key={"step-1"} className="px-2 sm:px-6">
+        <div className="text-black-75 text-center sm:text-lef text-lg">
+          Shiping Address
+        </div>
+        <div className="py-2 sm:py-[13px]"></div>
         <ShippingAdress />
       </div>,
       <div key={"step-2"} className="px-6">
-        <div className="text-black-75">Billing Address</div>
+        <div className="text-black-75 text-center sm:text-left  text-lg">
+          Billing Address
+        </div>
         <BillingAdress />
       </div>,
     ],
@@ -135,7 +152,7 @@ const Form = () => {
         <div className="bg-[#f9f9f9] ">
           <CreditCardBox />
 
-          <div className="p-4">
+          <div className="p-0 sm:p-4 sm:px-0 px-4">
             <CustomizedSteppers steps={stepsWithCustomContent} />
           </div>
           {/* <div className="">

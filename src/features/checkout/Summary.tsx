@@ -6,25 +6,28 @@ import { useSelector } from "react-redux";
 import useCurrency from "@/hooks/useCurrency";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
+import { Field, useFormikContext } from "formik";
+import { useEffect } from "react";
 
 const linkStyles =
   "text-black-100 text-black-75 lg:max-w-[138px] hover:text-primary";
 
 const CheckoutSummary = () => {
   const { totalAmount, cartDetails } = useSelector(selectCart);
+  const { setFieldValue } = useFormikContext();
   const { couponData } = useSelector(selectCoupenCode);
-  const { formatPrice, calculatePrice } = useCurrency();
+  const { formatPrice, calculatePrice, calculatePriceInTurkishCurency } =
+    useCurrency();
 
   const { shipping_amount, free_shipping_threshold, vat_amount } =
     useSelector(selectSiteSetting);
-
   const { discount_type, discount_amount, discount_percentage } =
     couponData || {};
 
   const shippingFee =
-    totalAmount >= parseInt(free_shipping_threshold)
+    totalAmount >= Number(free_shipping_threshold)
       ? 0
-      : parseInt(shipping_amount);
+      : Number(shipping_amount);
 
   const discountAmount = couponData
     ? discount_type === "percentage"
@@ -38,6 +41,12 @@ const CheckoutSummary = () => {
   const calculatedTotalAmount =
     totalAmount + vatFee + shippingFee - discountAmount;
 
+  useEffect(() => {
+    setFieldValue(
+      "total_amount",
+      calculatePriceInTurkishCurency(calculatedTotalAmount)
+    );
+  }, [calculatedTotalAmount]);
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-normal pb-[17px]">
