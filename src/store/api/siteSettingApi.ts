@@ -12,8 +12,7 @@ export const siteSettingApi = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
           const {data} = await queryFulfilled;
-
-          console.log("data", data);
+          
           dispatch(updateSiteSettings(data.data))
           
         } catch (error) {

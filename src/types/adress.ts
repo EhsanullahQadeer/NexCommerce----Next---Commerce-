@@ -36,6 +36,24 @@ export interface IAddress {
     address: string;
     postal_code: number | string;
 }
+export interface IaddressResponse{
+    id: string
+    user_id: number
+    first_name: string
+    last_name: string
+    phone: string
+    email: string
+    address: string
+    provinces: string
+    disctrict: string
+    village: string
+    postal_code: string
+    neighborhood: string
+    address_name: string
+    province_name: string
+    district_name: string
+    village_name: string
+}
 
 export type TadressType = "shippingaddress" | "billingaddress";
 export type TlocationType = "provinces" | "districts" | "villages";

@@ -17,4 +17,7 @@ export interface OrderPayload {
     expire_month: string;
     expire_year: string;
     cvc: string;
+    province_name: string;
+    district_name: string;
+    village_name: string;
 }

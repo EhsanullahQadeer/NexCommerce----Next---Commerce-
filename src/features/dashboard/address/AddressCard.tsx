@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { IAddress, TadressType } from "@/types/adress";
+import { IAddress, IaddressResponse, TadressType } from "@/types/adress";
 import React, { useEffect, useState } from "react";
 import AddressModal from "./AddressModal";
 import { RootState } from "@/store";
@@ -8,7 +8,7 @@ import { setLocationData } from "@/store/slices/adress/adressSlice";
 import Skeleton from "react-loading-skeleton";
 import { cn } from "@/lib/utils";
 import { selectShippingAddress } from "@/store/slices/shippingaddress/shippingAddressSlice";
-import { selectBillingAddress } from "@/store/slices/billingaddress/billingAddressSlice";
+import {  selectBillingAddress } from "@/store/slices/billingaddress/billingAddressSlice";
 
 const cardStyles = "w-full py-10 px-7 border border-black-300 bg-[#f9f9f9]";
 const titleStyles = "text-xl text-black-75 font-normal leading-[24px] mb-[5px]";
@@ -21,8 +21,8 @@ interface CardProps {
   className?: string;
   style?: React.CSSProperties;
   onClick?: (adress: IAddress) => void;
-  setSelectedAddress?: (adress: IAddress) => void;
-  selectedAddress?: IAddress;
+  setSelectedAddress?: (adress: IaddressResponse | undefined) => void;
+  selectedAddress?: IaddressResponse | undefined;
   disableEdit?: boolean;
   btnBoxProps?: {
     className?: string;
@@ -62,12 +62,11 @@ const AddressCard = (props: Iprops) => {
     ? [adressData[addresstype]]
     : [];
   const isAdressAvailable = !!adressArray.length && !isLoading;
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isAdressAvailable && setSelectedAddress) {
-      setSelectedAddress(adressArray[0] as unknown as IAddress);
+      setSelectedAddress(adressArray[0]);
     }
   }, [isAdressAvailable]);
 
@@ -88,6 +87,9 @@ const AddressCard = (props: Iprops) => {
           address_name,
           postal_code,
           email,
+          province_name,
+          district_name,
+          village_name
         } = item;
         const addressData: IAddress = {
           first_name,
@@ -125,7 +127,7 @@ const AddressCard = (props: Iprops) => {
             <p className={textStyles}>Phone: {phone}</p>
             <p className={textStyles}>Email: {email}</p>
             <p className={textStyles}>
-              Location: {provinceId}, {disctrictId}, {villageId}
+              Location: {province_name}, {disableEdit}, {village_name}
             </p>
             <p className={textStyles}>Address: {address}</p>
             <div className={cn("flex space-x-4 mt-4", btnBoxProps?.className)}>

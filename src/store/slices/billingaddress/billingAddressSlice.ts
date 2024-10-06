@@ -1,24 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '@/store';
+import { IaddressResponse } from '@/types/adress';
 
 
-export interface BillingAddressSlice {
-  id: string
-  user_id: number
-  first_name: string
-  last_name: string
-  phone: string
-  email: string
-  address: string
-  provinces: string
-  disctrict: string
-  village: string
-  postal_code: string
-  neighborhood: string
-  address_name: string
-}
-
-const initialState: BillingAddressSlice = {
+const initialState: IaddressResponse = {
   id: "",
   user_id: 0,
   first_name: "",
@@ -31,14 +16,17 @@ const initialState: BillingAddressSlice = {
   village: "",
   postal_code: "",
   neighborhood: "",
-  address_name: ""
+  address_name: "",
+  province_name: "",
+  village_name: "",
+  district_name: "",
 }
 
 export const siteBillingAddressSlice = createSlice({
   name: 'billingaddress',
   initialState,
   reducers: {
-    updateBillingAddress: (state, action: PayloadAction<BillingAddressSlice>) => {
+    updateBillingAddress: (state, action: PayloadAction<IaddressResponse>) => {
       Object.assign(state, action.payload);
     }
   },

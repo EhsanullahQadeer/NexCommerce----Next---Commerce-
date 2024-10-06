@@ -8,6 +8,7 @@ import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import { selectCoupenCode } from "@/store/slices/coupencode/coupenCodeSlice";
 import { Field, useFormikContext } from "formik";
 import { useEffect } from "react";
+import { useCheckoutContext } from "./context/CheckoutContext";
 
 const linkStyles =
   "text-black-100 text-black-75 lg:max-w-[138px] hover:text-primary";
@@ -18,11 +19,13 @@ const CheckoutSummary = () => {
   const { couponData } = useSelector(selectCoupenCode);
   const { formatPrice, calculatePrice, calculatePriceInTurkishCurency } =
     useCurrency();
+  const { setVatFee } = useCheckoutContext();
 
   const { shipping_amount, free_shipping_threshold, vat_amount } =
     useSelector(selectSiteSetting);
   const { discount_type, discount_amount, discount_percentage } =
     couponData || {};
+    console.log('vat_amount: ', vat_amount);
 
   const shippingFee =
     totalAmount >= Number(free_shipping_threshold)
@@ -40,13 +43,11 @@ const CheckoutSummary = () => {
 
   const calculatedTotalAmount =
     totalAmount + vatFee + shippingFee - discountAmount;
+    console.log('vatFee: ', vatFee);
 
   useEffect(() => {
-    setFieldValue(
-      "total_amount",
-      calculatePriceInTurkishCurency(calculatedTotalAmount)
-    );
-  }, [calculatedTotalAmount]);
+    setVatFee(vatFee);
+  }, [vatFee]);
   return (
     <div className="w-full lg:max-w-[336px] bg-[#f9f9f9] px-[30px] py-[25px] border border-dashed border-[#d7d7d7] rounded-[3px]">
       <h3 className="border-b border-black-600 text-base font-normal pb-[17px]">

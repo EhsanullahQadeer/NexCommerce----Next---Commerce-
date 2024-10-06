@@ -4,12 +4,14 @@ import { setOpenAuthModal } from "../auth/authSlice";
 import { toast } from "react-toastify";
 import { showToast } from "@/utility/showToast";
 import { handleLogout } from "@/utility/handleLogout";
+import store from "@/store";
+import { setFullScreenLoader } from "@/store/slice";
 
 const getAuthToken = () => {
   const token = localStorage.getItem('access_token');
   return token || "";
 };
-
+let activeRequests = 0;
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL || "",
   credentials: "same-origin",
@@ -22,7 +24,27 @@ const baseQuery = fetchBaseQuery({
   },
 });
 const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
-  const result = await baseQuery(args, api, extraOptions);
+  let payload = { ...args };
+  let fullPageLoader = false;
+  if (typeof args === "object" && args !== null) {
+    if (typeof args.body === "object" && args.body !== null) {
+      payload.body = args.body.payload || args.body;
+      fullPageLoader = args.body.fullPageLoader ?? fullPageLoader;
+    }
+  }
+  if (fullPageLoader) {
+    activeRequests += 1
+    if (activeRequests === 1) {
+      store.dispatch(setFullScreenLoader(true));
+    }
+  }
+  const result = await baseQuery(payload, api, extraOptions);
+  if (fullPageLoader) {
+    activeRequests -= 1;
+    if (activeRequests === 0) {
+      store.dispatch(setFullScreenLoader(false));
+    }
+  }
 
   // Handle global error detection
   if (result.error) {

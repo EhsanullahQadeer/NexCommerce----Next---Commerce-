@@ -6,7 +6,7 @@ import { useScrollToFieldError } from "@/hooks/useScrollToFieldError";
 import { useCheckoutContext } from "./context/CheckoutContext";
 import { TadressType } from "@/types/adress";
 import AddressModal from "../dashboard/address/AddressModal";
-import { selectCart } from "@/store/slices/cart/cartSlice";
+import { clearCart, selectCart } from "@/store/slices/cart/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useAddOrderMutation } from "@/store/api/ordersApi";
 import { OrderItem } from "@/types/order";
@@ -15,6 +15,8 @@ import {
   clearCoupon,
   selectCoupenCode,
 } from "@/store/slices/coupencode/coupenCodeSlice";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface PaymentFormValues {
   card_number: string;
@@ -22,7 +24,6 @@ interface PaymentFormValues {
   expire_year: string;
   cvc: string;
   card_holder_name: string;
-  total_amount: string;
 }
 
 const currentYear = new Date().getFullYear();
@@ -70,17 +71,16 @@ const isExpirationDateValid = (month: string, year: string) => {
   return expirationDate >= currentDate;
 };
 const initialValues: PaymentFormValues = {
-  card_number: "",
   // card_number: "5526080000000006",
-  expire_month: "",
-  // expire_month: "11",
-  expire_year: "",
   // expire_year: "2026",
-  cvc: "",
+  // expire_month: "11",
   // cvc: "123",
-  card_holder_name: "",
   // card_holder_name: "Test User",
-  total_amount: "",
+  card_number: "",
+  expire_month: "",
+  expire_year: "",
+  cvc: "",
+  card_holder_name: "",
 };
 
 const ScrollToFieldError = () => {
@@ -90,17 +90,25 @@ const ScrollToFieldError = () => {
 let addresstype: TadressType = "shippingaddress";
 const FormWrap = ({ children }: { children: ReactNode }) => {
   const dispatch = useDispatch();
-  const [addOrder, { isLoading }] = useAddOrderMutation();
+  const router = useRouter();
+  const [addOrder] = useAddOrderMutation();
   const { user } = useSelector((state: RootState) => state.auth);
   const { coupon_code } = useSelector(selectCoupenCode);
   const { cartDetails } = useSelector(selectCart);
+  const {
+    isBillingSame,
+    selectedShippingAddress,
+    selectedBillingAddress,
+    vatFee,
+  } = useCheckoutContext();
 
-  const totalAmountRed = useRef<number>(0);
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+  const totalAmountRef = useRef<number>(0);
 
   const orderItems: OrderItem[] = useMemo(() => {
     return cartDetails.map((item) => {
       const price_at_order = item.product.price * item.quantity;
-      totalAmountRed.current += price_at_order;
+      totalAmountRef.current += price_at_order;
       return {
         product_id: item.product_id,
         quantity: item.quantity,
@@ -110,13 +118,7 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
     });
   }, [cartDetails]);
 
-  const { isBillingSame, selectedShippingAddress, selectedBillingAddress } =
-    useCheckoutContext();
-
-  const [isModalOpen, setModalOpen] = useState<boolean>(false);
-
   const onSubmit = async (values: PaymentFormValues) => {
-
     if (!selectedShippingAddress) {
       addresstype = "shippingaddress";
       setModalOpen(true);
@@ -133,25 +135,31 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
       : selectedBillingAddress?.id;
 
     if (shipping_address_id && billing_address_id) {
-      const body = {
+      const { province_name, district_name, village_name } =
+        selectedShippingAddress;
+      const payload = {
         ...values,
         card_number: values.card_number.replaceAll(" ", ""),
         shipping_address_id,
         billing_address_id,
         order_items: orderItems,
         user_id: user.id,
-        total_amount: totalAmountRed.current,
+        total_amount: totalAmountRef.current + vatFee,
+        province_name,
+        district_name,
+        village_name,
         ...(coupon_code ? { coupon_code } : {}),
       };
 
       try {
-        await addOrder(body).unwrap();
+        await addOrder({ payload, fullPageLoader: true }).unwrap();
+        toast.success("Order placed successfully! Thank you for your purchase.")
         if (coupon_code) {
           dispatch(clearCoupon());
         }
-      } catch (error) {
-        console.log("error: ", error);
-      }
+        dispatch(clearCart());
+        router.push('/dashboard') 
+      } catch (error) {}
     }
   };
 

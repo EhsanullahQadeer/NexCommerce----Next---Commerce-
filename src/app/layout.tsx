@@ -13,6 +13,7 @@ import "react-international-phone/style.css";
 import { I18Provider } from "./i18";
 import { useEffect, useState } from "react";
 import { theme } from "@/theme/theme";
+import FullPageLoader from "@/components/Loaders/PageLoader";
 export interface SiteSettings {
   site_status: number;
   brand_name: string;
@@ -110,6 +111,7 @@ export default function RootLayout({
                     theme="light"
                     limit={1}
                   />
+                  <FullPageLoader/>
               </MainLayout>
             )}
             <div id="sidebar-wrapper"></div>

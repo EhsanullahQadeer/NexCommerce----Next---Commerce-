@@ -4,6 +4,7 @@ import { apiSlice } from "../slices/api/apiSlice";
 import { toast } from "react-toastify";
 
 
+
 export const ordersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // login endpoint here
@@ -21,9 +22,10 @@ export const ordersApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    // OrderPayload
 
     addOrder: builder.mutation({
-      query: (data:OrderPayload) => ({
+      query: (data: WithLoader<OrderPayload>) => ({
         url: "add-order",
         method: 'POST',
         body: data,
