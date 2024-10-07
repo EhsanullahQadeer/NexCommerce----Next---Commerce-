@@ -71,16 +71,16 @@ const isExpirationDateValid = (month: string, year: string) => {
   return expirationDate >= currentDate;
 };
 const initialValues: PaymentFormValues = {
-  card_number: "5526080000000006",
-  expire_year: "2026",
-  expire_month: "11",
-  cvc: "123",
-  card_holder_name: "Test User",
-  // card_number: "",
-  // expire_month: "",
-  // expire_year: "",
-  // cvc: "",
-  // card_holder_name: "",
+  // card_number: "5526080000000006",
+  // expire_year: "2026",
+  // expire_month: "11",
+  // cvc: "123",
+  // card_holder_name: "Test User",
+  card_number: "",
+  expire_month: "",
+  expire_year: "",
+  cvc: "",
+  card_holder_name: "",
 };
 
 const ScrollToFieldError = () => {
@@ -129,7 +129,6 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
     const billing_address_id = isBillingSame
       ? selectedShippingAddress?.id
       : selectedBillingAddress?.id;
-
     if (shipping_address_id && billing_address_id) {
       const { province_name, district_name, village_name } =
         selectedShippingAddress;
