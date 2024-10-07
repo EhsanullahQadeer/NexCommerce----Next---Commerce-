@@ -3,11 +3,8 @@ import Link from "next/link";
 import { FC } from "react";
 import { useSelector } from "react-redux";
 
-interface DashboardTabProps {
-  handleTabChange: (tab: number) => void;
-}
 
-const DashboardTab: FC<DashboardTabProps> = ({ handleTabChange }) => {
+const DashboardTab: FC= () => {
   const data: any = useSelector(state => state)
   const {email, name} = data?.auth?.user || {}
   return (
@@ -18,15 +15,15 @@ const DashboardTab: FC<DashboardTabProps> = ({ handleTabChange }) => {
         <Link href="/login" className="text-primary">Log out</Link>)
         <br />
         From your account dashboard you can view your{' '}
-        <Link href="#" className="text-primary underline" onClick={() => handleTabChange(2)}>
+        <Link href="/dashboard/orders" className="text-primary underline">
           recent orders
         </Link>
         , manage your{' '}
-        <Link href="#tab-address" className="text-primary" onClick={() => handleTabChange(4)}>
+        <Link href="/dashboard/addresses" className="text-primary">
           shipping and billing addresses
         </Link>
         , and{' '}
-        <Link href="#" className="text-primary" onClick={() => handleTabChange(5)}>
+        <Link href="/dashboard/account-details" className="text-primary">
           edit your password and account details
         </Link>
         .
