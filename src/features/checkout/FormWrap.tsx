@@ -71,16 +71,16 @@ const isExpirationDateValid = (month: string, year: string) => {
   return expirationDate >= currentDate;
 };
 const initialValues: PaymentFormValues = {
-  // card_number: "5526080000000006",
-  // expire_year: "2026",
-  // expire_month: "11",
-  // cvc: "123",
-  // card_holder_name: "Test User",
-  card_number: "",
-  expire_month: "",
-  expire_year: "",
-  cvc: "",
-  card_holder_name: "",
+  card_number: "5526080000000006",
+  expire_year: "2026",
+  expire_month: "11",
+  cvc: "123",
+  card_holder_name: "Test User",
+  // card_number: "",
+  // expire_month: "",
+  // expire_year: "",
+  // cvc: "",
+  // card_holder_name: "",
 };
 
 const ScrollToFieldError = () => {
@@ -99,20 +99,16 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
     isBillingSame,
     selectedShippingAddress,
     selectedBillingAddress,
-    vatFee,
   } = useCheckoutContext();
 
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
-  const totalAmountRef = useRef<number>(0);
 
   const orderItems: OrderItem[] = useMemo(() => {
     return cartDetails.map((item) => {
-      const price_at_order = item.product.price * item.quantity;
-      totalAmountRef.current += price_at_order;
       return {
         product_id: item.product_id,
         quantity: item.quantity,
-        price_at_order,
+        price_at_order: item.product.price,
         variant_id: item.variant.id,
       };
     });
@@ -144,7 +140,6 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
         billing_address_id,
         order_items: orderItems,
         user_id: user.id,
-        total_amount: totalAmountRef.current + vatFee,
         province_name,
         district_name,
         village_name,
@@ -153,12 +148,14 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
 
       try {
         await addOrder({ payload, fullPageLoader: true }).unwrap();
-        toast.success("Order placed successfully! Thank you for your purchase.")
+        toast.success(
+          "Order placed successfully! Thank you for your purchase."
+        );
         if (coupon_code) {
           dispatch(clearCoupon());
         }
         dispatch(clearCart());
-        router.push('/dashboard') 
+        router.push("/dashboard/orders");
       } catch (error) {}
     }
   };

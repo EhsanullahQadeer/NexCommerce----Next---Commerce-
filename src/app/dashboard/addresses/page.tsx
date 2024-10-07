@@ -1,4 +1,5 @@
-import AddressCard from "./address/AddressCard";
+"use client";
+import AddressCard from "@/features/dashboard/address/AddressCard";
 import AddressLayout from "@/components/layout/AddressLayout";
 import useIsMutating from "@/hooks/useIsMutating";
 

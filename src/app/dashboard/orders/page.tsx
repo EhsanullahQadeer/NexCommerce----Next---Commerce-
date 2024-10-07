@@ -1,10 +1,11 @@
+'use client';
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import NotificationIcon from "@/components/Navbar/elements/NotificationIcon";
-import OrderExpanded from "./OrderExpanded";
-import { orders, orderStatuses } from "./data";
+import OrderExpanded from "@/features/dashboard/OrderExpanded";
+import { orderStatuses } from "@/features/dashboard/data";
 import { useSelector } from 'react-redux';
 import { useFetchOrdersMutation } from "@/store/api/ordersApi";
 

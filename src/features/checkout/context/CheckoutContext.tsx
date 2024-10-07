@@ -9,8 +9,6 @@ interface ICheckoutContext {
   setSelectedShippingAddress: (address?: IaddressResponse) => void;
   selectedBillingAddress?: IaddressResponse;
   setSelectedBillingAddress: (address?: IaddressResponse) => void;
-  vatFee: number;
-  setVatFee: (value: number) => void;
 }
 
 // Create the context with a default value of null
@@ -40,7 +38,6 @@ export const CheckoutProvider: React.FC<CheckoutProviderProps> = ({
   const [selectedBillingAddress, setSelectedBillingAddress] = useState<
     IaddressResponse | undefined
   >();
-  const [vatFee, setVatFee] = useState<number>(0);
   const initialState: ICheckoutContext = {
     isBillingSame,
     setIsBillingSame,
@@ -48,8 +45,6 @@ export const CheckoutProvider: React.FC<CheckoutProviderProps> = ({
     setSelectedShippingAddress,
     selectedBillingAddress,
     setSelectedBillingAddress,
-    vatFee,
-    setVatFee,
   };
 
   return (

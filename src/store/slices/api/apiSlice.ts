@@ -4,8 +4,11 @@ import { setOpenAuthModal } from "../auth/authSlice";
 import { toast } from "react-toastify";
 import { showToast } from "@/utility/showToast";
 import { handleLogout } from "@/utility/handleLogout";
-import store from "@/store";
+
 import { setFullScreenLoader } from "@/store/slice";
+
+// Lazy load the store
+let lazyStore: any = null;
 
 const getAuthToken = () => {
   const token = localStorage.getItem('access_token');
@@ -24,6 +27,11 @@ const baseQuery = fetchBaseQuery({
   },
 });
 const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
+  // Lazy initialize store when needed
+  if (!lazyStore) {
+    lazyStore = (await import('@/store')).default;
+  }
+
   let payload = { ...args };
   let fullPageLoader = false;
   if (typeof args === "object" && args !== null) {
@@ -35,14 +43,14 @@ const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
   if (fullPageLoader) {
     activeRequests += 1
     if (activeRequests === 1) {
-      store.dispatch(setFullScreenLoader(true));
+      lazyStore.dispatch(setFullScreenLoader(true));
     }
   }
   const result = await baseQuery(payload, api, extraOptions);
   if (fullPageLoader) {
     activeRequests -= 1;
     if (activeRequests === 0) {
-      store.dispatch(setFullScreenLoader(false));
+      lazyStore.dispatch(setFullScreenLoader(false));
     }
   }
 
@@ -51,7 +59,23 @@ const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
     if (result.error.status === 401) {
       handleLogout()
     } else {
-      showToast('An error occurred. Please try again later.', 'general_error');
+      // Add type guard to ensure that error has data property
+      const isErrorWithMessage = (
+        error: any
+      ): error is { data: { message?: string; errors?: string[] } } => {
+        return error && typeof error.data === 'object';
+      };
+      const generalError = 'An error occurred. Please try again later.';
+      let errorMessage = generalError;
+
+      if (isErrorWithMessage(result.error)) {
+        errorMessage =
+          result.error.data?.message ||
+          result.error.data?.errors?.[0] ||
+          generalError;
+      }
+
+      showToast(errorMessage, 'general_error');
     }
   }
 

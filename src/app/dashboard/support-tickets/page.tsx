@@ -1,8 +1,14 @@
+"use client";
 import Button from "@/components/Button";
 import { useState } from "react";
-import { dotColors, statusColors, TICKET, tickets } from "./data";
-import TicketsDetails from "./TicketDetail";
-import CreateTicketForm from "./CreateTicket";
+import {
+  dotColors,
+  statusColors,
+  TICKET,
+  tickets,
+} from "@/features/dashboard/data";
+import TicketsDetails from "@/features/dashboard/TicketDetail";
+import CreateTicketForm from "@/features/dashboard/CreateTicket";
 
 const SupportTickets = () => {
   const [visibleTickets, setVisibleTickets] = useState(4);

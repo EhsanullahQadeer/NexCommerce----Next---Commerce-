@@ -8,7 +8,7 @@ export interface OrderItem {
 export interface OrderPayload {
     user_id: number;
     coupon_code?: string;
-    total_amount: string | number;
+    // total_amount: string | number;
     shipping_address_id: number | string;
     billing_address_id: number | string;
     order_items: OrderItem[];
@@ -17,7 +17,7 @@ export interface OrderPayload {
     expire_month: string;
     expire_year: string;
     cvc: string;
-    province_name: string;
-    district_name: string;
-    village_name: string;
+    // province_name: string;
+    // district_name: string;
+    // village_name: string;
 }
