@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
@@ -6,8 +6,9 @@ import Input from "@/components/Input";
 import NotificationIcon from "@/components/Navbar/elements/NotificationIcon";
 import OrderExpanded from "@/features/dashboard/OrderExpanded";
 import { orderStatuses } from "@/features/dashboard/data";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import { useFetchOrdersMutation } from "@/store/api/ordersApi";
+import useCurrency from "@/hooks/useCurrency";
 
 export interface ORDERS {
   id: number;
@@ -27,7 +28,7 @@ export interface ORDERS {
   note: string;
   order_date: string;
   shipping_address_id: number;
-  billing_address_id: number
+  billing_address_id: number;
   items: Array<{
     id: number;
     order_id: number;
@@ -44,26 +45,26 @@ export interface ORDERS {
       small_image: string;
       medium_image: string;
       description: string;
-      price: number,
+      price: number;
       additional_description: string;
       additional_info: string;
       shipping_return: string;
-      meta_title: null,
-      meta_desc: null,
-      is_active: number,
-      is_deleted: number,
-      currency_id: number,
+      meta_title: null;
+      meta_desc: null;
+      is_active: number;
+      is_deleted: number;
+      currency_id: number;
       current_details: {
-        id: number,
+        id: number;
         currency_code: string;
         currency_name: string;
         exchange_rate_to_usd: string;
-      }
-    }
-  }>,
+      };
+    };
+  }>;
   order_shipping_address: {
-    id: number,
-    order_id: number,
+    id: number;
+    order_id: number;
     first_name: string;
     last_name: string;
     phone: string;
@@ -74,10 +75,10 @@ export interface ORDERS {
     state: string;
     postal_code: string;
     country: string;
-  },
+  };
   order_billing_address: {
-    id: number,
-    order_id: number,
+    id: number;
+    order_id: number;
     first_name: string;
     last_name: string;
     phone: string;
@@ -88,27 +89,27 @@ export interface ORDERS {
     state: string;
     postal_code: string;
     country: string;
-  },
+  };
   payment: {
-    id: number,
-    order_id: number,
-    total_amount: number,
+    id: number;
+    order_id: number;
+    total_amount: number;
     payment_method: string;
     payment_date: string;
     transaction_id: string;
     payment_status: string;
-  },
+  };
   user: {
     id: number;
     user_role_id: number;
     name: string;
     surname: string;
     email: string;
-    email_verified_at: null,
+    email_verified_at: null;
     verification_code: number;
     is_active: number;
     is_deleted: number;
-  },
+  };
   coupon: {
     id: number;
     coupon_code: string;
@@ -118,8 +119,8 @@ export interface ORDERS {
     expiry_date: string;
     minimum_order_amount: number;
     one_time_use: number;
-    currency_id: null
-  }
+    currency_id: null;
+  };
 }
 
 const OrderTab = () => {
@@ -129,28 +130,27 @@ const OrderTab = () => {
   const [orders, setOrders] = useState([]);
   const [ordersToShow, setOrdersToShow] = useState(orders);
   const [searchTerm, setSearchTerm] = useState("");
-  const data: any = useSelector(state => state)
+  const data: any = useSelector((state) => state);
   const [fetchOrders, isLoading] = useFetchOrdersMutation();
+  const { formatPrice } = useCurrency();
 
   useEffect(() => {
     const fetchOrdersData = async () => {
       try {
         let userId = data?.auth?.user?.id;
-        const response = await fetchOrders({userId})
-        console.log("Orders_Data", response?.data?.data?.orderList)
+        const response = await fetchOrders({ userId });
+        console.log("Orders_Data", response?.data?.data?.orderList);
         if (response?.data?.data) {
-          setOrdersToShow(response?.data?.data?.orderList)
-          setOrders(response?.data?.data?.orderList)
+          setOrdersToShow(response?.data?.data?.orderList);
+          setOrders(response?.data?.data?.orderList);
         }
       } catch (error) {
         console.error("fetch orders:", error);
       }
-    }
+    };
 
-    fetchOrdersData()
-  }, [])
-
- 
+    fetchOrdersData();
+  }, [data?.auth?.user]);
 
   const loadMoreOrders = () => {
     setVisibleOrders((prev) => prev + 5);
@@ -195,15 +195,16 @@ const OrderTab = () => {
               key={status.id}
               size="xs"
               variant={selected === status.status ? "primary" : "outlined"}
-              className={`rounded ${selected === status.status && "text-primary"
-                }`}
+              className={`rounded ${
+                selected === status.status && "text-primary"
+              }`}
               onClick={() => {
                 if (status.status == "All") setOrdersToShow(orders);
                 else
                   setOrdersToShow(
-                    orders.filter((o : ORDERS) => o.status === status.status)
+                    orders.filter((o: ORDERS) => o.status === status.status)
                   );
-                  setSelected(status.status);
+                setSelected(status.status);
               }}
             >
               {status.status}
@@ -213,55 +214,62 @@ const OrderTab = () => {
       </div>
 
       <div className="space-y-4">
-        { ordersToShow?.length > 0 ? ordersToShow.slice(0, visibleOrders).map((order: ORDERS) =>
-        (
-          <div key={order?.id} className="border rounded-lg p-4">
-            <div
-              className="flex flex-col md:flex-row items-center justify-between cursor-pointer"
-              onClick={() => toggleAccordion(order.id)}
-            >
-              <div className="flex items-center space-x-4 w-full md:w-[20%] justify-center md:justify-start">
-                <Image
-                  src={process.env.NEXT_PUBLIC_BASE_URL + order?.items[0]?.product?.small_image}
-                  alt={`${order.order_num}`}
-                  width={50}
-                  height={50}
-                  className="rounded"
-                />
-              </div>
-              <div className="w-full md:w-[30%] mt-2 md:mt-0 text-center md:text-left">
-                <p className="text-black-75 text-sm">
-                  <span className="font-light text-xs">Order no:</span>{" "}
-                  <span className="text-sm">ORD{order.order_num}</span>
-                </p>
-              </div>
-
-              <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
-                <p className="text-black-75 text-sm">
-                  <i className={`${order.statusIcon}`}></i> {order.status}
-                </p>
-              </div>
-
-              <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
-                <div className="text-center md:text-right">
-                  <p className="text-black-75 text-sm">{order.order_date}</p>
-
-                  <p className="text-green-600 text-sm">${order.total_amount}</p>
+        {ordersToShow?.length > 0 ? (
+          ordersToShow.slice(0, visibleOrders).map((order: ORDERS) => (
+            <div key={order?.id} className="border rounded-lg p-4">
+              <div
+                className="flex flex-col md:flex-row items-center justify-between cursor-pointer"
+                onClick={() => toggleAccordion(order.id)}
+              >
+                <div className="flex items-center space-x-4 w-full md:w-[20%] justify-center md:justify-start">
+                  <Image
+                    src={
+                      process.env.NEXT_PUBLIC_BASE_URL +
+                      order?.items[0]?.product?.small_image
+                    }
+                    alt={`${order.order_num}`}
+                    width={50}
+                    height={50}
+                    className="rounded"
+                  />
                 </div>
-                <i
-                  className={`las ${expandedOrder === order.id ? "la-angle-up" : "la-angle-down"
-                    } text-lg ml-2 font-bold mt-2`}
-                ></i>
-              </div>
-            </div>
+                <div className="w-full md:w-[30%] mt-2 md:mt-0 text-center md:text-left">
+                  <p className="text-black-75 text-sm">
+                    <span className="font-light text-xs">Order no:</span>{" "}
+                    <span className="text-sm">ORD{order.order_num}</span>
+                  </p>
+                </div>
 
-            {expandedOrder === order.id && <OrderExpanded order={order} />}
-          </div>
-        )
-        )
-      :
-      <div className="flex justify-center mt-4">No orders</div>
-      }
+                <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
+                  <p className="text-black-75 text-sm">
+                    <i className={`${order.statusIcon}`}></i> {order.status}
+                  </p>
+                </div>
+
+                <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
+                  <div className="text-center md:text-right">
+                    <p className="text-black-75 text-sm">{order.order_date}</p>
+
+                    <p className="text-green-600 text-sm">
+                      {formatPrice(order.total_amount, order.currency_id ?? 2)}
+                    </p>
+                  </div>
+                  <i
+                    className={`las ${
+                      expandedOrder === order.id
+                        ? "la-angle-up"
+                        : "la-angle-down"
+                    } text-lg ml-2 font-bold mt-2`}
+                  ></i>
+                </div>
+              </div>
+
+              {expandedOrder === order.id && <OrderExpanded order={order} />}
+            </div>
+          ))
+        ) : (
+          <div className="flex justify-center mt-4">No orders</div>
+        )}
       </div>
 
       {visibleOrders < ordersToShow.length && (

@@ -1,8 +1,11 @@
 import Button from "@/components/Button";
+import useCurrency from "@/hooks/useCurrency";
+import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
-interface ORDERS{
+interface ORDERS {
   id: number;
   imageUrl: string;
   order_num: string;
@@ -37,26 +40,26 @@ interface ORDERS{
       small_image: string;
       medium_image: string;
       description: string;
-      price: number,
+      price: number;
       additional_description: string;
       additional_info: string;
       shipping_return: string;
-      meta_title: null,
-      meta_desc: null,
-      is_active: number,
-      is_deleted: number,
-      currency_id: number,
+      meta_title: null;
+      meta_desc: null;
+      is_active: number;
+      is_deleted: number;
+      currency_id: number;
       current_details: {
-        id: number,
+        id: number;
         currency_code: string;
         currency_name: string;
         exchange_rate_to_usd: string;
-      }
-    }
-  }>,
+      };
+    };
+  }>;
   order_shipping_address: {
-    id: number,
-    order_id: number,
+    id: number;
+    order_id: number;
     first_name: string;
     last_name: string;
     phone: string;
@@ -67,10 +70,10 @@ interface ORDERS{
     state: string;
     postal_code: string;
     country: string;
-  },
+  };
   order_billing_address: {
-    id: number,
-    order_id: number,
+    id: number;
+    order_id: number;
     first_name: string;
     last_name: string;
     phone: string;
@@ -81,27 +84,27 @@ interface ORDERS{
     state: string;
     postal_code: string;
     country: string;
-  },
+  };
   payment: {
-    id: number,
-    order_id: number,
-    total_amount: number,
+    id: number;
+    order_id: number;
+    total_amount: number;
     payment_method: string;
     payment_date: string;
     transaction_id: string;
     payment_status: string;
-  },
+  };
   user: {
     id: number;
     user_role_id: number;
     name: string;
     surname: string;
     email: string;
-    email_verified_at: null,
+    email_verified_at: null;
     verification_code: number;
     is_active: number;
     is_deleted: number;
-  },
+  };
   coupon: {
     id: number;
     coupon_code: string;
@@ -111,8 +114,8 @@ interface ORDERS{
     expiry_date: string;
     minimum_order_amount: number;
     one_time_use: number;
-    currency_id: null
-  }
+    currency_id: null;
+  };
 }
 
 interface OrderExpandedProps {
@@ -121,6 +124,9 @@ interface OrderExpandedProps {
 
 const OrderExpanded = ({ order }: OrderExpandedProps) => {
   const [expanded, setExpanded] = useState<number | null>(null);
+  const { shipping_amount } = useSelector(selectSiteSetting);
+  const { formatPrice } = useCurrency();
+  const currency_id = order?.currency_id ?? 2;
 
   return (
     <div className="my-4">
@@ -143,7 +149,10 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
           <div className="md:w-[50%] flex p-4 px-2 flex-col md:flex-row justify-center md:justify-start items-center md:items-start">
             <div className="flex md:w-[20%] p-2">
               <Image
-                src={process.env.NEXT_PUBLIC_BASE_URL+order?.items[0]?.product?.medium_image}
+                src={
+                  process.env.NEXT_PUBLIC_BASE_URL +
+                  order?.items[0]?.product?.medium_image
+                }
                 alt="product"
                 width={70}
                 height={70}
@@ -154,7 +163,12 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
               <p className="text-black-500 font-normal text-sm leading-[30.1px]">
                 {order?.items[0]?.product?.name}
               </p>
-              <p className="text-green-600 font-bold text-md">${order?.items[0]?.product?.price}</p>
+              <p className="text-green-600 font-bold text-md">
+                {formatPrice(
+                  order?.items[0]?.product?.price,
+                  order?.items[0]?.product?.currency_id ?? 2
+                )}
+              </p>
               <div className="flex mt-2 gap-2 flex-col md:flex-row">
                 <Button
                   size="xs"
@@ -184,7 +198,8 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                   {order?.status}
                 </p>
                 <p className="text-green-600 font-light text-xs">
-                  Date: <span className="font-semibold">{order?.order_date}</span>
+                  Date:{" "}
+                  <span className="font-semibold">{order?.order_date}</span>
                 </p>
                 <p className="text-green-600 font-light text-xs">
                   Received by: <span className="font-semibold">John Doe</span>
@@ -217,16 +232,23 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
               Shipping Address
             </p>
             <p className="text-black-75 text-xs flex items-center font-bold">
-             {order?.order_shipping_address?.first_name} {order?.order_shipping_address?.last_name}
+              {order?.order_shipping_address?.first_name}{" "}
+              {order?.order_shipping_address?.last_name}
             </p>
 
             <p className="text-black-500 text-xs flex items-center">
-             {order?.order_shipping_address?.postal_code}, {order?.order_shipping_address?.address_line1}, {order?.order_shipping_address?.address_line2}, {order?.order_shipping_address?.city}, {order?.order_shipping_address?.state}
+              {order?.order_shipping_address?.postal_code},{" "}
+              {order?.order_shipping_address?.address_line1},{" "}
+              {order?.order_shipping_address?.address_line2},{" "}
+              {order?.order_shipping_address?.city},{" "}
+              {order?.order_shipping_address?.state}
             </p>
             {/* <p className="text-black-500 text-xs flex items-center">
               Springfield
             </p> */}
-            <p className="text-black-500 text-xs flex items-center">{order?.order_shipping_address?.country}</p>
+            <p className="text-black-500 text-xs flex items-center">
+              {order?.order_shipping_address?.country}
+            </p>
           </div>
 
           <div className="border border-black-600 rounded-lg p-4 mt-4">
@@ -249,17 +271,22 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
             {expanded == order.id && (
               <div>
                 <p className="text-black-75 text-xs flex items-center font-bold">
-                  {order?.order_billing_address?.first_name} {order?.order_billing_address?.last_name}
+                  {order?.order_billing_address?.first_name}{" "}
+                  {order?.order_billing_address?.last_name}
                 </p>
 
                 <p className="text-black-500 text-xs flex items-center">
-                {order?.order_billing_address?.postal_code}, {order?.order_billing_address?.address_line1}, {order?.order_billing_address?.address_line2}, {order?.order_billing_address?.city}, {order?.order_billing_address?.state}
+                  {order?.order_billing_address?.postal_code},{" "}
+                  {order?.order_billing_address?.address_line1},{" "}
+                  {order?.order_billing_address?.address_line2},{" "}
+                  {order?.order_billing_address?.city},{" "}
+                  {order?.order_billing_address?.state}
                 </p>
                 {/* <p className="text-black-500 text-xs flex items-center">
                   Springfield
                 </p> */}
                 <p className="text-black-500 text-xs flex items-center">
-                 {order?.order_billing_address?.country}
+                  {order?.order_billing_address?.country}
                 </p>
                 <p className="text-black-75 text-xs flex items-center font-bold">
                   {/* **** **** **** 1234 {order?.payment?.transaction_id} */}
@@ -275,7 +302,10 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
             <div className="flex gap-4 mb-4">
               <div className="w-[30%]">
                 <Image
-                  src={process.env.NEXT_PUBLIC_BASE_URL + order?.items[0]?.product?.small_image}
+                  src={
+                    process.env.NEXT_PUBLIC_BASE_URL +
+                    order?.items[0]?.product?.small_image
+                  }
                   alt="Product"
                   width={70}
                   height={50}
@@ -284,12 +314,14 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
               </div>
               <div>
                 <p className="font-semibold text-green-600 text-sm">
-                  ${order.total_amount}
+                  {formatPrice(order.total_amount, order.currency_id ?? 2)}
                 </p>
                 <p className="text-black-75 text-xs flex items-center font-bold">
                   {/* **** **** **** 1234 */} {order?.payment?.transaction_id}
                 </p>
-                <p className="text-black-500 text-xs flex items-center">{order?.payment?.payment_method}</p>
+                <p className="text-black-500 text-xs flex items-center">
+                  {order?.payment?.payment_method}
+                </p>
               </div>
             </div>
             <div className="border-t mt-4">
@@ -298,7 +330,16 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                   Cargo
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  ${order?.shipping_amount}
+                  {Number(order?.shipping_amount) === 0 ? (
+                    <>
+                      <span>Free</span>
+                      <span className="line-through text-red-500 ml-2">
+                        {formatPrice(Number(shipping_amount))}
+                      </span>
+                    </>
+                  ) : (
+                    formatPrice(Number(order?.shipping_amount), currency_id)
+                  )}
                 </p>
               </div>
               <div className="flex justify-between my-2">
@@ -306,31 +347,39 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                   Products
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  ${order.total_amount}
+                  {formatPrice(order.total_amount, currency_id)}
                 </p>
               </div>
-              <div className="flex justify-between my-2">
-                <p className="text-black-500 text-sm flex items-center">
-                  Vat
-                </p>
-                <p className="text-black-75 text-sm flex items-center font-semibold">
-                 %{order?.vat_amount}
-                </p>
-              </div>
-              <div className="flex justify-between my-2">
-                <p className="text-black-500 text-sm flex items-center">
-                  Discount
-                </p>
-                <p className="text-black-75 text-sm flex items-center font-semibold">
-                  ${order.discount_amount}
-                </p>
-              </div>
+              {Number(order?.vat_amount) ? (
+                <div className="flex justify-between my-2">
+                  <p className="text-black-500 text-sm flex items-center">
+                    Vat
+                  </p>
+                  <p className="text-black-75 text-sm flex items-center font-semibold">
+                    {formatPrice(Number(order?.vat_amount), currency_id)}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
+              {Number(order.discount_amount) ? (
+                <div className="flex justify-between my-2">
+                  <p className="text-black-500 text-sm flex items-center">
+                    Discount
+                  </p>
+                  <p className="text-black-75 text-sm flex items-center font-semibold">
+                    {formatPrice(Number(order.discount_amount), currency_id)}
+                  </p>
+                </div>
+              ) : (
+                ""
+              )}
               <div className="flex justify-between my-2 border-t pt-2">
                 <p className="text-black-500 text-sm flex items-center">
                   Grand Total
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  ${order?.total_amount}
+                  {formatPrice(order?.total_amount, currency_id)}
                 </p>
               </div>
             </div>
