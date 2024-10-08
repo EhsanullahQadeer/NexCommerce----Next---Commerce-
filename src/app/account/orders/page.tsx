@@ -11,8 +11,10 @@ import { useFetchOrdersMutation } from "@/store/api/ordersApi";
 import useCurrency from "@/hooks/useCurrency";
 import { baseUrl } from "@/config/config";
 import { Tooltip } from "@mui/material";
+import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import moment from "moment";
-
+import "moment/locale/tr";
+import "moment/locale/en-gb";
 export interface ORDERS {
   id: number;
   imageUrl: string;
@@ -134,7 +136,8 @@ const OrderTab = () => {
   const data: any = useSelector((state) => state);
   const [fetchOrders, isLoading] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
-  visibleOrders;
+  const { selected_language_id } = useSelector(selectSiteSetting);
+
   useEffect(() => {
     const fetchOrdersData = async () => {
       try {
@@ -160,6 +163,8 @@ const OrderTab = () => {
   const toggleAccordion = (orderId: any) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
+  const lang = selected_language_id == 1 ? "en" : "tr";
+  moment.locale(lang);
 
   return (
     <div className="mt-1.5 flex-1 px-4 md:px-8">
@@ -220,9 +225,10 @@ const OrderTab = () => {
             const imagesArray = order.items.map(
               (item) => baseUrl + item.product.small_image
             );
-            const formattedDate = moment(order.order_date).format(
-              "MMMM D, YYYY h:mm A"
-            );
+
+            const formattedDate = moment(order.order_date).format("LL dddd");
+            const formattedTime = moment(order.order_date).format("HH:mm:ss");
+            const date = `${formattedDate}, ${formattedTime}`;
             return (
               <div key={order?.id} className="border rounded-lg p-4">
                 <div
@@ -285,7 +291,7 @@ const OrderTab = () => {
                   </div>
 
                   <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
-                    <p className="text-black-75 text-sm">
+                    <p className="text-black-75 text-sm capitalize">
                       <i className={`${order.statusIcon}`}></i> {order.status}
                     </p>
                   </div>
@@ -293,7 +299,7 @@ const OrderTab = () => {
                   <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
                     <div className="text-center md:text-right">
                       <p className="text-black-75 text-sm whitespace-nowrap">
-                        {formattedDate}
+                        {date}
                       </p>
 
                       <p className="text-green-600 text-sm">
@@ -313,7 +319,7 @@ const OrderTab = () => {
                   </div>
                 </div>
 
-                {expandedOrder === order.id && <OrderExpanded order={order} />}
+                {expandedOrder === order.id && <OrderExpanded date={date} order={order} />}
               </div>
             );
           })

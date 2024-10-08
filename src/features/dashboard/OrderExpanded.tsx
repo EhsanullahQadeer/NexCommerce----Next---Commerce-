@@ -4,25 +4,27 @@ import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
 import routes from "@/routes/routes";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
-import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import moment from "moment";
-
 interface OrderExpandedProps {
   order: ORDERS;
+  date: string;
 }
 
-const OrderExpanded = ({ order }: OrderExpandedProps) => {
-  const { items } = order;
+const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
+  const { items, note } = order;
   const [expanded, setExpanded] = useState<number | null>(null);
-  const { shipping_amount } = useSelector(selectSiteSetting);
+  const { selected_language_id } = useSelector(selectSiteSetting);
   const { formatPrice } = useCurrency();
   const currency_id = order?.currency_id ?? 2;
-  const formattedDate = moment(order.order_date).format(
-    "MMMM D, YYYY h:mm A"
+
+
+
+  const productsNameStr = useMemo(
+    () => items.map((item) => item.product.name).join(", "),
+    [items]
   );
   return (
     <div className="my-4">
@@ -30,7 +32,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
         <div className="border-b px-4 py-3 flex justify-between flex-col md:flex-row">
           <div className="flex gap-2">
             <h6 className="text-black-500 text-sm font-bold m-0 p-0 flex items-center">
-              ABC Electronics
+              {productsNameStr}
             </h6>
             <Button
               size="xs"
@@ -101,15 +103,17 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
               </div>
 
               <div>
-                <p className="text-black-75 font-bold text-sm mb-1">
+                <p className="text-black-75 font-bold text-sm mb-1 capitalize">
                   {order?.status}
                 </p>
                 <p className="text-green-600 font-light text-xs">
                   Date:{" "}
-                  <span className="font-semibold">{formattedDate}</span>
+                  <span className="font-semibold">
+                    {date}
+                  </span>
                 </p>
                 <p className="text-green-600 font-light text-xs">
-                  Received by: <span className="font-semibold">John Doe</span>
+                  <span className="font-semibold">{note}</span>
                 </p>
               </div>
             </div>
@@ -238,9 +242,6 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                   {Number(order?.shipping_amount) === 0 ? (
                     <>
                       <span>Free</span>
-                      <span className="line-through text-red-500 ml-2">
-                        {formatPrice(Number(shipping_amount))}
-                      </span>
                     </>
                   ) : (
                     formatPrice(Number(order?.shipping_amount), currency_id)

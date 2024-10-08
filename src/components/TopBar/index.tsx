@@ -21,6 +21,7 @@ import {
 import { selectLanguage } from "@/store/slices/languagelist/languageSlice";
 import { useTranslations } from "next-intl";
 import { clearCoupon } from "@/store/slices/coupencode/coupenCodeSlice";
+import routes from "@/routes/routes";
 
 const TopBar: React.FC = () => {
   const t = useTranslations();
@@ -159,10 +160,10 @@ const TopBar: React.FC = () => {
                     {dropdownOpen && (
                       <div className="absolute right-0 mt-2 w-48 bg-white shadow-md border rounded-lg">
                         <Link
-                          href="/dashboard"
+                          href={routes.account}
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                         >
-                          {t("Dashboard")}
+                          Account
                         </Link>
                         <Link
                           href="/settings"

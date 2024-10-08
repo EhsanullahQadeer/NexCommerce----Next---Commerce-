@@ -90,9 +90,6 @@ const CheckoutSummary = () => {
             <>
               <strong>
                 <span>Free</span>
-                <span className="line-through text-red-500 ml-2">
-                  {formatPrice(Number(shipping_amount))}
-                </span>
               </strong>
             </>
           )}
