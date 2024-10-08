@@ -7,7 +7,8 @@ import Link from "next/link";
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import ProgressIcon from "@/components/Icons/ProgressIcon";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import routes from "@/routes/routes";
 interface LoginFormProps {
   setIsOpen?: (isOpen: boolean) => void;
   onClose?: () => void;
@@ -36,10 +37,10 @@ const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
         password,
       });
       localStorage.setItem("access_token", response.data.data.token);
-      Cookies.set("access_token", response.data.data.token); 
-      setIsOpen && setIsOpen(false)
+      Cookies.set("access_token", response.data.data.token);
+      setIsOpen && setIsOpen(false);
 
-      router.push('/dashboard') 
+      router.push(routes.home);
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -74,9 +75,7 @@ const LoginForm: FC<LoginFormProps> = ({ setIsOpen }) => {
 
         <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between mb-[23px] pb-[30px] border-b border-black-300 gap-y-[6px] sm:gap-y-0">
           <div className="w-full flex flex-col-reverse sm:flex-row">
-            <Button
-              className="!max-w-full !w-full sm:!max-w-[115px] sm:!w-full !h-[40px] !px-[15px] sm:mr-4 mt-2.5 sm:mt-0 justify-center uppercase"
-            >
+            <Button className="!max-w-full !w-full sm:!max-w-[115px] sm:!w-full !h-[40px] !px-[15px] sm:mr-4 mt-2.5 sm:mt-0 justify-center uppercase">
               {isLoading ? (
                 <ProgressIcon />
               ) : (

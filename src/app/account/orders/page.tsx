@@ -143,7 +143,6 @@ const OrderTab = () => {
       try {
         let userId = data?.auth?.user?.id;
         const response = await fetchOrders({ userId });
-        console.log("Orders_Data", response?.data?.data?.orderList[0]);
         if (response?.data?.data) {
           setOrdersToShow(response?.data?.data?.orderList);
           setOrders(response?.data?.data?.orderList);
