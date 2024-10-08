@@ -131,6 +131,7 @@ const OrderTab = () => {
   const [visibleOrders, setVisibleOrders] = useState(5);
   const [selected, setSelected] = useState("All");
   const [orders, setOrders] = useState([]);
+  console.log('orders: ', orders);
   const [ordersToShow, setOrdersToShow] = useState(orders);
   const [searchTerm, setSearchTerm] = useState("");
   const data: any = useSelector((state) => state);

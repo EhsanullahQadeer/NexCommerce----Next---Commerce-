@@ -1,27 +1,33 @@
-import { FC, ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import { FC, ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-interface BreadcrumbProps {
-  links: { url: string; name: string }[];
-  border?: 'top' | 'bottom' | 'both';
+export interface IbreadcrumbLink {
+  url: string;
+  name: string;
+  disabled?: boolean;
+}
+export interface BreadcrumbProps {
+  links: IbreadcrumbLink[];
+  border?: "top" | "bottom" | "both";
   children?: ReactNode;
 }
 
 const borderType = {
-  top: 'border-t',
-  bottom: 'border-b',
-  both: 'border-t border-b',
+  top: "border-t",
+  bottom: "border-b",
+  both: "border-t border-b",
 };
 
 const Breadcrumb: FC<BreadcrumbProps> = ({
   links,
-  border = 'bottom',
+  border = "bottom",
   children,
 }) => {
   return (
     <nav
       className={cn(
-        'flex py-[14px] border-[rgba(235,235,235,.55)]',
+        "flex py-[14px] border-[rgba(235,235,235,.55)]",
         borderType[border]
       )}
     >
@@ -36,12 +42,15 @@ const Breadcrumb: FC<BreadcrumbProps> = ({
                 </span>
               ) : (
                 <>
-                  <a
+                  <Link
                     href={link.url}
-                    className="capitalize inline-flex items-center text-sm font-extralight text-black-500 hover:text-primary"
+                    className={cn(
+                      link.disabled ? "pointer-events-none" : "",
+                      "capitalize inline-flex items-center text-sm font-extralight text-black-500 hover:text-primary"
+                    )}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                   <i className="las la-angle-right text-[12px] mx-2.5 text-black-500"></i>
                 </>
               )}

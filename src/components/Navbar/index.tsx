@@ -30,9 +30,11 @@ const Navbar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
 
-  const isActiveLink = (path: string) => {
+  const isActiveLink = (path: string, childRoutes?: boolean) => {
     const pathnameWithoutQuery = pathname.split("?")[0];
-    return pathnameWithoutQuery === path;
+    return childRoutes
+      ? pathnameWithoutQuery.includes(path)
+      : pathnameWithoutQuery === path;
   };
 
   const handleScroll = () => {
@@ -93,7 +95,7 @@ const Navbar = () => {
                 <NavLink
                   key={item.url + index}
                   {...item}
-                  isActive={isActiveLink(item.url)}
+                  isActive={isActiveLink(item.url, item.childRoutes)}
                 />
               );
             })}

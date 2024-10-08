@@ -1,27 +1,13 @@
 "use client";
 import React, { useMemo } from "react";
-import Breadcrumb from "@/components/Breadcrumb";
+import Breadcrumb, { IbreadcrumbLink } from "@/components/Breadcrumb";
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import useLogout from "@/hooks/useLogout";
-
-const links = [
-  {
-    url: "/",
-    name: "Home",
-  },
-  {
-    url: "#",
-    name: "Shop",
-  },
-  {
-    url: "/account",
-    name: "Overview",
-  },
-];
+import routes from "@/routes/routes";
 
 const Layout = ({
   children,
@@ -48,17 +34,33 @@ const Layout = ({
       {
         id: 1,
         label: "Overview",
-        url: "/account",
+        url: routes.account,
       },
-      { id: 2, label: "Orders", url: "/account/orders" },
-      { id: 3, label: "Notifications", url: "/account/notifications" },
-      { id: 4, label: "Addresses", url: "/account/addresses" },
-      { id: 5, label: "Account Details", url: "/account/account-details" },
-      { id: 8, label: "Support Tickets", url: "/account/support-tickets" },
+      { id: 2, label: "Orders", url: routes.orders },
+      { id: 3, label: "Notifications", url: routes.notifications },
+      { id: 4, label: "Addresses", url: routes.addresses },
+      { id: 5, label: "Account Details", url: routes.accountDetails },
+      { id: 8, label: "Support Tickets", url: routes.supportTickets },
       { id: 7, label: "Signout", url: "/auth", onclick: handleLogoutClick },
     ],
     []
   );
+
+  // Generate the breadcrumb trail
+  const links: IbreadcrumbLink[] = useMemo(() => {
+    const matchingTab = tabs.find((tab) => pathname === tab.url);
+    return [
+      { url: "/", name: "Home" },
+      {
+        url: routes.account,
+        name: "Account",
+        disabled: pathname === routes.account,
+      },
+      ...(matchingTab
+        ? [{ url: matchingTab.url, name: matchingTab.label }]
+        : []), // Dynamic tab link
+    ].filter(Boolean);
+  }, [pathname, tabs]);
 
   return (
     <div>

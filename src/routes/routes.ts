@@ -5,6 +5,7 @@ const routes = {
     cart: "/cart",
     checkout: "/checkout",
     whishlist: "/whishlist",
+    categories: "/categories",
     // 
     products: "/products",
     productDetails: (slug: string) => `/products/${slug}`,
@@ -12,7 +13,9 @@ const routes = {
     account: "/account",
     orders: "/account/orders",
     addresses: "/account/addresses",
-    accountDetails: "/account/account-details"
+    accountDetails: "/account/account-details",
+    supportTickets: "/account/support-tickets",
+    notifications: "/account/notifications"
 
 };
 // these are the routes user can only access when he is logged in

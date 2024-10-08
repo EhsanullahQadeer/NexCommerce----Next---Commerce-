@@ -139,9 +139,9 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
         billing_address_id,
         order_items: orderItems,
         user_id: user.id,
-        province_name,
-        district_name,
-        village_name,
+        // province_name,
+        // district_name,
+        // village_name,
         ...(coupon_code ? { coupon_code } : {}),
       };
 
