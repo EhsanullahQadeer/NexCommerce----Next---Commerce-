@@ -10,13 +10,13 @@ import { useSelector } from "react-redux";
 interface Iprops {
   discountAmount: number;
   shippingFee: number;
-  vatFee:number
+  vatFee: number;
 }
 const Shipping = (props: Iprops) => {
-  const { discountAmount, shippingFee ,vatFee} = props;
-  const {formatPrice}=  useCurrency();
+  const { discountAmount, shippingFee, vatFee } = props;
+  const { formatPrice } = useCurrency();
   const { totalAmount } = useSelector(selectCart);
-  const { free_shipping_threshold } =
+  const { free_shipping_threshold, shipping_amount } =
     useSelector(selectSiteSetting);
   // const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
@@ -34,13 +34,18 @@ const Shipping = (props: Iprops) => {
           checked={selectedItem === 'shipping'}
           onChange={(e: any) => setSelectedItem(e.target.value)}
         /> */}
+        <span className="text-black-75 font-light text-sm">Shipping</span>
         <span className="text-black-75 font-light text-sm">
-          {totalAmount >= parseInt(free_shipping_threshold)
-            ? "Free Shipping"
-            : "Shipping Charge"}
-        </span>
-        <span className="text-black-75 font-light text-sm">
-          {formatPrice(shippingFee)}
+          {totalAmount >= parseInt(free_shipping_threshold) ? (
+            <strong>
+              <span>Free</span>
+              <span className="line-through text-red-500 ml-2">
+                {formatPrice(Number(shipping_amount))}
+              </span>
+            </strong>
+          ) : (
+            formatPrice(shippingFee)
+          )}
         </span>
       </div>
 

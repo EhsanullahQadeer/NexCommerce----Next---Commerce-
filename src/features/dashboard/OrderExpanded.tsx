@@ -1,133 +1,29 @@
+import { ORDERS } from "@/app/account/orders/page";
 import Button from "@/components/Button";
+import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
+import routes from "@/routes/routes";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
+import { Tooltip } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-
-interface ORDERS {
-  id: number;
-  imageUrl: string;
-  order_num: string;
-  statusIcon: string;
-  details: string;
-  user_id: number;
-  coupon_id: number;
-  currency_id: number;
-  total_amount: number;
-  vat_amount: string;
-  discount_amount: string;
-  shipping_amount: string;
-  paid_amount: string;
-  status: string;
-  note: string;
-  order_date: string;
-  shipping_address_id: number;
-  billing_address_id: number;
-  items: Array<{
-    id: number;
-    order_id: number;
-    product_id: number;
-    quantity: number;
-    price_at_order: number;
-    sub_total: number;
-    variant_id: number;
-    product: {
-      id: number;
-      name: string;
-      slug: string;
-      image: string;
-      small_image: string;
-      medium_image: string;
-      description: string;
-      price: number;
-      additional_description: string;
-      additional_info: string;
-      shipping_return: string;
-      meta_title: null;
-      meta_desc: null;
-      is_active: number;
-      is_deleted: number;
-      currency_id: number;
-      current_details: {
-        id: number;
-        currency_code: string;
-        currency_name: string;
-        exchange_rate_to_usd: string;
-      };
-    };
-  }>;
-  order_shipping_address: {
-    id: number;
-    order_id: number;
-    first_name: string;
-    last_name: string;
-    phone: string;
-    email: string;
-    address_line1: string;
-    address_line2: string;
-    city: string;
-    state: string;
-    postal_code: string;
-    country: string;
-  };
-  order_billing_address: {
-    id: number;
-    order_id: number;
-    first_name: string;
-    last_name: string;
-    phone: string;
-    email: string;
-    address_line1: string;
-    address_line2: string;
-    city: string;
-    state: string;
-    postal_code: string;
-    country: string;
-  };
-  payment: {
-    id: number;
-    order_id: number;
-    total_amount: number;
-    payment_method: string;
-    payment_date: string;
-    transaction_id: string;
-    payment_status: string;
-  };
-  user: {
-    id: number;
-    user_role_id: number;
-    name: string;
-    surname: string;
-    email: string;
-    email_verified_at: null;
-    verification_code: number;
-    is_active: number;
-    is_deleted: number;
-  };
-  coupon: {
-    id: number;
-    coupon_code: string;
-    discount_type: string;
-    discount_percentage: number;
-    discount_amount: number;
-    expiry_date: string;
-    minimum_order_amount: number;
-    one_time_use: number;
-    currency_id: null;
-  };
-}
+import moment from "moment";
 
 interface OrderExpandedProps {
   order: ORDERS;
 }
 
 const OrderExpanded = ({ order }: OrderExpandedProps) => {
+  const { items } = order;
   const [expanded, setExpanded] = useState<number | null>(null);
   const { shipping_amount } = useSelector(selectSiteSetting);
   const { formatPrice } = useCurrency();
   const currency_id = order?.currency_id ?? 2;
-
+  const formattedDate = moment(order.order_date).format(
+    "MMMM D, YYYY h:mm A"
+  );
   return (
     <div className="my-4">
       <div className="border border-black-600 rounded-lg">
@@ -146,47 +42,58 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
           </div>
         </div>
         <div className="flex justify-between w-full flex-col md:flex-row">
-          <div className="md:w-[50%] flex p-4 px-2 flex-col md:flex-row justify-center md:justify-start items-center md:items-start">
-            <div className="flex md:w-[20%] p-2">
-              <Image
-                src={
-                  process.env.NEXT_PUBLIC_BASE_URL +
-                  order?.items[0]?.product?.medium_image
-                }
-                alt="product"
-                width={70}
-                height={70}
-                className="rounded "
-              />
-            </div>
-            <div className="ml-4 flex-1">
-              <p className="text-black-500 font-normal text-sm leading-[30.1px]">
-                {order?.items[0]?.product?.name}
-              </p>
-              <p className="text-green-600 font-bold text-md">
-                {formatPrice(
-                  order?.items[0]?.product?.price,
-                  order?.items[0]?.product?.currency_id ?? 2
-                )}
-              </p>
-              <div className="flex mt-2 gap-2 flex-col md:flex-row">
-                <Button
-                  size="xs"
-                  variant="primary"
-                  className="!rounded-lg !p-0 !px-3 !py-1 !font-semibold hover:!bg-black-300 !bg-black-300 !border-black-300 !text-black-500 !text-xs"
+          <div className="md:w-[50%]">
+            {items.map((item) => {
+              const imgSrc = baseUrl + item.product.medium_image;
+              const { product, quantity } = item;
+              const { name, price, currency_id = 2, slug } = product;
+              return (
+                <div
+                  key={"order-" + item.order_id}
+                  className="flex p-4 px-2 flex-col md:flex-row justify-center md:justify-start items-center md:items-start"
                 >
-                  Buy again
-                </Button>
-                <Button
-                  size="xs"
-                  variant="primary"
-                  className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
-                >
-                  Rate the product
-                </Button>
-              </div>
-            </div>
+                  <div className="flex md:w-[20%] p-2">
+                    <Image
+                      src={imgSrc}
+                      alt="product"
+                      width={70}
+                      height={70}
+                      className="rounded "
+                    />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <Link href={routes.productDetails(slug)}>
+                      <p className="text-black-500 hover:text-primary font-normal text-sm leading-[30.1px]">
+                        {name}
+                      </p>
+                    </Link>
+                    <p className="text-green-600 font-bold text-md">
+                      {quantity} × {formatPrice(price, currency_id)}
+                    </p>
+                    <div className="flex mt-2 gap-2 flex-col md:flex-row">
+                      <Link href={routes.productDetails(slug)}>
+                        <Button
+                          size="xs"
+                          variant="primary"
+                          className="!rounded-lg !p-0 !px-3 !py-1 !font-semibold hover:!bg-black-400 !bg-black-300 !border-black-300 !text-black-500 !text-xs"
+                        >
+                          Buy again
+                        </Button>
+                      </Link>
+                      <Button
+                        size="xs"
+                        variant="primary"
+                        className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
+                      >
+                        Rate the product
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
           <div className="lg:mt-0 md:w-[50%] bg-green-50 overflow-hidden">
             <div className="border-b p-4 flex items-center gap-4">
               <div className="bg-green-500 w-10 h-10 rounded-full flex justify-center items-center">
@@ -199,7 +106,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
                 </p>
                 <p className="text-green-600 font-light text-xs">
                   Date:{" "}
-                  <span className="font-semibold">{order?.order_date}</span>
+                  <span className="font-semibold">{formattedDate}</span>
                 </p>
                 <p className="text-green-600 font-light text-xs">
                   Received by: <span className="font-semibold">John Doe</span>
@@ -238,8 +145,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
 
             <p className="text-black-500 text-xs flex items-center">
               {order?.order_shipping_address?.postal_code},{" "}
-              {order?.order_shipping_address?.address_line1},{" "}
-              {order?.order_shipping_address?.address_line2},{" "}
+              {order?.order_shipping_address?.address},{" "}
               {order?.order_shipping_address?.city},{" "}
               {order?.order_shipping_address?.state}
             </p>
@@ -277,8 +183,7 @@ const OrderExpanded = ({ order }: OrderExpandedProps) => {
 
                 <p className="text-black-500 text-xs flex items-center">
                   {order?.order_billing_address?.postal_code},{" "}
-                  {order?.order_billing_address?.address_line1},{" "}
-                  {order?.order_billing_address?.address_line2},{" "}
+                  {order?.order_billing_address?.address},{" "}
                   {order?.order_billing_address?.city},{" "}
                   {order?.order_billing_address?.state}
                 </p>

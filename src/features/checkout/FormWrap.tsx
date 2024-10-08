@@ -154,7 +154,7 @@ const FormWrap = ({ children }: { children: ReactNode }) => {
           dispatch(clearCoupon());
         }
         dispatch(clearCart());
-        router.push("/dashboard/orders");
+        router.push("/account/orders");
       } catch (error) {}
     }
   };

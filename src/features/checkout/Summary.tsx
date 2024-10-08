@@ -82,8 +82,20 @@ const CheckoutSummary = () => {
 
       <div className="flex items-center justify-between min-h-[70px] text-sm text-black-75 font-extralight border-b border-black-300">
         <h4>Shipping</h4>
+
         <span>
-          {shippingFee > 0 ? formatPrice(shippingFee) : "Free shipping"}
+          {shippingFee > 0 ? (
+            formatPrice(shippingFee)
+          ) : (
+            <>
+              <strong>
+                <span>Free</span>
+                <span className="line-through text-red-500 ml-2">
+                  {formatPrice(Number(shipping_amount))}
+                </span>
+              </strong>
+            </>
+          )}
         </span>
       </div>
       {vatFee ? (

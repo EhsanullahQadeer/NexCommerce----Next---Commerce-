@@ -18,8 +18,8 @@ const links = [
     name: "Shop",
   },
   {
-    url: "/dashboard",
-    name: "Dashboard",
+    url: "/account",
+    name: "Overview",
   },
 ];
 
@@ -47,14 +47,14 @@ const Layout = ({
     () => [
       {
         id: 1,
-        label: "Dashboard",
-        url: "/dashboard",
+        label: "Overview",
+        url: "/account",
       },
-      { id: 2, label: "Orders", url: "/dashboard/orders" },
-      { id: 3, label: "Notifications", url: "/dashboard/notifications" },
-      { id: 4, label: "Addresses", url: "/dashboard/addresses" },
-      { id: 5, label: "Account Details", url: "/dashboard/account-details" },
-      { id: 8, label: "Support Tickets", url: "/dashboard/support-tickets" },
+      { id: 2, label: "Orders", url: "/account/orders" },
+      { id: 3, label: "Notifications", url: "/account/notifications" },
+      { id: 4, label: "Addresses", url: "/account/addresses" },
+      { id: 5, label: "Account Details", url: "/account/account-details" },
+      { id: 8, label: "Support Tickets", url: "/account/support-tickets" },
       { id: 7, label: "Signout", url: "/auth", onclick: handleLogoutClick },
     ],
     []
@@ -72,16 +72,16 @@ const Layout = ({
               const isActive = isActiveLink(url);
 
               return (
-                <li
+                <Link
+                  {...(tab?.onclick && { onClick: tab.onclick })}
+                  href={url}
                   key={tab.id}
-                  className={cn(
-                    "relative text-sm font-extralight leading-[21px] py-[14px] hover:text-primary cursor-pointer border-b border-black-300",
-                    isActive && "pl-5 text-primary"
-                  )}
                 >
-                  <Link
-                    {...(tab?.onclick && { onClick: tab.onclick })}
-                    href={url}
+                  <li
+                    className={cn(
+                      "relative text-sm font-extralight leading-[21px] py-[14px] hover:text-primary cursor-pointer border-b border-black-300",
+                      isActive && "pl-5 text-primary"
+                    )}
                   >
                     <span>
                       <i
@@ -92,8 +92,8 @@ const Layout = ({
                       ></i>
                       {tab.label}
                     </span>
-                  </Link>
-                </li>
+                  </li>
+                </Link>
               );
             })}
           </ul>
