@@ -28,7 +28,6 @@ const baseQuery = fetchBaseQuery({
 });
 const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
   // Lazy initialize store when needed
-  debugger
   if (!lazyStore) {
     lazyStore = (await import('@/store')).default;
   }

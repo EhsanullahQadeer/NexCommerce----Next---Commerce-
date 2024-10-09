@@ -22,3 +22,10 @@ export interface OrderPayload {
     // village_name: string;
 }
 
+export interface IOrderListParams {
+    user_id: string;
+    page?: number;
+    limit?: number;
+    filter?: string;
+}
+

@@ -1,5 +1,5 @@
 'use client'
-import { OrderPayload } from "@/types/order";
+import { IOrderListParams, OrderPayload } from "@/types/order";
 import { apiSlice } from "../slices/api/apiSlice";
 import { toast } from "react-toastify";
 import { headers } from "next/headers";
@@ -10,9 +10,10 @@ export const ordersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // login endpoint here
     fetchOrders: builder.mutation({
-      query: ({ userId }) => ({
-        url: `orders-list?user_id=${userId}`,
+      query: (params:IOrderListParams) => ({
+        url: `orders-list`,
         method: 'GET',
+        params
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {

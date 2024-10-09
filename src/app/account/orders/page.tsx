@@ -15,6 +15,9 @@ import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import moment from "moment";
 import "moment/locale/tr";
 import "moment/locale/en-gb";
+import { IOrderListParams } from "@/types/order";
+import Skeleton from "react-loading-skeleton";
+import { arrayNumberGenerator } from "@/lib/utils";
 export interface ORDERS {
   id: number;
   imageUrl: string;
@@ -32,7 +35,7 @@ export interface ORDERS {
   status: string;
   note: string;
   order_date: string;
-  invoice_url:string;
+  invoice_url: string;
   shipping_address_id: number;
   billing_address_id: number;
   items: Array<{
@@ -127,38 +130,47 @@ export interface ORDERS {
   };
 }
 const maxImagesToShow = 1;
+const limit = 8;
 const OrderTab = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
-  const [visibleOrders, setVisibleOrders] = useState(5);
   const [selected, setSelected] = useState("All");
-  const [orders, setOrders] = useState([]);
-  console.log('orders: ', orders);
-  const [ordersToShow, setOrdersToShow] = useState(orders);
+  const [page, setPage] = useState(1);
+  const [ordersCount, setOrdersCount] = useState<number>(limit);
+  const [orders, setOrders] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const data: any = useSelector((state) => state);
-  const [fetchOrders, isLoading] = useFetchOrdersMutation();
+  const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
   const { selected_language_id } = useSelector(selectSiteSetting);
 
-  useEffect(() => {
-    const fetchOrdersData = async () => {
+  const fetchOrdersData = async (page: number) => {
+    let userId = data?.auth?.user?.id;
+    if (userId) {
       try {
-        let userId = data?.auth?.user?.id;
-        const response = await fetchOrders({ userId });
-        if (response?.data?.data) {
-          setOrdersToShow(response?.data?.data?.orderList);
-          setOrders(response?.data?.data?.orderList);
+        const params: IOrderListParams = { user_id: userId, page, limit };
+        if (selected !== "All") {
+          params["filter"] = selected;
         }
+        const response = await fetchOrders(params);
+        const { orderList = [], count = 0 } = response.data.data || {};
+        setOrders((prev) => [...prev, ...orderList]);
+        setOrdersCount(count);
       } catch (error) {
         console.error("fetch orders:", error);
       }
-    };
+    }
+  };
 
-    fetchOrdersData();
-  }, [data?.auth?.user]);
+  useEffect(() => {
+    setOrdersCount(limit);
+    setPage(1);
+    setOrders([]);
+    fetchOrdersData(1);
+  }, [data?.auth?.user, selected]);
 
   const loadMoreOrders = () => {
-    setVisibleOrders((prev) => prev + 5);
+    setPage((prev) => prev + 1);
+    fetchOrdersData(page + 1);
   };
 
   const toggleAccordion = (orderId: any) => {
@@ -183,16 +195,16 @@ const OrderTab = () => {
             placeholder="Search orders"
             className="w-full md:w-[180px] rounded bg-white"
             value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setOrdersToShow(
-                orders.filter((o: ORDERS) =>
-                  o.order_num
-                    .toLowerCase()
-                    .includes(e.target.value.toLowerCase())
-                )
-              );
-            }}
+            // onChange={(e) => {
+            //   setSearchTerm(e.target.value);
+            //   setOrdersToShow(
+            //     orders.filter((o: ORDERS) =>
+            //       o.order_num
+            //         .toLowerCase()
+            //         .includes(e.target.value.toLowerCase())
+            //     )
+            //   );
+            // }}
           />
         </div>
 
@@ -202,15 +214,10 @@ const OrderTab = () => {
               key={status.id}
               size="xs"
               variant={selected === status.status ? "primary" : "outlined"}
-              className={`rounded ${
+              className={`rounded capitalize ${
                 selected === status.status && "text-primary"
               }`}
               onClick={() => {
-                if (status.status == "All") setOrdersToShow(orders);
-                else
-                  setOrdersToShow(
-                    orders.filter((o: ORDERS) => o.status === status.status)
-                  );
                 setSelected(status.status);
               }}
             >
@@ -221,117 +228,131 @@ const OrderTab = () => {
       </div>
 
       <div className="space-y-4">
-        {ordersToShow?.length > 0 ? (
-          ordersToShow.slice(0, visibleOrders).map((order: ORDERS) => {
-            const imagesArray = order.items.map(
-              (item) => baseUrl + item.product.small_image
-            );
+        {orders.length > 0
+          ? orders.map((order: ORDERS) => {
+              const imagesArray = order.items.map(
+                (item) => baseUrl + item.product.small_image
+              );
 
-            const formattedDate = moment(order.order_date).format("LL dddd");
-            const formattedTime = moment(order.order_date).format("HH:mm:ss");
-            const date = `${formattedDate}, ${formattedTime}`;
-            return (
-              <div key={order?.id} className="border rounded-lg p-4">
-                <div
-                  className="flex flex-col md:flex-row items-center justify-between cursor-pointer"
-                  onClick={() => toggleAccordion(order.id)}
-                >
-                  <div className="flex items-center space-x-2 w-full md:w-[20%] justify-center md:justify-start">
-                    {imagesArray
-                      .slice(0, maxImagesToShow)
-                      .map((image, index) => (
-                        <Image
-                          key={index}
-                          src={image}
-                          alt={`Image ${index + 1}`}
-                          width={50}
-                          height={50}
-                          className="rounded"
-                        />
-                      ))}
+              const formattedDate = moment(order.order_date).format("LL dddd");
+              const formattedTime = moment(order.order_date).format("HH:mm:ss");
+              const date = `${formattedDate}, ${formattedTime}`;
+              return (
+                <div key={order?.id} className="border rounded-lg p-4">
+                  <div
+                    className="flex flex-col md:flex-row items-center justify-between cursor-pointer"
+                    onClick={() => toggleAccordion(order.id)}
+                  >
+                    <div className="flex items-center space-x-2 w-full md:w-[20%] justify-center md:justify-start">
+                      {imagesArray
+                        .slice(0, maxImagesToShow)
+                        .map((image, index) => (
+                          <Image
+                            key={index}
+                            src={image}
+                            alt={`Image ${index + 1}`}
+                            width={50}
+                            height={50}
+                            className="rounded"
+                          />
+                        ))}
 
-                    {imagesArray.length > maxImagesToShow && (
-                      <Tooltip
-                        title={
-                          <div className="flex space-x-2">
-                            {imagesArray
-                              .slice(maxImagesToShow)
-                              .map((img, index) => (
-                                <Image
-                                  key={index}
-                                  src={img}
-                                  alt={`Additional image ${index + 1}`}
-                                  width={50}
-                                  height={50}
-                                  className="rounded"
-                                />
-                              ))}
-                          </div>
-                        }
-                        placement="top"
-                        PopperProps={{
-                          sx: {
-                            "& .MuiTooltip-tooltip": {
-                              backgroundColor: "rgb(242,243,238)",
-                              color: "#fff",
+                      {imagesArray.length > maxImagesToShow && (
+                        <Tooltip
+                          title={
+                            <div className="flex space-x-2">
+                              {imagesArray
+                                .slice(maxImagesToShow)
+                                .map((img, index) => (
+                                  <Image
+                                    key={index}
+                                    src={img}
+                                    alt={`Additional image ${index + 1}`}
+                                    width={50}
+                                    height={50}
+                                    className="rounded"
+                                  />
+                                ))}
+                            </div>
+                          }
+                          placement="top"
+                          PopperProps={{
+                            sx: {
+                              "& .MuiTooltip-tooltip": {
+                                backgroundColor: "rgb(242,243,238)",
+                                color: "#fff",
+                              },
                             },
-                          },
-                        }}
-                      >
-                        <div className="w-[50px] h-[50px] flex items-center justify-center bg-[rgb(242,243,238)] text-black-75 rounded cursor-pointer">
-                          <span>+{imagesArray.length - maxImagesToShow}</span>
-                        </div>
-                      </Tooltip>
-                    )}
-                  </div>
-                  <div className="w-full md:w-[30%] mt-2 md:mt-0 text-center md:text-left">
-                    <p className="text-black-75 text-sm">
-                      <span className="font-light text-xs">Order no:</span>{" "}
-                      <span className="text-sm">ORD{order.order_num}</span>
-                    </p>
-                  </div>
-
-                  <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
-                    <p className="text-black-75 text-sm capitalize">
-                      <i className={`${order.statusIcon}`}></i> {order.status}
-                    </p>
-                  </div>
-
-                  <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
-                    <div className="text-center md:text-right">
-                      <p className="text-black-75 text-sm whitespace-nowrap">
-                        {date}
-                      </p>
-
-                      <p className="text-green-600 text-sm">
-                        {formatPrice(
-                          order.total_amount,
-                          order.currency_id ?? 2
-                        )}
+                          }}
+                        >
+                          <div className="w-[50px] h-[50px] flex items-center justify-center bg-[rgb(242,243,238)] text-black-75 rounded cursor-pointer">
+                            <span>+{imagesArray.length - maxImagesToShow}</span>
+                          </div>
+                        </Tooltip>
+                      )}
+                    </div>
+                    <div className="w-full md:w-[30%] mt-2 md:mt-0 text-center md:text-left">
+                      <p className="text-black-75 text-sm">
+                        <span className="font-light text-xs">Order no:</span>{" "}
+                        <span className="text-sm">ORD{order.order_num}</span>
                       </p>
                     </div>
-                    <i
-                      className={`las ${
-                        expandedOrder === order.id
-                          ? "la-angle-up"
-                          : "la-angle-down"
-                      } text-lg ml-2 font-bold mt-2`}
-                    ></i>
-                  </div>
-                </div>
 
-                {expandedOrder === order.id && <OrderExpanded date={date} order={order} />}
-              </div>
-            );
-          })
-        ) : (
-          <div className="flex justify-center mt-4">No orders</div>
-        )}
+                    <div className="w-full md:w-[25%] mt-2 md:mt-0 text-center md:text-left">
+                      <p className="text-black-75 text-sm capitalize">
+                        <i className={`${order.statusIcon}`}></i> {order.status}
+                      </p>
+                    </div>
+
+                    <div className="w-full md:w-[25%] mt-2 md:mt-0 flex justify-center md:justify-end">
+                      <div className="text-center md:text-right">
+                        <p className="text-black-75 text-sm whitespace-nowrap">
+                          {date}
+                        </p>
+
+                        <p className="text-green-600 text-sm">
+                          {formatPrice(
+                            order.total_amount,
+                            order.currency_id ?? 2
+                          )}
+                        </p>
+                      </div>
+                      <i
+                        className={`las ${
+                          expandedOrder === order.id
+                            ? "la-angle-up"
+                            : "la-angle-down"
+                        } text-lg ml-2 font-bold mt-2`}
+                      ></i>
+                    </div>
+                  </div>
+
+                  {expandedOrder === order.id && (
+                    <OrderExpanded date={date} order={order} />
+                  )}
+                </div>
+              );
+            })
+          : !isLoading && (
+              <div className="flex justify-center mt-4">No orders</div>
+            )}
+        {isLoading &&
+          arrayNumberGenerator(
+            Math.min(limit, ordersCount - orders.length)
+          ).map((value ,idx) => (
+            <div key={value + idx} className="p-0 rounded-lg">
+              <Skeleton height={"83.6px"} width={"100%"} />
+            </div>
+          ))}
       </div>
 
-      {visibleOrders < ordersToShow.length && (
+      {page * limit < ordersCount && (
         <div className="flex justify-center mt-4">
-          <Button className="uppercase" onClick={loadMoreOrders}>
+          <Button
+            variant={isLoading ? "disabled" : "outlined"}
+            className="uppercase"
+            onClick={loadMoreOrders}
+          >
             Load More <i className="las la-sync ml-2"></i>
           </Button>
         </div>

@@ -143,10 +143,10 @@ export const orders: ORDERS[] = [
 
 export const orderStatuses: ORDER_STATUS[] = [
   { id: 1, status: "All" },
-  { id: 2, status: "Ongoing" },
-  { id: 3, status: "Cancelled" },
-  { id: 4, status: "Refunded" },
-  { id: 5, status: "Undeliverable" },
+  { id: 2, status: "pending" },
+  { id: 3, status: "shipped" },
+  { id: 4, status: "delivered" },
+  { id: 5, status: "cancelled" },
 ];
 
 export const commentList: Comment[] = [

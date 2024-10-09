@@ -16,6 +16,7 @@ interface OrderExpandedProps {
 
 const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
   const { items, note, invoice_url } = order;
+  console.log("order: ", order);
   const [expanded, setExpanded] = useState<number | null>(null);
   const { selected_language_id } = useSelector(selectSiteSetting);
   const { formatPrice } = useCurrency();
@@ -140,13 +141,15 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                 <i className="las la-truck mr-2 text-2xl"></i>
                 <span className="">Cargo tracking</span>
               </p>
-              <p
-                onClick={() => handleInvoice(invoice_url)}
-                className="cursor-pointer text-black-500 hover:text-primary text-xs flex items-center w-[50%]"
-              >
-                <i className="las la-file-invoice mr-2 text-2xl"></i>
-                <span>View Invoice</span>
-              </p>
+              {invoice_url && (
+                <p
+                  onClick={() => handleInvoice(invoice_url)}
+                  className="cursor-pointer text-black-500 hover:text-primary text-xs flex items-center w-[50%]"
+                >
+                  <i className="las la-file-invoice mr-2 text-2xl"></i>
+                  <span>View Invoice</span>
+                </p>
+              )}
               <p className="text-black-500 text-xs flex items-center w-[50%] mt-4">
                 <i className="las la-truck mr-2 text-2xl"></i>
                 <span className="">Returns and other requests</span>
