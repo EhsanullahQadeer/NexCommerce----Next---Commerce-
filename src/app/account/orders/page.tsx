@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
@@ -18,6 +18,7 @@ import "moment/locale/en-gb";
 import { IOrderListParams } from "@/types/order";
 import Skeleton from "react-loading-skeleton";
 import { arrayNumberGenerator } from "@/lib/utils";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 export interface ORDERS {
   id: number;
   imageUrl: string;
@@ -133,7 +134,6 @@ const maxImagesToShow = 1;
 const limit = 8;
 const OrderTab = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
-  const [selected, setSelected] = useState("All");
   const [page, setPage] = useState(1);
   const [ordersCount, setOrdersCount] = useState<number>(limit);
   const [orders, setOrders] = useState<any[]>([]);
@@ -142,14 +142,30 @@ const OrderTab = () => {
   const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
   const { selected_language_id } = useSelector(selectSiteSetting);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("status") || "All";
+
+  const validTab = useMemo(() => {
+    const isValid = orderStatuses.some((item) => item.status === currentTab);
+    if (isValid) {
+      return currentTab;
+    } else {
+      handleRouteChange("All");
+      return "All";
+    }
+  }, [currentTab]);
+
+  const [selectedTab, setSelectedTab] = useState<string>(validTab);
 
   const fetchOrdersData = async (page: number) => {
     let userId = data?.auth?.user?.id;
     if (userId) {
       try {
         const params: IOrderListParams = { user_id: userId, page, limit };
-        if (selected !== "All") {
-          params["filter"] = selected;
+        if (selectedTab !== "All") {
+          params["filter"] = selectedTab;
         }
         const response = await fetchOrders(params);
         const { orderList = [], count = 0 } = response.data.data || {};
@@ -166,8 +182,23 @@ const OrderTab = () => {
     setPage(1);
     setOrders([]);
     fetchOrdersData(1);
-  }, [data?.auth?.user, selected]);
+    setSelectedTab(validTab);
+  }, [data?.auth?.user, searchParams]);
 
+  function handleTabChange(status: string) {
+    setSelectedTab(status);
+    handleRouteChange(status);
+  }
+
+  function handleRouteChange(status: string) {
+    const params = new URLSearchParams(searchParams);
+    if (status === "All") {
+      params.delete("status");
+    } else {
+      params.set("status", status);
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  }
   const loadMoreOrders = () => {
     setPage((prev) => prev + 1);
     fetchOrdersData(page + 1);
@@ -176,6 +207,7 @@ const OrderTab = () => {
   const toggleAccordion = (orderId: any) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
+
   const lang = selected_language_id == 1 ? "en" : "tr";
   moment.locale(lang);
 
@@ -209,19 +241,17 @@ const OrderTab = () => {
         </div>
 
         <div className="flex flex-wrap justify-center md:justify-start space-x-2 ml-2 gap-2">
-          {orderStatuses.map((status) => (
+          {orderStatuses.map((tab) => (
             <Button
-              key={status.id}
+              key={tab.id}
               size="xs"
-              variant={selected === status.status ? "primary" : "outlined"}
+              variant={selectedTab === tab.status ? "primary" : "outlined"}
               className={`rounded capitalize ${
-                selected === status.status && "text-primary"
+                selectedTab === tab.status && "text-primary"
               }`}
-              onClick={() => {
-                setSelected(status.status);
-              }}
+              onClick={() => handleTabChange(tab.status)}
             >
-              {status.status}
+              {tab.status}
             </Button>
           ))}
         </div>
@@ -339,7 +369,7 @@ const OrderTab = () => {
         {isLoading &&
           arrayNumberGenerator(
             Math.min(limit, ordersCount - orders.length)
-          ).map((value ,idx) => (
+          ).map((value, idx) => (
             <div key={value + idx} className="p-0 rounded-lg">
               <Skeleton height={"83.6px"} width={"100%"} />
             </div>
@@ -361,4 +391,12 @@ const OrderTab = () => {
   );
 };
 
-export default OrderTab;
+function SuspenseOrderTab() {
+  return (
+    <Suspense>
+      <OrderTab />
+    </Suspense>
+  );
+}
+
+export default SuspenseOrderTab;

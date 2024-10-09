@@ -4,22 +4,27 @@ import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
 import routes from "@/routes/routes";
 import { useGetInvoiceMutation } from "@/store/api/ordersApi";
-import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
-import { useSelector } from "react-redux";
 interface OrderExpandedProps {
   order: ORDERS;
   date: string;
 }
 
 const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
-  const { items, note, invoice_url } = order;
-  console.log("order: ", order);
+  const {
+    items,
+    note,
+    invoice_url,
+    total_amount,
+    discount_amount,
+    vat_amount,
+    shipping_amount,
+  } = order;
+
   const [expanded, setExpanded] = useState<number | null>(null);
-  const { selected_language_id } = useSelector(selectSiteSetting);
-  const { formatPrice } = useCurrency();
+  const { formatPrice, calculatePrice } = useCurrency();
   const currency_id = order?.currency_id ?? 2;
   const [getInvoice] = useGetInvoiceMutation();
 
@@ -47,6 +52,12 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
       console.log("error: ", error);
     }
   };
+
+  const subTotalAmount = calculatePrice(total_amount, currency_id);
+  const discount = calculatePrice(Number(discount_amount), currency_id);
+  const vat = calculatePrice(Number(vat_amount), currency_id);
+  const shippingAmmount = calculatePrice(Number(shipping_amount), currency_id);
+  const grandTotal = subTotalAmount + vat + shippingAmmount - discount;
 
   return (
     <div className="my-4">
@@ -232,7 +243,7 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
         <div className="w-full md:w-1/2 pl-2 mt-0 md:mt-0">
           <h3 className="text-black-75 text-lg mb-2">Payment Information</h3>
           <div className="border border-black-600 rounded-lg p-4 mt-0">
-            <div className="flex gap-4 mb-4">
+            {/* <div className="flex gap-4 mb-4">
               <div className="w-[30%]">
                 <Image
                   src={
@@ -250,14 +261,14 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                   {formatPrice(order.total_amount, order.currency_id ?? 2)}
                 </p>
                 <p className="text-black-75 text-xs flex items-center font-bold">
-                  {/* **** **** **** 1234 */} {order?.payment?.transaction_id}
+                {order?.payment?.transaction_id}
                 </p>
                 <p className="text-black-500 text-xs flex items-center">
                   {order?.payment?.payment_method}
                 </p>
               </div>
-            </div>
-            <div className="border-t mt-4">
+            </div> */}
+            <div className=" mt-4">
               <div className="flex justify-between my-2">
                 <p className="text-black-500 text-sm flex items-center">
                   Cargo
@@ -277,28 +288,28 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                   Products
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  {formatPrice(order.total_amount, currency_id)}
+                  {formatPrice(subTotalAmount, currency_id)}
                 </p>
               </div>
-              {Number(order?.vat_amount) ? (
+              {vat ? (
                 <div className="flex justify-between my-2">
                   <p className="text-black-500 text-sm flex items-center">
                     Vat
                   </p>
                   <p className="text-black-75 text-sm flex items-center font-semibold">
-                    {formatPrice(Number(order?.vat_amount), currency_id)}
+                    {formatPrice(vat, currency_id)}
                   </p>
                 </div>
               ) : (
                 ""
               )}
-              {Number(order.discount_amount) ? (
+              {discount ? (
                 <div className="flex justify-between my-2">
                   <p className="text-black-500 text-sm flex items-center">
                     Discount
                   </p>
                   <p className="text-black-75 text-sm flex items-center font-semibold">
-                    {formatPrice(Number(order.discount_amount), currency_id)}
+                    {formatPrice(discount, currency_id)}
                   </p>
                 </div>
               ) : (
@@ -309,7 +320,7 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                   Grand Total
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  {formatPrice(order?.total_amount, currency_id)}
+                  {formatPrice(grandTotal, currency_id)}
                 </p>
               </div>
             </div>
