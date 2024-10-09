@@ -2,6 +2,7 @@
 import { OrderPayload } from "@/types/order";
 import { apiSlice } from "../slices/api/apiSlice";
 import { toast } from "react-toastify";
+import { headers } from "next/headers";
 
 
 
@@ -40,9 +41,18 @@ export const ordersApi = apiSlice.injectEndpoints({
         }
       },
     }),
+    getInvoice: builder.mutation({
+      query: (data: WithLoader<{ url: string }>) => ({
+        url: data.payload.url,
+        method: 'GET',
+        body: { fullPageLoader: data.fullPageLoader },
+        responseHandler: (response: Response) => response.blob(),
+      }
+      ),
+    }),
 
 
   }),
 });
 
-export const { useFetchOrdersMutation, useAddOrderMutation } = ordersApi;
+export const { useFetchOrdersMutation, useAddOrderMutation, useGetInvoiceMutation } = ordersApi;

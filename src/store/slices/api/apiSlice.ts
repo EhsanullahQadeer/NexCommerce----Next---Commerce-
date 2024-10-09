@@ -28,10 +28,10 @@ const baseQuery = fetchBaseQuery({
 });
 const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
   // Lazy initialize store when needed
+  debugger
   if (!lazyStore) {
     lazyStore = (await import('@/store')).default;
   }
-
   let payload = { ...args };
   let fullPageLoader = false;
   if (typeof args === "object" && args !== null) {
@@ -46,6 +46,11 @@ const customBaseQuery = async (args: any, api: any, extraOptions: any) => {
       lazyStore.dispatch(setFullScreenLoader(true));
     }
   }
+  //  beacuse get method can't have body , only purpose to creating body while injecting endpoints are to make  loader workable
+  if (args.method === "GET" && payload.body) {
+    delete payload.body
+  }
+
   const result = await baseQuery(payload, api, extraOptions);
   if (fullPageLoader) {
     activeRequests -= 1;

@@ -32,6 +32,7 @@ export interface ORDERS {
   status: string;
   note: string;
   order_date: string;
+  invoice_url:string;
   shipping_address_id: number;
   billing_address_id: number;
   items: Array<{

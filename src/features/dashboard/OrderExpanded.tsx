@@ -3,6 +3,7 @@ import Button from "@/components/Button";
 import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
 import routes from "@/routes/routes";
+import { useGetInvoiceMutation } from "@/store/api/ordersApi";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,18 +15,38 @@ interface OrderExpandedProps {
 }
 
 const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
-  const { items, note } = order;
+  const { items, note, invoice_url } = order;
   const [expanded, setExpanded] = useState<number | null>(null);
   const { selected_language_id } = useSelector(selectSiteSetting);
   const { formatPrice } = useCurrency();
   const currency_id = order?.currency_id ?? 2;
-
-
+  const [getInvoice] = useGetInvoiceMutation();
 
   const productsNameStr = useMemo(
     () => items.map((item) => item.product.name).join(", "),
     [items]
   );
+
+  const handleInvoice = async (url: string) => {
+    try {
+      const res = await getInvoice({
+        payload: { url },
+        fullPageLoader: true,
+      }).unwrap();
+      const pdfBlob = new Blob([res], { type: "application/pdf" });
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.target = "_blank";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(pdfUrl);
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   return (
     <div className="my-4">
       <div className="border border-black-600 rounded-lg">
@@ -107,10 +128,7 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                   {order?.status}
                 </p>
                 <p className="text-green-600 font-light text-xs">
-                  Date:{" "}
-                  <span className="font-semibold">
-                    {date}
-                  </span>
+                  Date: <span className="font-semibold">{date}</span>
                 </p>
                 <p className="text-green-600 font-light text-xs">
                   <span className="font-semibold">{note}</span>
@@ -122,9 +140,12 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                 <i className="las la-truck mr-2 text-2xl"></i>
                 <span className="">Cargo tracking</span>
               </p>
-              <p className="text-black-500 text-xs flex items-center w-[50%]">
+              <p
+                onClick={() => handleInvoice(invoice_url)}
+                className="cursor-pointer text-black-500 hover:text-primary text-xs flex items-center w-[50%]"
+              >
                 <i className="las la-file-invoice mr-2 text-2xl"></i>
-                <span className="">View Invoice</span>
+                <span>View Invoice</span>
               </p>
               <p className="text-black-500 text-xs flex items-center w-[50%] mt-4">
                 <i className="las la-truck mr-2 text-2xl"></i>
