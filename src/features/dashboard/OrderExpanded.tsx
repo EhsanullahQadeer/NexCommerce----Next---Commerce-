@@ -52,12 +52,17 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
       console.log("error: ", error);
     }
   };
+  const subTotalAmount = useMemo(
+    () =>
+      items.reduce((acc, item) => {
+        return acc + item.sub_total;
+      }, 0),
+    [items]
+  );
 
-  const subTotalAmount = calculatePrice(total_amount, currency_id);
   const discount = calculatePrice(Number(discount_amount), currency_id);
   const vat = calculatePrice(Number(vat_amount), currency_id);
-  const shippingAmmount = calculatePrice(Number(shipping_amount), currency_id);
-  const grandTotal = subTotalAmount + vat + shippingAmmount - discount;
+  const grandTotal = calculatePrice(total_amount, currency_id);
 
   return (
     <div className="my-4">
