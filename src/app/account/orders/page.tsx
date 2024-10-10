@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useFetchOrdersMutation } from "@/store/api/ordersApi";
 import useCurrency from "@/hooks/useCurrency";
 import { baseUrl } from "@/config/config";
-import { Tooltip } from "@mui/material";
+import { debounce, Tooltip } from "@mui/material";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import moment from "moment";
 import "moment/locale/tr";
@@ -19,6 +19,8 @@ import { IOrderListParams } from "@/types/order";
 import Skeleton from "react-loading-skeleton";
 import { arrayNumberGenerator } from "@/lib/utils";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import useDebounce from "@/hooks/useDebounce";
+import useSkipFirstRender from "@/hooks/useSkipFirstRender";
 export interface ORDERS {
   id: number;
   imageUrl: string;
@@ -133,19 +135,24 @@ export interface ORDERS {
 const maxImagesToShow = 1;
 const limit = 8;
 const OrderTab = () => {
-  const [expandedOrder, setExpandedOrder] = useState(null);
-  const [page, setPage] = useState(1);
-  const [ordersCount, setOrdersCount] = useState<number>(limit);
-  const [orders, setOrders] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const data: any = useSelector((state) => state);
-  const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
-  const { formatPrice } = useCurrency();
-  const { selected_language_id } = useSelector(selectSiteSetting);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("status") || "All";
+  const initalSearchValue = searchParams.get("search") || "";
+  
+  const [searchTerm, setSearchTerm] = useState(initalSearchValue);
+  const searchDebounce = useDebounce(searchTerm, 300);
+  const [expandedOrder, setExpandedOrder] = useState(null);
+  const [page, setPage] = useState(1);
+  const [ordersCount, setOrdersCount] = useState<number>(limit);
+  const [orders, setOrders] = useState<any[]>([]);
+  const data: any = useSelector((state) => state);
+  const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
+  const { formatPrice } = useCurrency();
+  const { selected_language_id } = useSelector(selectSiteSetting);
+
+
 
   const validTab = useMemo(() => {
     const isValid = orderStatuses.some((item) => item.status === currentTab);
@@ -167,6 +174,9 @@ const OrderTab = () => {
         if (selectedTab !== "All") {
           params["filter"] = selectedTab;
         }
+        if (searchTerm) {
+          params["search"] = searchTerm;
+        }
         const response = await fetchOrders(params);
         const { orderList = [], count = 0 } = response.data.data || {};
         setOrders((prev) => [...prev, ...orderList]);
@@ -183,22 +193,41 @@ const OrderTab = () => {
     setOrders([]);
     fetchOrdersData(1);
     setSelectedTab(validTab);
-  }, [data?.auth?.user, searchParams]);
+  }, [data?.auth?.user, searchParams, searchDebounce]);
+
+  useSkipFirstRender(() => {
+    const params = new URLSearchParams(searchParams);
+    if (searchTerm) {
+      params.set("search", searchTerm);
+      router.push(`${pathname}?${params.toString()}`);
+    } else if (params.has("search")) {
+      params.delete("search");
+      router.push(`${pathname}?${params.toString()}`);
+    }
+  }, [searchDebounce]);
 
   function handleTabChange(status: string) {
+    setSearchTerm("");
     setSelectedTab(status);
-    handleRouteChange(status);
+    handleRouteChange(status, "");
   }
 
-  function handleRouteChange(status: string) {
+  function handleRouteChange(status: string, search?: string) {
     const params = new URLSearchParams(searchParams);
     if (status === "All") {
       params.delete("status");
     } else {
       params.set("status", status);
     }
+    if (search) {
+    } else {
+      if (params.has("search")) {
+        params.delete("search");
+      }
+    }
     router.push(`${pathname}?${params.toString()}`);
   }
+
   const loadMoreOrders = () => {
     setPage((prev) => prev + 1);
     fetchOrdersData(page + 1);
@@ -227,16 +256,9 @@ const OrderTab = () => {
             placeholder="Search orders"
             className="w-full md:w-[180px] rounded bg-white"
             value={searchTerm}
-            // onChange={(e) => {
-            //   setSearchTerm(e.target.value);
-            //   setOrdersToShow(
-            //     orders.filter((o: ORDERS) =>
-            //       o.order_num
-            //         .toLowerCase()
-            //         .includes(e.target.value.toLowerCase())
-            //     )
-            //   );
-            // }}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+            }}
           />
         </div>
 
@@ -358,7 +380,7 @@ const OrderTab = () => {
                   </div>
 
                   {expandedOrder === order.id && (
-                    <OrderExpanded date={date} order={order} />
+                    <OrderExpanded selectedTab={selectedTab} date={date} order={order} />
                   )}
                 </div>
               );

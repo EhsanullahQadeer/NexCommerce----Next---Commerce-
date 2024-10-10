@@ -27,5 +27,6 @@ export interface IOrderListParams {
     page?: number;
     limit?: number;
     filter?: string;
+    search?: string;
 }
 

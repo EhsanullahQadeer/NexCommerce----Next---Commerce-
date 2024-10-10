@@ -10,9 +10,10 @@ import React, { useMemo, useState } from "react";
 interface OrderExpandedProps {
   order: ORDERS;
   date: string;
+  selectedTab: string;
 }
 
-const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
+const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   const {
     items,
     note,
@@ -120,13 +121,15 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                           Buy again
                         </Button>
                       </Link>
-                      <Button
-                        size="xs"
-                        variant="primary"
-                        className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
-                      >
-                        Rate the product
-                      </Button>
+                      {selectedTab === "delivered" && (
+                        <Button
+                          size="xs"
+                          variant="primary"
+                          className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
+                        >
+                          Rate the product
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -153,10 +156,10 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
               </div>
             </div>
             <div className="p-4 flex flex-wrap gap-4]">
-              <p className="text-black-500 text-xs flex items-center w-[50%]">
+              {/* <p className="text-black-500 text-xs flex items-center w-[50%]">
                 <i className="las la-truck mr-2 text-2xl"></i>
                 <span className="">Cargo tracking</span>
-              </p>
+              </p> */}
               {invoice_url && (
                 <p
                   onClick={() => handleInvoice(invoice_url)}
@@ -166,10 +169,10 @@ const OrderExpanded = ({ order, date }: OrderExpandedProps) => {
                   <span>View Invoice</span>
                 </p>
               )}
-              <p className="text-black-500 text-xs flex items-center w-[50%] mt-4">
+              {/* <p className="text-black-500 text-xs flex items-center w-[50%] mt-4">
                 <i className="las la-truck mr-2 text-2xl"></i>
                 <span className="">Returns and other requests</span>
-              </p>
+              </p> */}
             </div>
           </div>
         </div>
