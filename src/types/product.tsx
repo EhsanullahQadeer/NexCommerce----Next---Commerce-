@@ -1,3 +1,4 @@
+import { IReview } from "./order"
 import { SEOData } from "./seo"
 
 export enum ProductLabel {
@@ -33,7 +34,7 @@ export interface Product {
   product_tags: ProductTag[]
   product_categories: Category[]
   product_variants: ProductVariant[]
-  reviews: any[]
+  reviews: IReview[]
   additional_description: string
   additional_info: string
   shipping_return: string

@@ -37,3 +37,15 @@ export interface IProductReviewParams {
     rating: number;
 }
 
+export interface IReview {
+    id: number;
+    user_id: number;
+    product_id: number;
+    review: string;
+    rating: number;
+    is_approved: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+

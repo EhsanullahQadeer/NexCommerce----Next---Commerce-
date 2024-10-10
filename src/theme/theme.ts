@@ -2,7 +2,6 @@
 import { createTheme } from '@mui/material/styles';
 import { colors } from './color';
 const baseColors = colors("mui")
-console.log('baseColors: ', baseColors);
 export const theme = createTheme({
     cssVariables: true,
     palette: {

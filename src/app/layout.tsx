@@ -14,6 +14,9 @@ import { I18Provider } from "./i18";
 import { useEffect, useState } from "react";
 import { theme } from "@/theme/theme";
 import FullPageLoader from "@/components/Loaders/PageLoader";
+import "moment/locale/tr";
+import "moment/locale/en-gb";
+
 export interface SiteSettings {
   site_status: number;
   brand_name: string;

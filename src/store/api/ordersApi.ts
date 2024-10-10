@@ -59,9 +59,17 @@ export const ordersApi = apiSlice.injectEndpoints({
       }
       ),
     }),
+    getProductReviewList: builder.mutation({
+      query: (body: WithLoader<{ product_id: string | number }>) => ({
+        url: "product-review-list",
+        method: 'POST',
+        body,
+      }
+      ),
+    }),
 
 
   }),
 });
 
-export const { useFetchOrdersMutation, useAddOrderMutation, useGetInvoiceMutation, useAddProductReviewMutation } = ordersApi;
+export const { useFetchOrdersMutation, useAddOrderMutation, useGetInvoiceMutation, useAddProductReviewMutation, useGetProductReviewListMutation } = ordersApi;

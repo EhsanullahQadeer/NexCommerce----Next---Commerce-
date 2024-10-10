@@ -13,14 +13,13 @@ import { baseUrl } from "@/config/config";
 import { debounce, Tooltip } from "@mui/material";
 import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
 import moment from "moment";
-import "moment/locale/tr";
-import "moment/locale/en-gb";
 import { IOrderListParams } from "@/types/order";
 import Skeleton from "react-loading-skeleton";
 import { arrayNumberGenerator } from "@/lib/utils";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import useDebounce from "@/hooks/useDebounce";
 import useSkipFirstRender from "@/hooks/useSkipFirstRender";
+import useDate from "@/hooks/useDate";
 export interface ORDERS {
   id: number;
   imageUrl: string;
@@ -151,8 +150,7 @@ const OrderTab = () => {
   const data: any = useSelector((state) => state);
   const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
-  const { selected_language_id } = useSelector(selectSiteSetting);
-
+  const { formateDate } = useDate();
   const validTab = useMemo(() => {
     const isValid = orderStatuses.some((item) => item.status === currentTab);
     if (isValid) {
@@ -236,9 +234,6 @@ const OrderTab = () => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
-  const lang = selected_language_id == 1 ? "en" : "tr";
-  moment.locale(lang);
-
   return (
     <div className="mt-1.5 flex-1 px-4 md:px-8">
       <h1
@@ -284,10 +279,7 @@ const OrderTab = () => {
               const imagesArray = order.items.map(
                 (item) => baseUrl + item.product.small_image
               );
-
-              const formattedDate = moment(order.order_date).format("LL dddd");
-              const formattedTime = moment(order.order_date).format("HH:mm:ss");
-              const date = `${formattedDate}, ${formattedTime}`;
+              const date = formateDate(order.order_date);
               return (
                 <div key={order?.id} className="border rounded-lg p-4">
                   <div
