@@ -21,7 +21,7 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
     total_amount,
     discount_amount,
     vat_amount,
-    shipping_amount,
+    sub_total,
   } = order;
 
   const [expanded, setExpanded] = useState<number | null>(null);
@@ -53,13 +53,6 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
       console.log("error: ", error);
     }
   };
-  const subTotalAmount = useMemo(
-    () =>
-      items.reduce((acc, item) => {
-        return acc + item.sub_total;
-      }, 0),
-    [items]
-  );
 
   const discount = calculatePrice(Number(discount_amount), currency_id);
   const vat = calculatePrice(Number(vat_amount), currency_id);
@@ -296,7 +289,7 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
                   Products
                 </p>
                 <p className="text-black-75 text-sm flex items-center font-semibold">
-                  {formatPrice(subTotalAmount, currency_id)}
+                  {formatPrice(sub_total, currency_id)}
                 </p>
               </div>
               {vat ? (

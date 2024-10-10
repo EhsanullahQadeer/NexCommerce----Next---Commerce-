@@ -37,6 +37,7 @@ export interface ORDERS {
   paid_amount: string;
   status: string;
   note: string;
+  sub_total: number;
   order_date: string;
   invoice_url: string;
   shipping_address_id: number;
@@ -140,7 +141,7 @@ const OrderTab = () => {
   const searchParams = useSearchParams();
   const currentTab = searchParams.get("status") || "All";
   const initalSearchValue = searchParams.get("search") || "";
-  
+
   const [searchTerm, setSearchTerm] = useState(initalSearchValue);
   const searchDebounce = useDebounce(searchTerm, 300);
   const [expandedOrder, setExpandedOrder] = useState(null);
@@ -151,8 +152,6 @@ const OrderTab = () => {
   const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
   const { selected_language_id } = useSelector(selectSiteSetting);
-
-
 
   const validTab = useMemo(() => {
     const isValid = orderStatuses.some((item) => item.status === currentTab);
@@ -380,7 +379,11 @@ const OrderTab = () => {
                   </div>
 
                   {expandedOrder === order.id && (
-                    <OrderExpanded selectedTab={selectedTab} date={date} order={order} />
+                    <OrderExpanded
+                      selectedTab={selectedTab}
+                      date={date}
+                      order={order}
+                    />
                   )}
                 </div>
               );
