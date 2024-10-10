@@ -6,6 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   rows?: string;
   isFullWidth?: boolean;
+  error?: string; 
 }
 
 const baseInputStyles =
@@ -13,6 +14,9 @@ const baseInputStyles =
 
 const labelStyles =
   "inline-block text-sm text-black-100 font-extralight mb-1 leading-[26.04px]";
+
+const errorTextStyles =
+  "text-xs text-red-600 mt-1"; 
 
 const inputVariants = {
   text: "h-10 px-5 text-black-100 font-extralight bg-[#fafafa] border border-black-300",
@@ -24,17 +28,25 @@ const Input: FC<InputProps> = ({
   variant = "text",
   label,
   isFullWidth = false,
+  error,
   ...props
 }) => {
   const renderLabel = label && <label className={labelStyles}>{label}</label>;
+  const renderError = error && <span className={errorTextStyles}>{error}</span>;
 
   return (
     <div className={cn(isFullWidth && "w-full")}>
       {renderLabel}
       <input
         {...props}
-        className={cn(baseInputStyles, className, inputVariants[variant])}
+        className={cn(
+          baseInputStyles,
+          className,
+          inputVariants[variant],
+          error && "border-red-500" 
+        )}
       />
+      {renderError} 
     </div>
   );
 };

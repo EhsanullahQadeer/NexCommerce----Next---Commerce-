@@ -72,7 +72,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
     }),
     userUpdate: builder.mutation({
-      query: (data) => (
+      query: (data:WithLoader<any>) => (
         {
           url: "user-update",
           method: "POST",
@@ -98,10 +98,6 @@ export const authApi = apiSlice.injectEndpoints({
             toast.success(message)
           }
         } catch (error: any) {
-          if (error?.error?.data?.message) {
-            const message = error?.error?.data?.message
-            toast.error(message)
-          }
         }
       },
     }),

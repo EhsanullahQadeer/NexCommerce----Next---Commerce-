@@ -1,78 +1,162 @@
 "use client";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useUserUpdateMutation } from "@/store/api/authApi";
+
+interface FormErrors {
+  name?: string;
+  surname?: string;
+  email?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+  currentPassword?: string;
+}
 
 const AccountDetailsTab = () => {
   const [userUpdate] = useUserUpdateMutation();
   const data: any = useSelector((state) => state);
   const [formData, setFormData] = useState(data?.auth?.user || {});
+
+  useEffect(() => {
+    if (data?.auth?.user) {
+      setFormData(data?.auth?.user);
+    }
+  }, [data?.auth?.user]);
+
   const [updateFieldValues, setUpdateFieldVlues] = useState({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const onChange = (key: any, val: any) => {
     let _vals = { ...formData };
     _vals[key] = val;
 
-    if (val.trim() == "") {
+    if (val.trim() === "") {
       delete _vals[key];
+    } else {
+      // Clear error for the input if it has a value
+      setErrors((prev) => ({ ...prev, [key]: undefined }));
     }
+
     setFormData(_vals);
     setUpdateFieldVlues((prev) => ({ ...prev, [key]: val }));
   };
 
+  const validate = (): FormErrors => {
+    let validationErrors: FormErrors = {};
+
+    // Required field validations
+    if (!formData.name) {
+      validationErrors.name = "First name is required";
+    }
+    if (!formData.surname) {
+      validationErrors.surname = "Last name is required";
+    }
+    if (!formData.email) {
+      validationErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      validationErrors.email = "Email address is invalid";
+    }
+
+    // Password validations
+    if (formData.newPassword || formData.confirmPassword) {
+      if (!formData.currentPassword) {
+        validationErrors.currentPassword =
+          "Current password is required when updating password";
+      }
+      if (!formData.newPassword) {
+        validationErrors.newPassword = "New password is required";
+      }
+      if (!formData.confirmPassword) {
+        validationErrors.confirmPassword = "Confirm password is required";
+      }
+      if (
+        formData.newPassword &&
+        formData.confirmPassword &&
+        formData.newPassword !== formData.confirmPassword
+      ) {
+        validationErrors.confirmPassword = "Passwords do not match";
+      }
+    }
+
+    return validationErrors;
+  };
+
   const handleSave = async (e: any) => {
     e.preventDefault();
-    let data = {
+
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length > 0) {
+      return;
+    }
+
+    const dataToUpdate = {
       name: formData?.name,
       surname: formData?.surname,
       email: formData?.email,
+      current_password: formData?.currentPassword || undefined,
+      new_password: formData?.newPassword || undefined, 
+      new_password_confirmation:formData?.newPassword || undefined
     };
-    const response = await userUpdate(data);
+
+    const response = await userUpdate({
+      payload: dataToUpdate,
+      fullPageLoader: true,
+    });
     console.log(JSON.stringify(response));
   };
 
   return (
-    <form className="mt-1.5">
+    <form className="mt-1.5" onSubmit={handleSave}>
       <div className="flex flex-col gap-[13px]">
         <div className="grid sm:grid-cols-2 gap-[13px] sm:gap-5">
           <Input
             label="First Name *"
             value={formData?.name}
             onChange={(e) => onChange("name", e.target.value)}
+            error={errors.name}
           />
           <Input
             label="Last Name *"
             value={formData?.surname}
             onChange={(e) => onChange("surname", e.target.value)}
+            error={errors.surname}
           />
-        </div>
-        <div>
-          <Input label="DisplayName" />
-          <small className="text-[11px] mt-2 text-black-200 font-light">
-            This will be how your name will be displayed in the account section
-            and in reviews
-          </small>
         </div>
         <div>
           <Input
             label="Email *"
             value={formData?.email}
             onChange={(e) => onChange("email", e.target.value)}
+            error={errors.email}
           />
         </div>
         <div>
-          <Input label="Current password (leave blank to leave unchanged)" />
+          <Input
+            label="Current password (leave blank to leave unchanged)"
+            onChange={(e) => onChange("currentPassword", e.target.value)}
+            error={errors.currentPassword}
+          />
         </div>
         <div>
-          <Input label="New password (leave blank to leave unchanged)" />
+          <Input
+            label="New password (leave blank to leave unchanged)"
+            onChange={(e) => onChange("newPassword", e.target.value)}
+            error={errors.newPassword}
+          />
         </div>
         <div>
-          <Input label="Confirm new password (leave blank to leave unchanged)" />
+          <Input
+            label="Confirm new password (leave blank to leave unchanged)"
+            onChange={(e) => onChange("confirmPassword", e.target.value)}
+            error={errors.confirmPassword}
+          />
         </div>
       </div>
-      <Button className="uppercase mt-5" onClick={(e) => handleSave(e)}>
+      <Button className="uppercase mt-5" type="submit">
         Save changes <i className="las la-long-arrow-alt-right ml-2.5"></i>
       </Button>
     </form>
