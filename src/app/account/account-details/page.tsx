@@ -1,9 +1,10 @@
 "use client";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { useUserUpdateMutation } from "@/store/api/authApi";
+import { Tooltip } from "@mui/material";
 
 interface FormErrors {
   name?: string;
@@ -18,14 +19,15 @@ const AccountDetailsTab = () => {
   const [userUpdate] = useUserUpdateMutation();
   const data: any = useSelector((state) => state);
   const [formData, setFormData] = useState(data?.auth?.user || {});
+  const [initialData, setInitialData] = useState(data?.auth?.user || {}); // Track the initial data
 
   useEffect(() => {
     if (data?.auth?.user) {
       setFormData(data?.auth?.user);
+      setInitialData(data?.auth?.user); // Set initial data when user data changes
     }
   }, [data?.auth?.user]);
 
-  const [updateFieldValues, setUpdateFieldVlues] = useState({});
   const [errors, setErrors] = useState<FormErrors>({});
 
   const onChange = (key: any, val: any) => {
@@ -40,7 +42,6 @@ const AccountDetailsTab = () => {
     }
 
     setFormData(_vals);
-    setUpdateFieldVlues((prev) => ({ ...prev, [key]: val }));
   };
 
   const validate = (): FormErrors => {
@@ -83,9 +84,14 @@ const AccountDetailsTab = () => {
     return validationErrors;
   };
 
+  // Check if any field has changed
+  const hasChanges = useMemo(
+    () => JSON.stringify(formData) !== JSON.stringify(initialData),
+    [formData, initialData]
+  );
+
   const handleSave = async (e: any) => {
     e.preventDefault();
-
     const validationErrors = validate();
     setErrors(validationErrors);
 
@@ -98,8 +104,8 @@ const AccountDetailsTab = () => {
       surname: formData?.surname,
       email: formData?.email,
       current_password: formData?.currentPassword || undefined,
-      new_password: formData?.newPassword || undefined, 
-      new_password_confirmation:formData?.newPassword || undefined
+      new_password: formData?.newPassword || undefined,
+      new_password_confirmation: formData?.confirmPassword || undefined, // Use confirmPassword here
     };
 
     const response = await userUpdate({
@@ -156,7 +162,11 @@ const AccountDetailsTab = () => {
           />
         </div>
       </div>
-      <Button className="uppercase mt-5" type="submit">
+      <Button
+        variant={hasChanges ? "outlined" : "disabled"}
+        className="uppercase mt-5"
+        type="submit"
+      >
         Save changes <i className="las la-long-arrow-alt-right ml-2.5"></i>
       </Button>
     </form>
