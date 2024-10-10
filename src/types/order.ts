@@ -30,3 +30,10 @@ export interface IOrderListParams {
     search?: string;
 }
 
+export interface IProductReviewParams {
+    user_id: string;
+    product_id: string | number;
+    review: string;
+    rating: number;
+}
+

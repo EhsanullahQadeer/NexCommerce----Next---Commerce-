@@ -1,12 +1,20 @@
 import { ORDERS } from "@/app/account/orders/page";
 import Button from "@/components/Button";
+import RatingModal from "@/components/review-modal/RatingModal";
 import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
 import routes from "@/routes/routes";
-import { useGetInvoiceMutation } from "@/store/api/ordersApi";
+import { RootState } from "@/store";
+import {
+  useAddProductReviewMutation,
+  useGetInvoiceMutation,
+} from "@/store/api/ordersApi";
+import { Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 interface OrderExpandedProps {
   order: ORDERS;
   date: string;
@@ -23,9 +31,11 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
     vat_amount,
     sub_total,
   } = order;
-
+  const [addProductReview] = useAddProductReviewMutation();
+  const { user } = useSelector((state: RootState) => state.auth);
   const [expanded, setExpanded] = useState<number | null>(null);
   const { formatPrice, calculatePrice } = useCurrency();
+  const [productInfo, setProductInfo] = useState<Product | null>(null);
   const currency_id = order?.currency_id ?? 2;
   const [getInvoice] = useGetInvoiceMutation();
 
@@ -57,6 +67,24 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   const discount = calculatePrice(Number(discount_amount), currency_id);
   const vat = calculatePrice(Number(vat_amount), currency_id);
   const grandTotal = calculatePrice(total_amount, currency_id);
+
+  const handleRateProduct = (product: Product) => {
+    setProductInfo(product);
+  };
+
+  const handleSubmitReview = async (props: {
+    review: string;
+    rating: number;
+  }) => {
+    if (!productInfo) return;
+    try {
+      await addProductReview({
+        payload: { ...props, user_id: user.id, product_id: productInfo.id },
+        fullPageLoader: true,
+      });
+      toast.success("Product review added successfully");
+    } catch (error) {}
+  };
 
   return (
     <div className="my-4">
@@ -119,6 +147,11 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
                           size="xs"
                           variant="primary"
                           className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
+                          onClick={() =>
+                            handleRateProduct(
+                              item.product as unknown as Product
+                            )
+                          }
                         >
                           Rate the product
                         </Button>
@@ -340,6 +373,17 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
           </p>
         </div>
       </div> */}
+      {productInfo && (
+        <RatingModal
+          isOpen={!!productInfo}
+          onClose={() => {
+            setProductInfo(null);
+          }}
+          onSubmit={handleSubmitReview}
+          productImage={baseUrl + productInfo.image}
+          productName={productInfo.name}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 'use client'
-import { IOrderListParams, OrderPayload } from "@/types/order";
+import { IOrderListParams, IProductReviewParams, OrderPayload } from "@/types/order";
 import { apiSlice } from "../slices/api/apiSlice";
 import { toast } from "react-toastify";
 import { headers } from "next/headers";
@@ -10,7 +10,7 @@ export const ordersApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     // login endpoint here
     fetchOrders: builder.mutation({
-      query: (params:IOrderListParams) => ({
+      query: (params: IOrderListParams) => ({
         url: `orders-list`,
         method: 'GET',
         params
@@ -51,9 +51,17 @@ export const ordersApi = apiSlice.injectEndpoints({
       }
       ),
     }),
+    addProductReview: builder.mutation({
+      query: (body: WithLoader<IProductReviewParams>) => ({
+        url: "add-product-review",
+        method: 'POST',
+        body,
+      }
+      ),
+    }),
 
 
   }),
 });
 
-export const { useFetchOrdersMutation, useAddOrderMutation, useGetInvoiceMutation } = ordersApi;
+export const { useFetchOrdersMutation, useAddOrderMutation, useGetInvoiceMutation, useAddProductReviewMutation } = ordersApi;

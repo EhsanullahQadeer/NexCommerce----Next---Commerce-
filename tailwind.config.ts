@@ -1,3 +1,4 @@
+import { colors } from "./src/theme/color";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -12,27 +13,7 @@ const config: Config = {
       content: {
         icon: '\f10e'
       },
-      colors: {
-        primary: {
-          DEFAULT: "#cc9966",
-          300: "rgba(204, 153, 102, 0.3)", 
-          500: "rgba(204, 153, 102, 0.5)", 
-        },
-        secondary: {
-          DEFAULT: "#cc6666",
-        },
-        black: {
-          DEFAULT: "#000000",
-          50: "#222222",
-          75: "#333333",
-          100: "#666666",
-          200: "#999999",
-          300: "#ebebeb",
-          400: "rgba(255, 255, 255, 0.1)",
-          500: "#777777",
-          600: "#cccccc",
-        },
-      },
+      colors: colors("tailwind"),
       width: {
         container: "1188px",
       },

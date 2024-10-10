@@ -4,7 +4,7 @@ import { StoreProvider } from "@/store/StoreProvider";
 import MainLayout from "@/components/layout/MainLayout";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
-
+import { ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -96,7 +96,8 @@ export default function RootLayout({
                 </div>
               </div>
             ) : (
-              <MainLayout>
+              <MUIThemeProvider theme={theme}>
+                <MainLayout>
                   {children}
                   <ToastContainer
                     position="top-right"
@@ -111,8 +112,9 @@ export default function RootLayout({
                     theme="light"
                     limit={1}
                   />
-                  <FullPageLoader/>
-              </MainLayout>
+                  <FullPageLoader />
+                </MainLayout>
+              </MUIThemeProvider>
             )}
             <div id="sidebar-wrapper"></div>
           </body>

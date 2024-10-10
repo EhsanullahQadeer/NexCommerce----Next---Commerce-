@@ -33,7 +33,6 @@ export interface ProductCardProps extends Product {
 }
 
 const ProductCard: FC<ProductCardProps> = (productDetails) => {
-  console.log('productDetails: ', productDetails.product_variants);
   const { user } = useSelector((state: RootState) => state.auth);
   const { wishListData } = useSelector(selectWishlist);
   const [addToCart] = useAddToCartMutation();
