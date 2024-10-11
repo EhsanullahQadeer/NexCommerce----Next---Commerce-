@@ -4,18 +4,26 @@ import * as Yup from "yup";
 import Button from "../Button";
 import Image from "next/image";
 
+export interface ReviewInitialValues {
+  review: string;
+  rating: number;
+}
+
 interface RatingModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: { review: string; rating: number }) => void;
   productImage: string;
   productName: string;
+  mode?: "readOnly";
+  values?: ReviewInitialValues;
 }
 
 function RatingModal(props: RatingModalProps) {
-  const { isOpen, onClose, onSubmit, productImage, productName } = props;
+  const { isOpen, onClose, onSubmit, productImage, productName, values, mode } =
+    props;
   const formik = useFormik({
-    initialValues: {
+    initialValues: values || {
       review: "",
       rating: 0,
     },
@@ -33,6 +41,7 @@ function RatingModal(props: RatingModalProps) {
   if (!productName) {
     return null;
   }
+  const isReadOnly = mode === "readOnly";
   return (
     <Modal open={isOpen} onClose={onClose}>
       <Box
@@ -46,7 +55,8 @@ function RatingModal(props: RatingModalProps) {
             variant="h6"
             className="text-black-75 font-semibold text-center"
           >
-            Rate the Product
+            {isReadOnly?"Thank you for your Rating!":"Rate the Product"}
+            
           </Typography>
           <button
             onClick={onClose}
@@ -73,7 +83,7 @@ function RatingModal(props: RatingModalProps) {
 
         {/* Rating Instructions */}
         <Typography variant="body2" className="text-black-50 mb-2 text-center">
-          Please rate your experience with this product:
+          {!isReadOnly && "Please rate your experience with this product:"}
         </Typography>
 
         {/* Rating Component */}
@@ -84,6 +94,7 @@ function RatingModal(props: RatingModalProps) {
             onChange={(event, newValue) =>
               formik.setFieldValue("rating", newValue)
             }
+            readOnly={isReadOnly}
             size="large"
           />
           {formik.touched.rating && formik.errors.rating && (
@@ -95,7 +106,7 @@ function RatingModal(props: RatingModalProps) {
 
         {/* Review TextField */}
         <TextField
-          label="Write your review"
+          label={isReadOnly ? "Your review" : "Write your review"}
           multiline
           rows={4}
           fullWidth
@@ -106,20 +117,25 @@ function RatingModal(props: RatingModalProps) {
           error={formik.touched.review && Boolean(formik.errors.review)}
           helperText={formik.touched.review && formik.errors.review}
           inputProps={{ maxLength: 500 }}
+          slotProps={{ input: { readOnly: isReadOnly } }}
         />
-        <Typography className="text-gray-500 text-right text-sm">
-          {formik.values.review.length}/500
-        </Typography>
+        {!isReadOnly && (
+          <Typography className="text-gray-500 text-right text-sm">
+            {formik.values.review.length}/500
+          </Typography>
+        )}
 
         {/* Button Group */}
-        <div className="flex justify-between mt-4">
-          <Button variant="outlined" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={() => formik.handleSubmit()}>
-            Submit
-          </Button>
-        </div>
+        {!isReadOnly && (
+          <div className="flex justify-between mt-4">
+            <Button variant="outlined" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={() => formik.handleSubmit()}>
+              Submit
+            </Button>
+          </div>
+        )}
       </Box>
     </Modal>
   );

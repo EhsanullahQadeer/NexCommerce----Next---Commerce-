@@ -10,10 +10,8 @@ import { useSelector } from "react-redux";
 import { useFetchOrdersMutation } from "@/store/api/ordersApi";
 import useCurrency from "@/hooks/useCurrency";
 import { baseUrl } from "@/config/config";
-import { debounce, Tooltip } from "@mui/material";
-import { selectSiteSetting } from "@/store/slices/siteSetting/siteSettingSlice";
-import moment from "moment";
-import { IOrderListParams } from "@/types/order";
+import { Tooltip } from "@mui/material";
+import { IOrderListParams, IReview } from "@/types/order";
 import Skeleton from "react-loading-skeleton";
 import { arrayNumberGenerator } from "@/lib/utils";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -72,6 +70,8 @@ export interface ORDERS {
         currency_name: string;
         exchange_rate_to_usd: string;
       };
+
+      reviews:IReview[];
     };
   }>;
   order_shipping_address: {
@@ -146,7 +146,7 @@ const OrderTab = () => {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [page, setPage] = useState(1);
   const [ordersCount, setOrdersCount] = useState<number>(limit);
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<ORDERS[]>([]);
   const data: any = useSelector((state) => state);
   const [fetchOrders, { isLoading }] = useFetchOrdersMutation();
   const { formatPrice } = useCurrency();
@@ -385,7 +385,7 @@ const OrderTab = () => {
             )}
         {isLoading &&
           arrayNumberGenerator(
-            Math.min(limit, ordersCount - orders.length)
+            Math.min(limit, Math.max(ordersCount - orders.length, 0))
           ).map((value, idx) => (
             <div key={value + idx} className="p-0 rounded-lg">
               <Skeleton height={"83.6px"} width={"100%"} />

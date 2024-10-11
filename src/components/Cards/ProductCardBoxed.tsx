@@ -1,23 +1,31 @@
-import { FC } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { productVerticalActionStyles } from './elements/styles';
-import IconWithText from '../Icons/IconWithTextOverlay';
-import ReadOnlyColorVariants from '../ColorVariants/ReadOnly';
-import CardPrice from './elements/CardPrice';
-import Stars from '../Stars';
-import CardActions from './elements/Actions';
-import { ColorVariant, Product, ProductVariant } from '@/types/product';
-import { useDispatch, useSelector } from 'react-redux';
-import { useAddToCartMutation, useCartDetailsGetMutation } from '@/store/api/cartApi';
-import { RootState } from '@/store';
-import { useAddRemoveToWishlistMutation, useWishlistDetailsGetMutation } from '@/store/api/wishlistApi';
-import { selectWishlist } from '@/store/slices/wishlist/wishlistSlice';
-import { isUserLoggedIn } from '@/utility/helper';
-import { toast } from 'react-toastify';
-import { RESPONSE_MESSAGES } from '@/utility/constant';
-import { setOpenAuthModal } from '@/store/slices/auth/authSlice';
+import { FC, useMemo } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { productVerticalActionStyles } from "./elements/styles";
+import IconWithText from "../Icons/IconWithTextOverlay";
+import ReadOnlyColorVariants from "../ColorVariants/ReadOnly";
+import CardPrice from "./elements/CardPrice";
+import CardActions from "./elements/Actions";
+import { ColorVariant, Product, ProductVariant } from "@/types/product";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useAddToCartMutation,
+  useCartDetailsGetMutation,
+} from "@/store/api/cartApi";
+import { RootState } from "@/store";
+import {
+  useAddRemoveToWishlistMutation,
+  useWishlistDetailsGetMutation,
+} from "@/store/api/wishlistApi";
+import { selectWishlist } from "@/store/slices/wishlist/wishlistSlice";
+import { isUserLoggedIn } from "@/utility/helper";
+import { toast } from "react-toastify";
+import { RESPONSE_MESSAGES } from "@/utility/constant";
+import { setOpenAuthModal } from "@/store/slices/auth/authSlice";
+import { Rating } from "@mui/material";
+import { calculateAverageRating } from "@/utility/calculateAverageRating";
+import { IReview } from "@/types/order";
 
 export interface ProductCardBoxedProps extends Product {
   className?: string;
@@ -34,37 +42,46 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
     className,
     slug,
     onPreview,
-    currency_id
+    currency_id,
+    reviews,
     // heading,
   } = productDetails;
   const { user } = useSelector((state: RootState) => state.auth);
-  const { wishListData } = useSelector(selectWishlist)
-  const [addToCart] = useAddToCartMutation()
-  const [cartDetailsGet] = useCartDetailsGetMutation()
-  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation()
-  const [wishlistDetailsGet] = useWishlistDetailsGetMutation()
-  const dispatch = useDispatch()
+  const { wishListData } = useSelector(selectWishlist);
+  const [addToCart] = useAddToCartMutation();
+  const [cartDetailsGet] = useCartDetailsGetMutation();
+  const [addRemoveToWishlist] = useAddRemoveToWishlistMutation();
+  const [wishlistDetailsGet] = useWishlistDetailsGetMutation();
+  const dispatch = useDispatch();
   const productUrl = `/products/${slug}`;
 
   const colorVarientFilter = (varients: ProductVariant[]) => {
-    let colorsvarients: ColorVariant[] = []
+    let colorsvarients: ColorVariant[] = [];
 
     varients.map((el) => {
       el?.attribute_values?.map((item) => {
-        if (item?.variant_attribute?.attribute_name == "Color" || item?.variant_attribute?.attribute_name == "Colour") {
-          const checkColor = colorsvarients.find(el => el.color == item.value.toLowerCase())
-          !checkColor && colorsvarients.push({ id: item.id, color: item.value.toLowerCase() })
+        if (
+          item?.variant_attribute?.attribute_name == "Color" ||
+          item?.variant_attribute?.attribute_name == "Colour"
+        ) {
+          const checkColor = colorsvarients.find(
+            (el) => el.color == item.value.toLowerCase()
+          );
+          !checkColor &&
+            colorsvarients.push({
+              id: item.id,
+              color: item.value.toLowerCase(),
+            });
         }
-      })
-    })
+      });
+    });
 
-    return colorsvarients
-  }
+    return colorsvarients;
+  };
 
   const handleFetchCart = async () => {
     try {
       if (user?.id) {
-
         await cartDetailsGet({ user_id: user?.id }).unwrap();
       }
     } catch (error) {
@@ -75,19 +92,27 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const addToCartHandler = async () => {
     try {
       if (!isUserLoggedIn()) {
-        dispatch(setOpenAuthModal(true))
+        dispatch(setOpenAuthModal(true));
         return;
       }
-      const addToCartDetails = { "user_id": user.id, products: [{ "product_id": id, "variant_id": product_variants[0]?.id, "price": product_variants[0]?.price, "quantity": "1" }] }
+      const addToCartDetails = {
+        user_id: user.id,
+        products: [
+          {
+            product_id: id,
+            variant_id: product_variants[0]?.id,
+            price: product_variants[0]?.price,
+            quantity: "1",
+          },
+        ],
+      };
 
       await addToCart(addToCartDetails).unwrap();
-      handleFetchCart()
-
+      handleFetchCart();
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
-
 
   const handleFetchWishlist = async () => {
     try {
@@ -102,30 +127,40 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
   const addToWishListHandler = async (id: number) => {
     try {
       if (!isUserLoggedIn()) {
-        dispatch(setOpenAuthModal(true))
+        dispatch(setOpenAuthModal(true));
         return;
       }
-      const addToWishList = { "user_id": user.id, product_id: id, variant_id: product_variants[0]?.id }
+      const addToWishList = {
+        user_id: user.id,
+        product_id: id,
+        variant_id: product_variants[0]?.id,
+      };
 
       await addRemoveToWishlist(addToWishList).unwrap();
-      handleFetchWishlist()
-
+      handleFetchWishlist();
     } catch (error) {
       console.error("Failed to fetch products:", error);
     }
   };
 
   const checkInWishlist = (): boolean => {
+    return !!wishListData.find((el) => {
+      return (
+        el.product_id === productDetails.id &&
+        el.product_variant_id === productDetails.product_variants[0]?.id
+      );
+    });
+  };
 
-    return !!wishListData.find(el => {
-      return el.product_id === productDetails.id && el.product_variant_id === productDetails.product_variants[0]?.id
-    })
-  }
+  const averageRating = useMemo(
+    () => calculateAverageRating(reviews as IReview[]),
+    [reviews]
+  );
 
   return (
     <div
       className={cn(
-        'group relative mb-2.5 hover:shadow-[0_5px_20px_rgba(0,0,0,0.05)] h-full',
+        "group relative mb-2.5 hover:shadow-[0_5px_20px_rgba(0,0,0,0.05)] h-full",
         className
       )}
     >
@@ -140,16 +175,21 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
         </Link>
         {/* {label && <TagLabel label={label} />} */}
 
-        <button className={productVerticalActionStyles} onClick={() => addToWishListHandler(id)}>
-          {
-            !checkInWishlist() ? <IconWithText
+        <button
+          className={productVerticalActionStyles}
+          onClick={() => addToWishListHandler(id)}
+        >
+          {!checkInWishlist() ? (
+            <IconWithText
               icon={<i className="lar la-heart"></i>}
               text="Add Wishlist"
-            /> : <IconWithText
+            />
+          ) : (
+            <IconWithText
               icon={<i className="las la-heart"></i>}
               text="Remove Wishlist"
             />
-          }
+          )}
         </button>
 
         <CardActions onPreview={onPreview} onAddToCart={addToCartHandler} />
@@ -158,16 +198,29 @@ const ProductCardBoxed: FC<ProductCardBoxedProps> = (productDetails) => {
         <div className="text-gray-500 text-[13px] font-light tracking-[-0.13px] leading-[15.6px] mb-[3px]">
           {/* {heading} */}
         </div>
-        <h3 className="text-base font-normal text-black-75 mb-[3px] tracking-[-0.16px] leading-[20px] mb-[2px]">
+        <h3 className="text-base font-normal text-black-75 tracking-[-0.16px] leading-[20px] mb-[2px]">
           <Link href={productUrl} className="hover:text-primary">
             {name}
           </Link>
         </h3>
-        <CardPrice currency_id={currency_id} price={price} oldPrice={0} isBoxed />
+        <CardPrice
+          currency_id={currency_id}
+          price={price}
+          oldPrice={0}
+          isBoxed
+        />
         <div className="mb-[17px] mt-[13px]">
-          <Stars count={5} reviewCount={2} />
+          <Rating
+            name="product-rating"
+            value={averageRating}
+            size="small"
+            precision={0.1}
+            readOnly
+          />
         </div>
-        <ReadOnlyColorVariants variants={colorVarientFilter(product_variants)} />
+        <ReadOnlyColorVariants
+          variants={colorVarientFilter(product_variants)}
+        />
       </div>
     </div>
   );

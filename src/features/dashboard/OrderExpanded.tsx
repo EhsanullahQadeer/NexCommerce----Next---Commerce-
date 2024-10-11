@@ -1,14 +1,18 @@
 import { ORDERS } from "@/app/account/orders/page";
 import Button from "@/components/Button";
-import RatingModal from "@/components/review-modal/RatingModal";
+import RatingModal, {
+  ReviewInitialValues,
+} from "@/components/review-modal/RatingModal";
 import { baseUrl } from "@/config/config";
 import useCurrency from "@/hooks/useCurrency";
+import { cn } from "@/lib/utils";
 import routes from "@/routes/routes";
 import { RootState } from "@/store";
 import {
   useAddProductReviewMutation,
   useGetInvoiceMutation,
 } from "@/store/api/ordersApi";
+import { IReview } from "@/types/order";
 import { Product } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +24,9 @@ interface OrderExpandedProps {
   date: string;
   selectedTab: string;
 }
-
+interface INewReviews extends ReviewInitialValues {
+  user_id: string;
+}
 const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   const {
     items,
@@ -36,8 +42,10 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   const [expanded, setExpanded] = useState<number | null>(null);
   const { formatPrice, calculatePrice } = useCurrency();
   const [productInfo, setProductInfo] = useState<Product | null>(null);
+  const [review, setReview] = useState<INewReviews | null>(null);
   const currency_id = order?.currency_id ?? 2;
   const [getInvoice] = useGetInvoiceMutation();
+  const [newReviews, setNewReviews] = useState<INewReviews[]>([]);
 
   const productsNameStr = useMemo(
     () => items.map((item) => item.product.name).join(", "),
@@ -68,8 +76,9 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   const vat = calculatePrice(Number(vat_amount), currency_id);
   const grandTotal = calculatePrice(total_amount, currency_id);
 
-  const handleRateProduct = (product: Product) => {
+  const handleRateProduct = (product: Product, review?: INewReviews) => {
     setProductInfo(product);
+    review && setReview(review);
   };
 
   const handleSubmitReview = async (props: {
@@ -78,10 +87,16 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
   }) => {
     if (!productInfo) return;
     try {
+      const newReview = {
+        ...props,
+        user_id: user.id,
+        product_id: productInfo.id,
+      };
       await addProductReview({
-        payload: { ...props, user_id: user.id, product_id: productInfo.id },
+        payload: newReview,
         fullPageLoader: true,
       });
+      setNewReviews((prev) => [...prev, newReview]);
       toast.success("Product review added successfully");
     } catch (error) {}
   };
@@ -108,7 +123,12 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
             {items.map((item) => {
               const imgSrc = baseUrl + item.product.medium_image;
               const { product, quantity } = item;
-              const { name, price, currency_id = 2, slug } = product;
+              const { name, price, currency_id = 2, slug, reviews } = product;
+              const allReview = [...reviews, ...newReviews];
+              const userRating = selectedTab === "delivered";
+              const userReview = userRating
+                ? allReview.find((review) => review.user_id === user.id)
+                : null;
               return (
                 <div
                   key={"order-" + item.order_id}
@@ -142,18 +162,26 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
                           Buy again
                         </Button>
                       </Link>
-                      {selectedTab === "delivered" && (
+                      {userRating && (
                         <Button
                           size="xs"
                           variant="primary"
-                          className="!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-xs"
+                          className={cn(
+                            "!rounded-lg !p-0 !px-3 !py-1 hover:!bg-primary !text-x",
+                            userReview
+                              ? "!bg-green-500 hover:!bg-green-600 !border-green-500"
+                              : ""
+                          )}
                           onClick={() =>
                             handleRateProduct(
-                              item.product as unknown as Product
+                              item.product as unknown as Product,
+                              userReview
+                                ? (userReview as unknown as INewReviews)
+                                : undefined
                             )
                           }
                         >
-                          Rate the product
+                          {userReview ? "See Your Rating" : "Rate the product"}
                         </Button>
                       )}
                     </div>
@@ -378,10 +406,13 @@ const OrderExpanded = ({ order, date, selectedTab }: OrderExpandedProps) => {
           isOpen={!!productInfo}
           onClose={() => {
             setProductInfo(null);
+            setReview(null);
           }}
           onSubmit={handleSubmitReview}
           productImage={baseUrl + productInfo.image}
           productName={productInfo.name}
+          values={review || undefined}
+          mode={review ? "readOnly" : undefined}
         />
       )}
     </div>
